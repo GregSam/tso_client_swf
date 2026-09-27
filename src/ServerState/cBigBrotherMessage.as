@@ -1,4 +1,4 @@
-﻿package ServerState
+package ServerState
 {
     import flash.utils.Timer;
     import flash.net.URLRequest;
@@ -81,11 +81,7 @@
             if (this.mStatus != 202)
             {
                 global.ui.mClientMessages.bigBrotherMessageCompleteHandler(this.mType, this.mZoneId, this.mObject, _local_2, this.mReplaceEndpoint, this.mResponder);
-                this.mTimer.stop();
-                this.mTimer.removeEventListener(TimerEvent.TIMER, this.Retry);
-                this.mTimer = null;
-                this.mLoginQueueStatus.dispose();
-                this.mLoginQueueStatus = null;
+                this.dispose();
             }
             else
             {
@@ -103,7 +99,9 @@
             }
             else
             {
-                global.ui.mClientMessages.FaultHandler(new FaultEvent(((("cBigBrotherMessage " + _arg_1.type) + " ") + _arg_1.text)));
+                var _local_2:FaultEvent = new FaultEvent("cBigBrotherMessage " + _arg_1.type + " " + _arg_1.text);
+                this.dispose();
+                global.ui.mClientMessages.FaultHandler(_local_2);
             };
         }
 
@@ -124,11 +122,18 @@
             }
             else
             {
-                global.ui.mClientMessages.FaultHandler(new FaultEvent(((("cBigBrotherMessage " + _arg_1.type) + " ") + _arg_1.text)));
+                var _local_2:FaultEvent = new FaultEvent("cBigBrotherMessage " + _arg_1.type + " " + _arg_1.text);
+                this.dispose();
+                global.ui.mClientMessages.FaultHandler(_local_2);
             };
         }
 
         public function cancelLoadingZone():void
+        {
+            this.dispose();
+        }
+
+        public function dispose():void
         {
             if (this.mTimer != null)
             {
@@ -136,11 +141,22 @@
                 this.mTimer.removeEventListener(TimerEvent.TIMER, this.Retry);
                 this.mTimer = null;
             };
+            if (this.mURLLoader != null)
+            {
+                this.mURLLoader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, this.HttpStatusHandler);
+                this.mURLLoader.removeEventListener(Event.COMPLETE, this.CompleteHandler);
+                this.mURLLoader.removeEventListener(IOErrorEvent.IO_ERROR, this.IoErrorHandler);
+                this.mURLLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, this.SecurityErrorHandler);
+                this.mURLLoader = null;
+            };
             if (this.mLoginQueueStatus != null)
             {
                 this.mLoginQueueStatus.dispose();
                 this.mLoginQueueStatus = null;
             };
+            this.mURLRequest = null;
+            this.mObject = null;
+            this.mResponder = null;
         }
 
         private function HttpStatusHandler(_arg_1:HTTPStatusEvent):void
