@@ -78,6 +78,27 @@
             this.resetPersistenceTimer();
         }
 
+        protected function uiScaleMinusButtonClickHandler(_arg_1:MouseEvent):void
+        {
+            this.sm.uiScale--;
+            this.resetPersistenceTimer();
+        }
+
+        protected function uiScalePlusButtonClickHandler(_arg_1:MouseEvent):void
+        {
+            this.sm.uiScale++;
+            this.resetPersistenceTimer();
+        }
+
+        public function setUiScaleState(_arg_1:int):void
+        {
+            var labels:Array = ["80%", "100%", "110%", "125%", "150%", "175%"];
+            var value:int = Math.max(1, Math.min(6, _arg_1));
+            this.mPanel.uiScaleValue.text = labels[value - 1];
+            this.mPanel.uiScaleMinus.enabled = value > 1;
+            this.mPanel.uiScalePlus.enabled = value < 6;
+        }
+
         protected function halfSizeImagesButtonClickHandler(_arg_1:MouseEvent):void
         {
             CustomAlert.show("ConfirmUseHalfSizeGraphicsOption", "ConfirmUseHalfSizeGraphicsOption", (Alert.OK | Alert.CANCEL), null, this.halfSizeConfirmHandler, null, Alert.OK, true);
@@ -255,6 +276,8 @@
             this.mPanel.sfxMute.addEventListener(MouseEvent.CLICK, this.sfxMuteButtonClickHandler);
             this.mPanel.sfxMinus.addEventListener(MouseEvent.CLICK, this.sfxMinusButtonClickHandler);
             this.mPanel.sfxPlus.addEventListener(MouseEvent.CLICK, this.sfxPlusButtonClickHandler);
+            this.mPanel.uiScaleMinus.addEventListener(MouseEvent.CLICK, this.uiScaleMinusButtonClickHandler);
+            this.mPanel.uiScalePlus.addEventListener(MouseEvent.CLICK, this.uiScalePlusButtonClickHandler);
             this.timer.addEventListener(TimerEvent.TIMER_COMPLETE, this.persistenceTimerCompleteHandler);
             this.mPanel.musicVolume.addEventListener(VolumeControl.VOLUME_BAR_CLICK, this.musicVolumeBarClickHandler);
             this.mPanel.sfxVolume.addEventListener(VolumeControl.VOLUME_BAR_CLICK, this.sfxVolumeBarClickHandler);
@@ -264,6 +287,7 @@
             this.mPanel.showFullWarehouseButton.addEventListener(MouseEvent.CLICK, this.showFullWarehouseClickHandler);
             this.mPanel.showStoppedProductionButton.addEventListener(MouseEvent.CLICK, this.showStoppedProductionClickHandler);
             this.mPanel.addEventListener(MouseEvent.MOUSE_DOWN, this.MouseDownHandler);
+            this.setUiScaleState(this.sm.uiScale);
         }
 
         public function setShowFullWarehouseState(_arg_1:Boolean):void
@@ -316,6 +340,7 @@
         {
             this.mPanel.musicVolume.data = this.sm.musicVolume;
             this.mPanel.sfxVolume.data = this.sm.sfxVolume;
+            this.setUiScaleState(this.sm.uiScale);
         }
 
         public function setSectorMarkerState(_arg_1:Boolean):void

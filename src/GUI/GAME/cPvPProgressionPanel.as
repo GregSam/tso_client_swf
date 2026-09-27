@@ -225,7 +225,7 @@
             {
                 _local_1 = new PvPProgressionPanel();
                 _local_1.id = "GAMESTATE_ID_PVP_PROGRESSION";
-                global.getApplication().isoengine.addChild(_local_1);
+                global.getApplication().guiScaleLayer.addChild(_local_1);
                 this.Init(_local_1);
             };
         }

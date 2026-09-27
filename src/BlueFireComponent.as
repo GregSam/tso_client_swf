@@ -48,6 +48,8 @@
         {
             super();
             mx_internal::_document = this;
+            this.horizontalScrollPolicy = "off";
+            this.verticalScrollPolicy = "off";
             this.addEventListener("creationComplete", this.___BlueFireComponent_Canvas1_creationComplete);
         }
 

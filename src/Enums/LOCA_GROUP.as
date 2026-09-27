@@ -41,6 +41,7 @@
         public static const ACHIEVEMENT_LABELS:String = "ACL";
         public static const ACHIEVEMENT_DESCRIPTIONS:String = "ACD";
         public static const TASKS:String = "TSK";
+        public static const UIS:String = "UIS";
 
 
     }

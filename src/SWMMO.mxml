@@ -1,8 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
     xmlns:local="*" xmlns:gui="GUI.Components.*"
     xmlns:bridge="com.bluebyte.tso.ui.bridge.*"
     xmlns:particles="com.bluebyte.tso.particle.*"
+    xmlns:states="GUI.States.*"
     xmlns:cg="com.bluebyte.tso.contentgenerator.view.ui.panel.*"
     xmlns:quest="com.bluebyte.tso.quests.view.ui.panel.*"
     creationPolicy="all">
@@ -84,6 +85,57 @@
         public var bootstrap:Bootstrap = new Bootstrap();
         [Bindable]
         public var runningState:State;
+        private var mUIScale:Number = 1;
+        private var uiScaleUpdatePending:Boolean = false;
+        private var appliedUIStageWidth:Number = -1;
+        private var appliedUIStageHeight:Number = -1;
+
+        public function getUIScale():Number
+        {
+            return (this.mUIScale);
+        }
+
+        public function setUIScale(_arg_1:Number):void
+        {
+            if (isNaN(_arg_1))
+            {
+                return;
+            };
+            this.mUIScale = Math.max(0.5, Math.min(2, _arg_1));
+            this.applyUIScale();
+        }
+
+        private function applyUIScale(_arg_1:Event=null):void
+        {
+            this.uiScaleUpdatePending = false;
+            if (((this.guiScaleLayer == null) || (this.stage == null)))
+            {
+                return;
+            };
+            this.guiScaleLayer.percentWidth = NaN;
+            this.guiScaleLayer.percentHeight = NaN;
+            var logicalWidth:Number = this.stage.stageWidth / this.mUIScale;
+            var logicalHeight:Number = this.stage.stageHeight / this.mUIScale;
+            this.guiScaleLayer.explicitWidth = logicalWidth;
+            this.guiScaleLayer.explicitHeight = logicalHeight;
+            this.guiScaleLayer.setActualSize(logicalWidth, logicalHeight);
+            this.guiScaleHost.scaleX = this.mUIScale;
+            this.guiScaleHost.scaleY = this.mUIScale;
+            this.appliedUIStageWidth = this.stage.stageWidth;
+            this.appliedUIStageHeight = this.stage.stageHeight;
+            this.guiScaleLayer.invalidateProperties();
+            this.guiScaleLayer.invalidateSize();
+            this.guiScaleLayer.invalidateDisplayList();
+        }
+
+        private function scheduleUIScaleUpdate(_arg_1:Event=null):void
+        {
+            if (!this.uiScaleUpdatePending)
+            {
+                this.uiScaleUpdatePending = true;
+                callLater(this.applyUIScale);
+            };
+        }
 
         private function registerInvokeHook():void
         {
@@ -93,9 +145,6 @@
                 gInitStaticForAllZones.parseCommandLineArguments(_arg_1.arguments);
             });
 
-            // TEMPORARY RUFFLE FALLBACK: standalone Ruffle exposes -P values as
-            // FlashVars, but does not provide a CLI positional argument for the
-            // AIR InvokeEvent. Feed those values through the existing parser.
             if (this.parameters != null)
             {
                 var ruffleArguments:Array = [];
@@ -160,6 +209,10 @@
         public function onSWMMOEnterFrame(_arg_1:Event):void
         {
             this.isoengine.update();
+            if (((this.stage != null) && (((((this.stage.stageWidth != this.appliedUIStageWidth) || (this.stage.stageHeight != this.appliedUIStageHeight))) || (Math.abs(((this.guiScaleLayer.width * this.mUIScale) - this.stage.stageWidth)) > 0.5)) || (Math.abs(((this.guiScaleLayer.height * this.mUIScale) - this.stage.stageHeight)) > 0.5))))
+            {
+                this.scheduleUIScaleUpdate();
+            };
         }
 
         public function getGUIItem(_arg_1:String):DisplayObject
@@ -257,6 +310,7 @@
             }
             this.runningState.addEventListener("exitState", this.__runningState_exitState);
             this.runningState.addEventListener("enterState", onGameEnterStateOnce);
+            this.scheduleUIScaleUpdate();
         }
 
         private function onGameEnterStateOnce(e:*):void
@@ -343,297 +397,297 @@
     <mx:states>
         <mx:State name="LoadSettings" />
         <mx:State name="Game">
-            <mx:AddChild position="lastChild">
+            <states:GuiAddChild position="lastChild">
                 <gui:CancelActionPanel id="GAMESTATE_ID_CANCEL_ACTION_PANEL" visible="false" horizontalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:PacketLossAlert id="GAMESTATE_ID_PACKET_LOST_ALERT" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:SupportLockZone id="GAMESTATE_ID_SUPPORT_LOCK_ZONE_CLOCK" visible="false" right="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:Combat30ToolTip id="GAMESTATE_ID_COMBAT30_TOOLTIP" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:CombatScenarioTooltip id="GAMESTATE_ID_COMBAT_SCENARIO_TOOLTIP" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:ActionBar id="GAMESTATE_ID_ACTIONBAR" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:InfoBar id="GAMESTATE_ID_INFO_BAR" y="-3" visible="false" horizontalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:SingleInfoBar id="GAMESTATE_ID_EXPEDITION_INFO_BAR" y="-3" visible="false" horizontalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:EventWidgetList id="GAMESTATE_ID_EVENT_WIDGET_LIST" visible="false" left="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:Avatar id="GAMESTATE_ID_AVATAR" y="0" x="0" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:AvatarMessageList id="GAMESTATE_ID_AVATAR_MESSAGE_LIST" visible="true" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:HintPointer id="GAMESTATE_ID_QUEST_HINT_POINTER" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:HintPointer id="GAMESTATE_ID_CALENDAR_HINT_POINTER" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <local:BlueFireComponent id="blueFireComponent" width="350" height="250" visible="false" left="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:FriendsList id="GAMESTATE_ID_FRIENDS_LIST" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:TrackedMissionList id="GAMESTATE_ID_TRACKED_MISSION_LIST" visible="false" right="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:ConstructionInfoPanel id="GAMESTATE_ID_CONSTRUCTION_INFO_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:DecorationInfoPanel id="GAMESTATE_ID_DECORATION_INFO_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:MinimalInfoPanel id="GAMESTATE_ID_MINIMAL_INFO_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:MinimalInfoPanel id="GAMESTATE_ID_TRADE_OFFICE_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:SpecialistCooldownPanel id="SPECIALIST_COOLDOWN_PANEL" visible="false" right="100" bottom="180" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:MysteryBoxPanel id="GAMESTATE_ID_MYSTERYBOX_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:BuildingInfoPanel id="GAMESTATE_ID_BUILDING_INFO_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:EpicWorkyardInfoPanel id="GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL" visible="false" right="200" bottom="180" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:MoveBuildingPanel id="GAMESTATE_ID_MOVE_BUILDING_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:ResidenceInfoPanel id="GAMESTATE_ID_RESIDENCE_INFO_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:GenericLinkBuildingInfoPanel id="GAMESTATE_ID_GENERIC_LINK_BUILDING_INFO_PANEL" visible="false" right="100" bottom="180" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:EnemyBuildingInfoPanel id="GAMESTATE_ID_ENEMY_BUILDING_INFO_PANEL" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:MountainInfoPanel id="GAMESTATE_ID_MOUNTAIN_INFO_PANEL" visible="false" right="100" bottom="180" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:TimedProductionInfoPanel id="GAMESTATE_ID_TIMED_PRODUCTION_INFO_PANEL" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:TimedProductionInfoPanel id="GAMESTATE_ID_BARRACKS" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:TimedProductionInfoPanel id="GAMESTATE_ID_BARRACKS3" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:TimedProductionInfoPanel id="GAMESTATE_ID_EXPEDITION_WEAPONSMITH" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:SkillProductionPanel id="GAMESTATE_ID_SKILL_PRODUCTION_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:WatchTowerInfoPanel id="GAMESTATE_ID_WATCHTOWER_INFO_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:WarehouseInfoPanel id="GAMESTATE_ID_WAREHOUSE_INFO_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:TavernInfoPanel id="GAMESTATE_ID_TAVERN_INFO_PANEL" visible="false" right="100" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:AddFriendsPanel id="GAMESTATE_ID_ADD_FRIENDS_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:FoundGuildPanel id="GAMESTATE_ID_FOUND_GUILD_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:LoadingZonePanel id="GAMESTATE_ID_LOADING_ZONE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:BuildQueue id="GAMESTATE_ID_BUILD_QUEUE" y="0" visible="false" right="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:HiredTroopsPoolPanel id="GAMESTATE_HIRED_TROOPS_POOL_PANEL" y="0" visible="false" right="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:StarMenu id="GAMESTATE_ID_STAR_MENU" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:SpecialistPanel id="GAMESTATE_ID_SPECIALIST_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:CombatPreviewPanel id="GAMESTATE_ID_PRECOMBAT_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:SpecialistTravelPanel id="GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:HintPointer id="GAMESTATE_ID_PVP_LEVEL_UP_HINT_POINTER" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:ToolboxPanel id="GAMESTATE_ID_TOOLBOX_PANEL" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:DarkenPanel id="GAMESTATE_ID_DARKEN_PANEL" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:ShopWindow id="GAMESTATE_ID_SHOP_WINDOW" visible="false" horizontalCenter="0" verticalCenter="-50" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:PvPReportWindow id="GAMESTATE_ID_PVP_REPORT_WINDOW" visible="false" horizontalCenter="0" verticalCenter="-50" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:LoadingMailPanel id="GAMESTATE_ID_LOADING_MAIL_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:TradeWindow id="GAMESTATE_ID_TRADE_WINDOW" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:GuildWindow id="GAMESTATE_ID_GUILD_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:AdventurePanel id="GAMESTATE_ID_ADVENTURE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <quest:QuestBook id="GAMESTATE_ID_QUEST_BOOK" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:HelpWindow id="GAMESTATE_ID_HELP_WINDOW" y="58" visible="false" left="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:HelpOverview id="GAMESTATE_ID_HELP_OVERVIEW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:AdventWindow id="GAMESTATE_ID_ADVENT_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:EventPanel id="GAMESTATE_ID_EVENT_WINDOW" visible="false" verticalCenter="0" horizontalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:LevelUpWindow id="GAMESTATE_ID_LEVELUP_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:EconomyOverview id="GAMESTATE_ID_ECONOMY_OVERVIEW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:ColonyWindow id="GAMESTATE_ID_COLONY_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:PvPColoniesWindow id="GAMESTATE_ID_PVPCOLONIES_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:PromotionWindow id="GAMESTATE_ID_PROMOTION" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:WelcomeWindow id="GAMESTATE_ID_WELCOME_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:DailyLoginPanel id="GAMESTATE_ID_DAILY_LOGIN_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:FriendsListMenu id="GAMESTATE_ID_FRIENDS_LIST_MENU" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:MailWindowContextMenu id="GAMESTATE_ID_MAIL_CONTEXT_MENU" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:MailWindowContextMenu id="GAMESTATE_ID_BLOCK_LIST_MENU" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:CameraControlPanel id="GAMESTATE_ID_CAMERA_CONTROL_PANEL" y="195" x="130" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:MemoryMonitorPanel id="GAMESTATE_ID_MEMORY_MONITOR" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:NewsWindow id="GAMESTATE_ID_NEWS_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:PremiumAccountActivationWindow id="GAMESTATE_ID_ACTIVATE_PREMIUM_ACCOUNT_WINDOW" visible="false" horizontalCenter="0" verticalCenter="-50" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:SkillTreeWindow id="GAMESTATE_ID_SKILLTREEWINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:EventMonster id="GAMESTATE_ID_EVENT_MONSTER" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:BlockList id="GAMESTATE_ID_BLOCK_LIST" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:GuildBank id="GAMESTATE_ID_GUILD_BANK_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:TaskBuildingPanel id="GAMESTATE_ID_TASK_BUILDING_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:GuildPayResourcePanel id="GAMESTATE_ID_GUILD_PAY_RESOURCE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:GuildTransferResourcePanel id="GAMESTATE_ID_GUILD_TRANSFER_RESOURCE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:ApplyBuffResourcePanel id="GAMESTATE_ID_APPLY_BUFF_RESOURCE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:DeleteBuffResourcePanel id="GAMESTATE_ID_DELETE_BUFF_RESOURCE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:GuildBankBuyTabPanel id="GAMESTATE_ID_GUILD_BUY_TAB_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:GuildBankEnlargeTabPanel id="GAMESTATE_ID_GUILD_ENLARGE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:GuildBankTransactionHistory id="GAMESTATE_ID_GUILD_TRANSACTION_HISTORY" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:AchievementPanelViewComponent id="GAMESTATE_ID_ACHIEVEMENT_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:AvatarSelectionViewComponent id="GAMESTATE_ID_AVATAR_SELECTION" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:DefenseBuildingPanel id="GAMESTATE_ID_DEFENSE_BUILDING" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:PvPLevelRewardPanel id="GAMESTATE_ID_PVP_LEVEL_REWARDS" visible="false" horizontalCenter="65" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:PlayerOptionsPanel id="GAMESTATE_ID_PLAYER_OPTIONS" y="180" x="200" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:EventInfoPanel id="GAMESTATE_ID_EVENT_INFO_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:ZoneBuffPanel id="GAMESTATE_ID_ZONE_BUFF_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:CultureBuildingPanel id="GAMESTATE_ID_CULTURE_BUILDING_PANEL" visible="false" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <cg:ContentGeneratorPanel id="GAMESTATE_ID_CONTENT_GENERATOR_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <cg:ContentGeneratorRewardPanel id="GAMESTATE_ID_CONTENT_GENERATOR_REWARD_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </mx:AddChild>
-            <mx:AddChild position="lastChild">
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
                 <gui:SplashScreen id="GAMESTATE_ID_SPLASH_SCREEN" percentWidth="100" percentHeight="100" visible="true" mouseEnabled="false" />
-            </mx:AddChild>
+            </states:GuiAddChild>
         </mx:State>
     </mx:states>
 
@@ -641,6 +695,11 @@
         <bridge:NLibFlexBridgeManager id="nLibFlexBridgeManager" />
         <particles:ParticlePlane id="particlePlane" percentWidth="100" percentHeight="100" />
     </local:EngineCanvas>
+    <mx:Canvas id="guiScaleHost" x="0" y="0" width="800" height="600" includeInLayout="false"
+        clipContent="false" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+        <mx:Canvas id="guiScaleLayer" x="0" y="0" width="800" height="600" includeInLayout="false"
+            horizontalScrollPolicy="off" verticalScrollPolicy="off" creationPolicy="all" />
+    </mx:Canvas>
     <gui:LoadingScreenLoader id="loadingScreenLoader" x="0" y="0" percentWidth="100" percentHeight="100" />
     <gui:LoadingScreen id="loadingScreen" x="0" y="0" percentWidth="100" percentHeight="100" visible="false" />
 </mx:Application>

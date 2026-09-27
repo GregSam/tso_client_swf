@@ -35,6 +35,7 @@
         private var mMusicVolume:int;
         private var mFriendsListVisible:Boolean;
         private var mAirshipSkin:int;
+        private var mUiScale:int = 2;
         private var mShowStoppedProduction:Boolean;
         private var mShowSettlers:Boolean;
 
@@ -124,6 +125,7 @@
             _local_1.options.addItem(PlayerOptionVO.Create(PLAYER_OPTION.SHOW_MISSING_RESOURCES, ((this.showMissingResources) ? "true" : "false")));
             _local_1.options.addItem(PlayerOptionVO.Create(PLAYER_OPTION.SHOW_FULL_WAREHOUSE, ((this.showFullWarehouse) ? "true" : "false")));
             _local_1.options.addItem(PlayerOptionVO.Create(PLAYER_OPTION.SHOW_STOPPED_PRODUCTION, ((this.showStoppedProduction) ? "true" : "false")));
+            _local_1.options.addItem(PlayerOptionVO.Create(PLAYER_OPTION.UI_SCALE, this.uiScale.toString()));
             return (_local_1);
         }
 
@@ -246,9 +248,28 @@
                     case PLAYER_OPTION.AIRSHIP_SKIN:
                         this.airshipSkin = parseInt(_local_2.value);
                         break;
+                    case PLAYER_OPTION.UI_SCALE:
+                        this.uiScale = parseInt(_local_2.value);
+                        break;
                 };
             };
             globalFlash.gui.mPlayerOptionsPanel.Update();
+        }
+
+        public function get uiScale():int
+        {
+            return (this.mUiScale);
+        }
+
+        public function set uiScale(_arg_1:int):void
+        {
+            var scales:Array = [0.8, 1, 1.1, 1.25, 1.5, 1.75];
+            this.mUiScale = (((_arg_1 < 1) || (_arg_1 > 6)) ? 2 : _arg_1);
+            global.getApplication().setUIScale(scales[this.mUiScale - 1]);
+            if (((globalFlash.gui != null) && (globalFlash.gui.mPlayerOptionsPanel != null)))
+            {
+                globalFlash.gui.mPlayerOptionsPanel.setUiScaleState(this.mUiScale);
+            };
         }
 
         public function get showHalfSizeGraphics():Boolean

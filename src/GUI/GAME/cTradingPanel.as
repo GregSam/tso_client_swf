@@ -446,7 +446,7 @@
             {
                 _local_1 = new TradingPanel();
                 _local_1.id = "GAMESTATE_ID_TRADING_PANEL";
-                global.getApplication().isoengine.addChild(_local_1);
+                global.getApplication().guiScaleLayer.addChild(_local_1);
                 this.Init(_local_1);
             };
         }

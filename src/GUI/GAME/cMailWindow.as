@@ -929,7 +929,7 @@
             {
                 _local_1 = new MailWindow();
                 _local_1.id = "GAMESTATE_ID_MAIL_WINDOW";
-                global.getApplication().isoengine.addChild(_local_1);
+                global.getApplication().guiScaleLayer.addChild(_local_1);
                 this.init(_local_1);
             };
         }
@@ -1904,7 +1904,7 @@
             {
                 _local_2 = new BattleWindow();
                 _local_2.id = "GAMESTATE_ID_BATTLE_WINDOW";
-                global.getApplication().isoengine.addChild(_local_2);
+                global.getApplication().guiScaleLayer.addChild(_local_2);
                 globalFlash.gui.mBattleWindow = new cBattleWindow();
                 globalFlash.gui.mBattleWindow.Init(_local_2);
             };

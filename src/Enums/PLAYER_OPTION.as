@@ -25,6 +25,7 @@
         public static const SHOW_MISSING_RESOURCES:String = "ShowMissingResources";
         public static const SHOW_FULL_WAREHOUSE:String = "ShowFullWarehouse";
         public static const SHOW_STOPPED_PRODUCTION:String = "ShowStoppedProduction";
+        public static const UI_SCALE:String = "uiScale";
 
 
     }

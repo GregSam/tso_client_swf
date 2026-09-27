@@ -889,7 +889,7 @@ Alert {
 
 ActionBarRight {
     backgroundSize: "100%";
-    backgroundImage: Embed(source="../../assets/vector/embedded/actionbar/actionbar_actionbar4_353.swf", symbol="SWMMO__embed_css_____data_src_gfx_embedded_actionbar_actionbar4_png_1780170099");
+    backgroundImage: Embed(source="../../assets/embedded/actionbar/actionbar_actionbar4.png", scaleGridLeft="2", scaleGridRight="7", scaleGridTop="1", scaleGridBottom="2");
     horizontalGap: 15;
     paddingBottom: 0;
     paddingLeft: 5;
@@ -1496,7 +1496,7 @@ Panel {
 
 ActionBarCenter {
     backgroundSize: "100%";
-    backgroundImage: Embed(source="../../assets/vector/embedded/actionbar/actionbar_actionbar3_415.swf", symbol="SWMMO__embed_css_____data_src_gfx_embedded_actionbar_actionbar3_png_1811650001");
+    backgroundImage: Embed(source="../../assets/embedded/actionbar/actionbar_actionbar3.png", scaleGridLeft="18", scaleGridRight="24", scaleGridTop="1", scaleGridBottom="2");
 }
 
 .economyProductionBgStdGrey {
@@ -1620,7 +1620,7 @@ ToolTip {
 
 ActionBarLeft {
     backgroundSize: "100%";
-    backgroundImage: Embed(source="../../assets/vector/embedded/actionbar/actionbar_actionbar2_433.swf", symbol="SWMMO__embed_css_____data_src_gfx_embedded_actionbar_actionbar2_png_1779695478");
+    backgroundImage: Embed(source="../../assets/embedded/actionbar/actionbar_actionbar2.png", scaleGridLeft="55", scaleGridRight="60", scaleGridTop="1", scaleGridBottom="2");
     horizontalGap: 15;
     paddingBottom: 0;
     paddingLeft: 50;
