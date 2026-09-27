@@ -1,4 +1,4 @@
-﻿package Interface
+package Interface
 {
     import nLib.cNLibInterface;
     import flash.events.IEventDispatcher;
@@ -671,6 +671,11 @@
             {
                 _local_3.setTriggerAchievementFinished(_local_4);
             };
+            var _local_5:UserAchievementManager = this.mComparedUsersAchievementManager[_local_3.getPlayerID()];
+            if (_local_5 != null)
+            {
+                _local_5.dispose();
+            };
             this.mComparedUsersAchievementManager[_local_3.getPlayerID()] = _local_3;
             ApplicationFacade.sendNotification(AchievementConsts.COMPARED_TREE_RECEIVED, _local_3.getTree());
         }
@@ -1008,6 +1013,13 @@
             var _local_3:UserAchievementManager;
             var _local_4:UserAchievementDataVO;
             var _local_5:UserAchievementTriggerFinishedUpdateVO;
+            for each (_local_3 in this.mComparedUsersAchievementManager)
+            {
+                if (_local_3 != null)
+                {
+                    _local_3.dispose();
+                };
+            };
             this.mComparedUsersAchievementManager = new Dictionary();
             var _local_2:AchievementManagerBuilder = new AchievementManagerBuilder(AchievementsManager.getInstance(), this);
             for each (_local_4 in _arg_1)
@@ -1463,7 +1475,11 @@
                     return (_local_2.getTree());
                 };
             };
-            this.mComparedUsersAchievementManager[_arg_1] = null;
+            if (_local_2 != null)
+            {
+                _local_2.dispose();
+            };
+            delete this.mComparedUsersAchievementManager[_arg_1];
             return (null);
         }
 
