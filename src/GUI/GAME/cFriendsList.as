@@ -31,6 +31,7 @@
         private var mFriendListPlayer:dPlayerListItemVO;
         private var mList:Array;
         private var mOnlineStatusGuildQueue:Object;
+        private var mOnlineFilterRefreshPending:Boolean = false;
 
 
         public function IsGuildMember(_arg_1:dPlayerListItemVO):Boolean
@@ -88,6 +89,26 @@
                 {
                     this.mOnlineStatusGuildQueue[_arg_1] = _arg_2;
                 };
+            };
+            this.ScheduleOnlineFilterRefresh();
+        }
+
+        private function ScheduleOnlineFilterRefresh():void
+        {
+            if (((this.mFilter != 3) || (this.mOnlineFilterRefreshPending)))
+            {
+                return;
+            };
+            this.mOnlineFilterRefreshPending = true;
+            this.mFriendsList.callLater(this.RefreshOnlineFilter);
+        }
+
+        private function RefreshOnlineFilter():void
+        {
+            this.mOnlineFilterRefreshPending = false;
+            if (((this.mFilter == 3) && (this.mList != null)))
+            {
+                this.SetData(this.mList);
             };
         }
 

@@ -89,7 +89,6 @@
         private var uiScaleUpdatePending:Boolean = false;
         private var appliedUIStageWidth:Number = -1;
         private var appliedUIStageHeight:Number = -1;
-
         public function getUIScale():Number
         {
             return (this.mUIScale);
