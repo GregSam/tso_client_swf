@@ -2358,6 +2358,38 @@
         private static var shopItems:BitmapFileMap = new BitmapFileMap();
         private static var iconspack:BitmapFileMap = new BitmapFileMap();
         private static var loadedGfxVector:Vector.<BitmapFileMap> = new Vector.<BitmapFileMap>();
+        private static var getGfxBitmapData:Dictionary = new Dictionary(true);
+
+        public static function CalculateGetGfxBitmapStats():Object
+        {
+            var bitmapData:BitmapData;
+            var memory:Number = 0;
+            var count:uint = 0;
+            for (var key:Object in getGfxBitmapData)
+            {
+                bitmapData = key as BitmapData;
+                if (bitmapData != null)
+                {
+                    try
+                    {
+                        memory = (memory + ((bitmapData.width * bitmapData.height) * 4));
+                        count++;
+                    }
+                    catch (_error:Error)
+                    {
+                    };
+                };
+            };
+            return ({count:count, memory:memory});
+        }
+
+        private static function TrackGetGfxBitmap(_arg_1:Bitmap):void
+        {
+            if (((_arg_1 != null) && (_arg_1.bitmapData != null)))
+            {
+                getGfxBitmapData[_arg_1.bitmapData] = true;
+            };
+        }
 
         public static function CalculateLoadedBitmapMemory():Number
         {
@@ -2628,6 +2660,7 @@
             {
                 return (dummy);
             };
+            TrackGetGfxBitmap(_local_4);
             return ((_arg_2) ? _local_4 : TurnToGreyScale(_local_4));
         }
 

@@ -338,7 +338,8 @@
             this.mPanel = _arg_1;
             this.mPanel.x = ((this.mPanel.stage.stageWidth - this.mPanel.width) / 2);
             this.mPanel.y = ((this.mPanel.stage.stageHeight - this.mPanel.height) / 2);
-            this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            if (this.mPanel.initialized) this.completeHandler(null);
+            else this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
         }
 
         private function PayResource(_arg_1:Event):void

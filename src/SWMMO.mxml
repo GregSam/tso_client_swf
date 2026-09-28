@@ -75,6 +75,61 @@
         private static const addrPrefix:String = "[object Stage].NO_UI.SWMMO.isoengine.";
         mx_internal static var swmmoStylesInitDone:Boolean = false;
         public var GAMESTATE_ID_CHAT_PANEL:ChatPanel = null;
+        public var GAMESTATE_ID_SHOP_WINDOW:ShopWindow = null;
+        public var GAMESTATE_ID_PVP_REPORT_WINDOW:PvPReportWindow = null;
+        public var GAMESTATE_ID_GUILD_WINDOW:GuildWindow = null;
+        public var GAMESTATE_ID_HELP_WINDOW:HelpWindow = null;
+        public var GAMESTATE_ID_ECONOMY_OVERVIEW:EconomyOverview = null;
+        public var GAMESTATE_ID_PVPCOLONIES_WINDOW:PvPColoniesWindow = null;
+        public var GAMESTATE_ID_SKILLTREEWINDOW:SkillTreeWindow = null;
+        public var GAMESTATE_ID_ACHIEVEMENT_PANEL:AchievementPanelViewComponent = null;
+        public var GAMESTATE_ID_CONTENT_GENERATOR_PANEL:ContentGeneratorPanel = null;
+        public var GAMESTATE_ID_CONTENT_GENERATOR_REWARD_PANEL:ContentGeneratorRewardPanel = null;
+        public var GAMESTATE_ID_TRADE_WINDOW:TradeWindow = null;
+        public var GAMESTATE_ID_BLOCK_LIST:BlockList = null;
+        public var GAMESTATE_ID_GUILD_BANK_WINDOW:GuildBank = null;
+        public var GAMESTATE_ID_GUILD_PAY_RESOURCE_PANEL:GuildPayResourcePanel = null;
+        public var GAMESTATE_ID_GUILD_TRANSFER_RESOURCE_PANEL:GuildTransferResourcePanel = null;
+        public var GAMESTATE_ID_GUILD_BUY_TAB_PANEL:GuildBankBuyTabPanel = null;
+        public var GAMESTATE_ID_GUILD_ENLARGE_PANEL:GuildBankEnlargeTabPanel = null;
+        public var GAMESTATE_ID_GUILD_TRANSACTION_HISTORY:GuildBankTransactionHistory = null;
+        public var GAMESTATE_ID_PLAYER_OPTIONS:PlayerOptionsPanel = null;
+        public var GAMESTATE_ID_ZONE_BUFF_PANEL:ZoneBuffPanel = null;
+        public var GAMESTATE_ID_ADD_FRIENDS_PANEL:AddFriendsPanel = null;
+        public var GAMESTATE_ID_FOUND_GUILD_PANEL:FoundGuildPanel = null;
+        public var GAMESTATE_ID_ACTIVATE_PREMIUM_ACCOUNT_WINDOW:PremiumAccountActivationWindow = null;
+        public var GAMESTATE_ID_TASK_BUILDING_PANEL:TaskBuildingPanel = null;
+        public var GAMESTATE_ID_APPLY_BUFF_RESOURCE_PANEL:ApplyBuffResourcePanel = null;
+        public var GAMESTATE_ID_DELETE_BUFF_RESOURCE_PANEL:DeleteBuffResourcePanel = null;
+        public var GAMESTATE_ID_EVENT_INFO_PANEL:EventInfoPanel = null;
+        public var GAMESTATE_ID_CULTURE_BUILDING_PANEL:CultureBuildingPanel = null;
+        public var GAMESTATE_ID_MOVE_BUILDING_PANEL:MoveBuildingPanel = null;
+        public var GAMESTATE_ID_MYSTERYBOX_PANEL:MysteryBoxPanel = null;
+        public var GAMESTATE_ID_PRECOMBAT_PANEL:CombatPreviewPanel = null;
+        public var GAMESTATE_ID_COLONY_WINDOW:ColonyWindow = null;
+        public var GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL:SpecialistTravelPanel = null;
+        public var GAMESTATE_ID_QUEST_BOOK:QuestBook = null;
+        public var GAMESTATE_ID_HELP_OVERVIEW:HelpOverview = null;
+        public var GAMESTATE_ID_ADVENTURE_PANEL:AdventurePanel = null;
+        public var GAMESTATE_ID_ADVENT_WINDOW:AdventWindow = null;
+        public var GAMESTATE_ID_PVP_LEVEL_REWARDS:PvPLevelRewardPanel = null;
+        public var GAMESTATE_ID_SPECIALIST_PANEL:SpecialistPanel = null;
+        public var GAMESTATE_ID_EVENT_WINDOW:EventPanel = null;
+        public var GAMESTATE_ID_LEVELUP_WINDOW:LevelUpWindow = null;
+        public var GAMESTATE_ID_WELCOME_WINDOW:WelcomeWindow = null;
+        public var GAMESTATE_ID_DAILY_LOGIN_PANEL:DailyLoginPanel = null;
+        public var GAMESTATE_ID_MEMORY_MONITOR:MemoryMonitorPanel = null;
+        public var GAMESTATE_ID_DEFENSE_BUILDING:DefenseBuildingPanel = null;
+        public var GAMESTATE_HIRED_TROOPS_POOL_PANEL:HiredTroopsPoolPanel = null;
+        public var GAMESTATE_ID_BUILDING_INFO_PANEL:BuildingInfoPanel = null;
+        public var GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL:EpicWorkyardInfoPanel = null;
+        public var GAMESTATE_ID_WAREHOUSE_INFO_PANEL:WarehouseInfoPanel = null;
+        public var GAMESTATE_ID_TIMED_PRODUCTION_INFO_PANEL:TimedProductionInfoPanel = null;
+        public var GAMESTATE_ID_BARRACKS:TimedProductionInfoPanel = null;
+        public var GAMESTATE_ID_BARRACKS3:TimedProductionInfoPanel = null;
+        public var GAMESTATE_ID_EXPEDITION_WEAPONSMITH:TimedProductionInfoPanel = null;
+        public var GAMESTATE_ID_SKILL_PRODUCTION_PANEL:SkillProductionPanel = null;
+        public var GAMESTATE_ID_BATTLE_WINDOW:BattleWindow = null;
         public var checker:RabbidCode = null;
         public var inputNotifier:InputNotifier = new InputNotifier();
         [Bindable]
@@ -92,6 +147,458 @@
         public function getUIScale():Number
         {
             return (this.mUIScale);
+        }
+
+        public function ensureShopWindow():ShopWindow
+        {
+            if (this.GAMESTATE_ID_SHOP_WINDOW == null)
+            {
+                this.GAMESTATE_ID_SHOP_WINDOW = new ShopWindow();
+                this.GAMESTATE_ID_SHOP_WINDOW.id = "GAMESTATE_ID_SHOP_WINDOW";
+                this.GAMESTATE_ID_SHOP_WINDOW.visible = false;
+                this.GAMESTATE_ID_SHOP_WINDOW.setStyle("horizontalCenter", 0);
+                this.GAMESTATE_ID_SHOP_WINDOW.setStyle("verticalCenter", -50);
+                this.guiScaleLayer.addChild(this.GAMESTATE_ID_SHOP_WINDOW);
+            }
+            return (this.GAMESTATE_ID_SHOP_WINDOW);
+        }
+
+        private function createLazyWindow(_arg_1:UIComponent, _arg_2:String, _arg_3:Number=0, _arg_4:Number=0):UIComponent
+        {
+            _arg_1.id = _arg_2;
+            _arg_1.visible = false;
+            _arg_1.setStyle("horizontalCenter", _arg_3);
+            _arg_1.setStyle("verticalCenter", _arg_4);
+            return (_arg_1);
+        }
+
+        private function addLazyWindow(_arg_1:UIComponent, _arg_2:String, _arg_3:Number=0, _arg_4:Number=0):UIComponent
+        {
+            this.createLazyWindow(_arg_1, _arg_2, _arg_3, _arg_4);
+            this.mountLazyWindow(_arg_1);
+            return (_arg_1);
+        }
+
+        public function mountLazyWindow(_arg_1:UIComponent):void
+        {
+            if (_arg_1.parent == null)
+            {
+                this.guiScaleLayer.addChild(_arg_1);
+                _arg_1.validateNow();
+            }
+        }
+
+        public function ensurePvpReportWindow():PvPReportWindow
+        {
+            if (this.GAMESTATE_ID_PVP_REPORT_WINDOW == null)
+                this.GAMESTATE_ID_PVP_REPORT_WINDOW = this.createLazyWindow(new PvPReportWindow(), "GAMESTATE_ID_PVP_REPORT_WINDOW", 0, -50) as PvPReportWindow;
+            return (this.GAMESTATE_ID_PVP_REPORT_WINDOW);
+        }
+
+        public function ensureGuildWindow():GuildWindow
+        {
+            if (this.GAMESTATE_ID_GUILD_WINDOW == null)
+                this.GAMESTATE_ID_GUILD_WINDOW = this.createLazyWindow(new GuildWindow(), "GAMESTATE_ID_GUILD_WINDOW") as GuildWindow;
+            return (this.GAMESTATE_ID_GUILD_WINDOW);
+        }
+
+        public function ensureHelpWindow():HelpWindow
+        {
+            if (this.GAMESTATE_ID_HELP_WINDOW == null)
+            {
+                this.GAMESTATE_ID_HELP_WINDOW = new HelpWindow();
+                this.GAMESTATE_ID_HELP_WINDOW.id = "GAMESTATE_ID_HELP_WINDOW";
+                this.GAMESTATE_ID_HELP_WINDOW.visible = false;
+                this.GAMESTATE_ID_HELP_WINDOW.y = 58;
+                this.GAMESTATE_ID_HELP_WINDOW.setStyle("left", 0);
+                this.GAMESTATE_ID_HELP_WINDOW.setStyle("right", "auto");
+                this.guiScaleLayer.addChild(this.GAMESTATE_ID_HELP_WINDOW);
+            }
+            return (this.GAMESTATE_ID_HELP_WINDOW);
+        }
+
+        public function ensureEconomyOverview():EconomyOverview
+        {
+            if (this.GAMESTATE_ID_ECONOMY_OVERVIEW == null)
+                this.GAMESTATE_ID_ECONOMY_OVERVIEW = this.createLazyWindow(new EconomyOverview(), "GAMESTATE_ID_ECONOMY_OVERVIEW") as EconomyOverview;
+            return (this.GAMESTATE_ID_ECONOMY_OVERVIEW);
+        }
+
+        public function ensurePvPColoniesWindow():PvPColoniesWindow
+        {
+            if (this.GAMESTATE_ID_PVPCOLONIES_WINDOW == null)
+                this.GAMESTATE_ID_PVPCOLONIES_WINDOW = this.addLazyWindow(new PvPColoniesWindow(), "GAMESTATE_ID_PVPCOLONIES_WINDOW") as PvPColoniesWindow;
+            return (this.GAMESTATE_ID_PVPCOLONIES_WINDOW);
+        }
+
+        public function ensureSkillTreeWindow():SkillTreeWindow
+        {
+            if (this.GAMESTATE_ID_SKILLTREEWINDOW == null)
+                this.GAMESTATE_ID_SKILLTREEWINDOW = this.createLazyWindow(new SkillTreeWindow(), "GAMESTATE_ID_SKILLTREEWINDOW") as SkillTreeWindow;
+            return (this.GAMESTATE_ID_SKILLTREEWINDOW);
+        }
+
+        public function ensureAchievementPanel():AchievementPanelViewComponent
+        {
+            if (this.GAMESTATE_ID_ACHIEVEMENT_PANEL == null)
+                this.GAMESTATE_ID_ACHIEVEMENT_PANEL = this.addLazyWindow(new AchievementPanelViewComponent(), "GAMESTATE_ID_ACHIEVEMENT_PANEL") as AchievementPanelViewComponent;
+            return (this.GAMESTATE_ID_ACHIEVEMENT_PANEL);
+        }
+
+        public function ensureContentGeneratorPanel():ContentGeneratorPanel
+        {
+            if (this.GAMESTATE_ID_CONTENT_GENERATOR_PANEL == null)
+                this.GAMESTATE_ID_CONTENT_GENERATOR_PANEL = this.addLazyWindow(new ContentGeneratorPanel(), "GAMESTATE_ID_CONTENT_GENERATOR_PANEL") as ContentGeneratorPanel;
+            return (this.GAMESTATE_ID_CONTENT_GENERATOR_PANEL);
+        }
+
+        public function ensureContentGeneratorRewardPanel():ContentGeneratorRewardPanel
+        {
+            if (this.GAMESTATE_ID_CONTENT_GENERATOR_REWARD_PANEL == null)
+                this.GAMESTATE_ID_CONTENT_GENERATOR_REWARD_PANEL = this.addLazyWindow(new ContentGeneratorRewardPanel(), "GAMESTATE_ID_CONTENT_GENERATOR_REWARD_PANEL") as ContentGeneratorRewardPanel;
+            return (this.GAMESTATE_ID_CONTENT_GENERATOR_REWARD_PANEL);
+        }
+
+        public function ensureTradeWindow():TradeWindow
+        {
+            if (this.GAMESTATE_ID_TRADE_WINDOW == null)
+                this.GAMESTATE_ID_TRADE_WINDOW = this.createLazyWindow(new TradeWindow(), "GAMESTATE_ID_TRADE_WINDOW") as TradeWindow;
+            return (this.GAMESTATE_ID_TRADE_WINDOW);
+        }
+
+        public function ensureBlockList():BlockList
+        {
+            if (this.GAMESTATE_ID_BLOCK_LIST == null)
+                this.GAMESTATE_ID_BLOCK_LIST = this.addLazyWindow(new BlockList(), "GAMESTATE_ID_BLOCK_LIST") as BlockList;
+            return (this.GAMESTATE_ID_BLOCK_LIST);
+        }
+
+        public function ensureGuildBankWindow():GuildBank
+        {
+            if (this.GAMESTATE_ID_GUILD_BANK_WINDOW == null)
+                this.GAMESTATE_ID_GUILD_BANK_WINDOW = this.createLazyWindow(new GuildBank(), "GAMESTATE_ID_GUILD_BANK_WINDOW") as GuildBank;
+            return (this.GAMESTATE_ID_GUILD_BANK_WINDOW);
+        }
+
+        public function ensureGuildPayResourcePanel():GuildPayResourcePanel
+        {
+            if (this.GAMESTATE_ID_GUILD_PAY_RESOURCE_PANEL == null)
+                this.GAMESTATE_ID_GUILD_PAY_RESOURCE_PANEL = this.addLazyWindow(new GuildPayResourcePanel(), "GAMESTATE_ID_GUILD_PAY_RESOURCE_PANEL") as GuildPayResourcePanel;
+            return (this.GAMESTATE_ID_GUILD_PAY_RESOURCE_PANEL);
+        }
+
+        public function ensureGuildTransferResourcePanel():GuildTransferResourcePanel
+        {
+            if (this.GAMESTATE_ID_GUILD_TRANSFER_RESOURCE_PANEL == null)
+                this.GAMESTATE_ID_GUILD_TRANSFER_RESOURCE_PANEL = this.createLazyWindow(new GuildTransferResourcePanel(), "GAMESTATE_ID_GUILD_TRANSFER_RESOURCE_PANEL") as GuildTransferResourcePanel;
+            return (this.GAMESTATE_ID_GUILD_TRANSFER_RESOURCE_PANEL);
+        }
+
+        public function ensureGuildBankBuyTabPanel():GuildBankBuyTabPanel
+        {
+            if (this.GAMESTATE_ID_GUILD_BUY_TAB_PANEL == null)
+                this.GAMESTATE_ID_GUILD_BUY_TAB_PANEL = this.createLazyWindow(new GuildBankBuyTabPanel(), "GAMESTATE_ID_GUILD_BUY_TAB_PANEL") as GuildBankBuyTabPanel;
+            return (this.GAMESTATE_ID_GUILD_BUY_TAB_PANEL);
+        }
+
+        public function ensureGuildBankEnlargePanel():GuildBankEnlargeTabPanel
+        {
+            if (this.GAMESTATE_ID_GUILD_ENLARGE_PANEL == null)
+                this.GAMESTATE_ID_GUILD_ENLARGE_PANEL = this.createLazyWindow(new GuildBankEnlargeTabPanel(), "GAMESTATE_ID_GUILD_ENLARGE_PANEL") as GuildBankEnlargeTabPanel;
+            return (this.GAMESTATE_ID_GUILD_ENLARGE_PANEL);
+        }
+
+        public function ensureGuildBankTransactionHistory():GuildBankTransactionHistory
+        {
+            if (this.GAMESTATE_ID_GUILD_TRANSACTION_HISTORY == null)
+                this.GAMESTATE_ID_GUILD_TRANSACTION_HISTORY = this.createLazyWindow(new GuildBankTransactionHistory(), "GAMESTATE_ID_GUILD_TRANSACTION_HISTORY") as GuildBankTransactionHistory;
+            return (this.GAMESTATE_ID_GUILD_TRANSACTION_HISTORY);
+        }
+
+        public function ensurePlayerOptionsPanel():PlayerOptionsPanel
+        {
+            if (this.GAMESTATE_ID_PLAYER_OPTIONS == null)
+            {
+                this.GAMESTATE_ID_PLAYER_OPTIONS = new PlayerOptionsPanel();
+                this.GAMESTATE_ID_PLAYER_OPTIONS.id = "GAMESTATE_ID_PLAYER_OPTIONS";
+                this.GAMESTATE_ID_PLAYER_OPTIONS.x = 200;
+                this.GAMESTATE_ID_PLAYER_OPTIONS.y = 180;
+                this.GAMESTATE_ID_PLAYER_OPTIONS.visible = false;
+            }
+            return (this.GAMESTATE_ID_PLAYER_OPTIONS);
+        }
+
+        public function ensureZoneBuffPanel():ZoneBuffPanel
+        {
+            if (this.GAMESTATE_ID_ZONE_BUFF_PANEL == null)
+                this.GAMESTATE_ID_ZONE_BUFF_PANEL = this.addLazyWindow(new ZoneBuffPanel(), "GAMESTATE_ID_ZONE_BUFF_PANEL") as ZoneBuffPanel;
+            return (this.GAMESTATE_ID_ZONE_BUFF_PANEL);
+        }
+
+        public function ensureAddFriendsPanel():AddFriendsPanel
+        {
+            if (this.GAMESTATE_ID_ADD_FRIENDS_PANEL == null)
+            {
+                this.GAMESTATE_ID_ADD_FRIENDS_PANEL = new AddFriendsPanel();
+                this.GAMESTATE_ID_ADD_FRIENDS_PANEL.id = "GAMESTATE_ID_ADD_FRIENDS_PANEL";
+                this.GAMESTATE_ID_ADD_FRIENDS_PANEL.visible = false;
+                this.GAMESTATE_ID_ADD_FRIENDS_PANEL.setStyle("horizontalCenter", 0);
+                this.GAMESTATE_ID_ADD_FRIENDS_PANEL.setStyle("verticalCenter", 0);
+            }
+            return (this.GAMESTATE_ID_ADD_FRIENDS_PANEL);
+        }
+
+        public function ensureFoundGuildPanel():FoundGuildPanel
+        {
+            if (this.GAMESTATE_ID_FOUND_GUILD_PANEL == null)
+                this.GAMESTATE_ID_FOUND_GUILD_PANEL = this.createLazyWindow(new FoundGuildPanel(), "GAMESTATE_ID_FOUND_GUILD_PANEL") as FoundGuildPanel;
+            return (this.GAMESTATE_ID_FOUND_GUILD_PANEL);
+        }
+
+        public function ensurePremiumAccountActivationWindow():PremiumAccountActivationWindow
+        {
+            if (this.GAMESTATE_ID_ACTIVATE_PREMIUM_ACCOUNT_WINDOW == null)
+                this.GAMESTATE_ID_ACTIVATE_PREMIUM_ACCOUNT_WINDOW = this.createLazyWindow(new PremiumAccountActivationWindow(), "GAMESTATE_ID_ACTIVATE_PREMIUM_ACCOUNT_WINDOW", 0, -50) as PremiumAccountActivationWindow;
+            return (this.GAMESTATE_ID_ACTIVATE_PREMIUM_ACCOUNT_WINDOW);
+        }
+
+        public function ensureTaskBuildingPanel():TaskBuildingPanel
+        {
+            if (this.GAMESTATE_ID_TASK_BUILDING_PANEL == null)
+                this.GAMESTATE_ID_TASK_BUILDING_PANEL = this.createLazyWindow(new TaskBuildingPanel(), "GAMESTATE_ID_TASK_BUILDING_PANEL") as TaskBuildingPanel;
+            return (this.GAMESTATE_ID_TASK_BUILDING_PANEL);
+        }
+
+        public function ensureApplyBuffResourcePanel():ApplyBuffResourcePanel
+        {
+            if (this.GAMESTATE_ID_APPLY_BUFF_RESOURCE_PANEL == null)
+                this.GAMESTATE_ID_APPLY_BUFF_RESOURCE_PANEL = this.createLazyWindow(new ApplyBuffResourcePanel(), "GAMESTATE_ID_APPLY_BUFF_RESOURCE_PANEL") as ApplyBuffResourcePanel;
+            return (this.GAMESTATE_ID_APPLY_BUFF_RESOURCE_PANEL);
+        }
+
+        public function ensureDeleteBuffResourcePanel():DeleteBuffResourcePanel
+        {
+            if (this.GAMESTATE_ID_DELETE_BUFF_RESOURCE_PANEL == null)
+                this.GAMESTATE_ID_DELETE_BUFF_RESOURCE_PANEL = this.createLazyWindow(new DeleteBuffResourcePanel(), "GAMESTATE_ID_DELETE_BUFF_RESOURCE_PANEL") as DeleteBuffResourcePanel;
+            return (this.GAMESTATE_ID_DELETE_BUFF_RESOURCE_PANEL);
+        }
+
+        public function ensureEventInfoPanel():EventInfoPanel
+        {
+            if (this.GAMESTATE_ID_EVENT_INFO_PANEL == null)
+                this.GAMESTATE_ID_EVENT_INFO_PANEL = this.addLazyWindow(new EventInfoPanel(), "GAMESTATE_ID_EVENT_INFO_PANEL") as EventInfoPanel;
+            return (this.GAMESTATE_ID_EVENT_INFO_PANEL);
+        }
+
+        public function ensureCultureBuildingPanel():CultureBuildingPanel
+        {
+            if (this.GAMESTATE_ID_CULTURE_BUILDING_PANEL == null)
+                this.GAMESTATE_ID_CULTURE_BUILDING_PANEL = this.createLazyWindow(new CultureBuildingPanel(), "GAMESTATE_ID_CULTURE_BUILDING_PANEL") as CultureBuildingPanel;
+            return (this.GAMESTATE_ID_CULTURE_BUILDING_PANEL);
+        }
+
+        public function ensureMoveBuildingPanel():MoveBuildingPanel
+        {
+            if (this.GAMESTATE_ID_MOVE_BUILDING_PANEL == null)
+                this.GAMESTATE_ID_MOVE_BUILDING_PANEL = this.createLazyWindow(new MoveBuildingPanel(), "GAMESTATE_ID_MOVE_BUILDING_PANEL") as MoveBuildingPanel;
+            return (this.GAMESTATE_ID_MOVE_BUILDING_PANEL);
+        }
+
+        public function ensureMysteryBoxPanel():MysteryBoxPanel
+        {
+            if (this.GAMESTATE_ID_MYSTERYBOX_PANEL == null)
+                this.GAMESTATE_ID_MYSTERYBOX_PANEL = this.createLazyWindow(new MysteryBoxPanel(), "GAMESTATE_ID_MYSTERYBOX_PANEL") as MysteryBoxPanel;
+            return (this.GAMESTATE_ID_MYSTERYBOX_PANEL);
+        }
+
+        public function ensureCombatPreviewPanel():CombatPreviewPanel
+        {
+            if (this.GAMESTATE_ID_PRECOMBAT_PANEL == null)
+                this.GAMESTATE_ID_PRECOMBAT_PANEL = this.createLazyWindow(new CombatPreviewPanel(), "GAMESTATE_ID_PRECOMBAT_PANEL") as CombatPreviewPanel;
+            return (this.GAMESTATE_ID_PRECOMBAT_PANEL);
+        }
+
+        public function ensureColonyWindow():ColonyWindow
+        {
+            if (this.GAMESTATE_ID_COLONY_WINDOW == null)
+                this.GAMESTATE_ID_COLONY_WINDOW = this.createLazyWindow(new ColonyWindow(), "GAMESTATE_ID_COLONY_WINDOW") as ColonyWindow;
+            return (this.GAMESTATE_ID_COLONY_WINDOW);
+        }
+
+        public function ensureSpecialistTravelPanel():SpecialistTravelPanel
+        {
+            if (this.GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL == null)
+                this.GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL = this.createLazyWindow(new SpecialistTravelPanel(), "GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL") as SpecialistTravelPanel;
+            return (this.GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL);
+        }
+
+        public function ensureQuestBook():QuestBook
+        {
+            if (this.GAMESTATE_ID_QUEST_BOOK == null)
+                this.GAMESTATE_ID_QUEST_BOOK = this.createLazyWindow(new QuestBook(), "GAMESTATE_ID_QUEST_BOOK") as QuestBook;
+            return (this.GAMESTATE_ID_QUEST_BOOK);
+        }
+
+        public function ensureHelpOverview():HelpOverview
+        {
+            if (this.GAMESTATE_ID_HELP_OVERVIEW == null)
+                this.GAMESTATE_ID_HELP_OVERVIEW = this.createLazyWindow(new HelpOverview(), "GAMESTATE_ID_HELP_OVERVIEW") as HelpOverview;
+            return (this.GAMESTATE_ID_HELP_OVERVIEW);
+        }
+
+        public function ensureAdventurePanel():AdventurePanel
+        {
+            if (this.GAMESTATE_ID_ADVENTURE_PANEL == null)
+                this.GAMESTATE_ID_ADVENTURE_PANEL = this.createLazyWindow(new AdventurePanel(), "GAMESTATE_ID_ADVENTURE_PANEL") as AdventurePanel;
+            return (this.GAMESTATE_ID_ADVENTURE_PANEL);
+        }
+
+        public function ensureAdventWindow():AdventWindow
+        {
+            if (this.GAMESTATE_ID_ADVENT_WINDOW == null)
+                this.GAMESTATE_ID_ADVENT_WINDOW = this.createLazyWindow(new AdventWindow(), "GAMESTATE_ID_ADVENT_WINDOW") as AdventWindow;
+            return (this.GAMESTATE_ID_ADVENT_WINDOW);
+        }
+
+        public function ensurePvPLevelRewardsPanel():PvPLevelRewardPanel
+        {
+            if (this.GAMESTATE_ID_PVP_LEVEL_REWARDS == null)
+                this.GAMESTATE_ID_PVP_LEVEL_REWARDS = this.createLazyWindow(new PvPLevelRewardPanel(), "GAMESTATE_ID_PVP_LEVEL_REWARDS", 65, 0) as PvPLevelRewardPanel;
+            return (this.GAMESTATE_ID_PVP_LEVEL_REWARDS);
+        }
+
+        public function ensureSpecialistPanel():SpecialistPanel
+        {
+            if (this.GAMESTATE_ID_SPECIALIST_PANEL == null)
+                this.GAMESTATE_ID_SPECIALIST_PANEL = this.createLazyWindow(new SpecialistPanel(), "GAMESTATE_ID_SPECIALIST_PANEL") as SpecialistPanel;
+            return (this.GAMESTATE_ID_SPECIALIST_PANEL);
+        }
+
+        public function ensureEventWindow():EventPanel
+        {
+            if (this.GAMESTATE_ID_EVENT_WINDOW == null)
+                this.GAMESTATE_ID_EVENT_WINDOW = this.createLazyWindow(new EventPanel(), "GAMESTATE_ID_EVENT_WINDOW") as EventPanel;
+            return (this.GAMESTATE_ID_EVENT_WINDOW);
+        }
+
+        public function ensureLevelUpWindow():LevelUpWindow
+        {
+            if (this.GAMESTATE_ID_LEVELUP_WINDOW == null)
+                this.GAMESTATE_ID_LEVELUP_WINDOW = this.createLazyWindow(new LevelUpWindow(), "GAMESTATE_ID_LEVELUP_WINDOW") as LevelUpWindow;
+            return (this.GAMESTATE_ID_LEVELUP_WINDOW);
+        }
+
+        public function ensureWelcomeWindow():WelcomeWindow
+        {
+            if (this.GAMESTATE_ID_WELCOME_WINDOW == null)
+                this.GAMESTATE_ID_WELCOME_WINDOW = this.createLazyWindow(new WelcomeWindow(), "GAMESTATE_ID_WELCOME_WINDOW") as WelcomeWindow;
+            return (this.GAMESTATE_ID_WELCOME_WINDOW);
+        }
+
+        public function ensureDailyLoginPanel():DailyLoginPanel
+        {
+            if (this.GAMESTATE_ID_DAILY_LOGIN_PANEL == null)
+                this.GAMESTATE_ID_DAILY_LOGIN_PANEL = this.createLazyWindow(new DailyLoginPanel(), "GAMESTATE_ID_DAILY_LOGIN_PANEL") as DailyLoginPanel;
+            return (this.GAMESTATE_ID_DAILY_LOGIN_PANEL);
+        }
+
+        public function ensureMemoryMonitorPanel():MemoryMonitorPanel
+        {
+            if (this.GAMESTATE_ID_MEMORY_MONITOR == null)
+                this.GAMESTATE_ID_MEMORY_MONITOR = this.createLazyWindow(new MemoryMonitorPanel(), "GAMESTATE_ID_MEMORY_MONITOR") as MemoryMonitorPanel;
+            return (this.GAMESTATE_ID_MEMORY_MONITOR);
+        }
+
+        public function ensureDefenseBuildingPanel():DefenseBuildingPanel
+        {
+            if (this.GAMESTATE_ID_DEFENSE_BUILDING == null)
+                this.GAMESTATE_ID_DEFENSE_BUILDING = this.createLazyWindow(new DefenseBuildingPanel(), "GAMESTATE_ID_DEFENSE_BUILDING") as DefenseBuildingPanel;
+            return (this.GAMESTATE_ID_DEFENSE_BUILDING);
+        }
+
+        private function prepareLazyWindow(_arg_1:UIComponent, _arg_2:String):UIComponent
+        {
+            _arg_1.id = _arg_2;
+            _arg_1.visible = false;
+            return (_arg_1);
+        }
+
+
+        public function ensureHiredTroopsPoolPanel():HiredTroopsPoolPanel
+        {
+            if (this.GAMESTATE_HIRED_TROOPS_POOL_PANEL == null)
+            {
+                this.GAMESTATE_HIRED_TROOPS_POOL_PANEL = this.prepareLazyWindow(new HiredTroopsPoolPanel(), "GAMESTATE_HIRED_TROOPS_POOL_PANEL") as HiredTroopsPoolPanel;
+                this.GAMESTATE_HIRED_TROOPS_POOL_PANEL.y = 0;
+                this.GAMESTATE_HIRED_TROOPS_POOL_PANEL.setStyle("right", 0);
+            }
+            return (this.GAMESTATE_HIRED_TROOPS_POOL_PANEL);
+        }
+
+        public function ensureBuildingInfoPanel():BuildingInfoPanel
+        {
+            if (this.GAMESTATE_ID_BUILDING_INFO_PANEL == null)
+            {
+                this.GAMESTATE_ID_BUILDING_INFO_PANEL = this.prepareLazyWindow(new BuildingInfoPanel(), "GAMESTATE_ID_BUILDING_INFO_PANEL") as BuildingInfoPanel;
+                this.GAMESTATE_ID_BUILDING_INFO_PANEL.setStyle("right", 100);
+                this.GAMESTATE_ID_BUILDING_INFO_PANEL.setStyle("left", "auto");
+            }
+            return (this.GAMESTATE_ID_BUILDING_INFO_PANEL);
+        }
+
+        public function ensureEpicWorkyardInfoPanel():EpicWorkyardInfoPanel
+        {
+            if (this.GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL == null)
+            {
+                this.GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL = this.prepareLazyWindow(new EpicWorkyardInfoPanel(), "GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL") as EpicWorkyardInfoPanel;
+                this.GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL.setStyle("right", 200);
+                this.GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL.setStyle("bottom", 180);
+            }
+            return (this.GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL);
+        }
+
+        public function ensureWarehouseInfoPanel():WarehouseInfoPanel
+        {
+            if (this.GAMESTATE_ID_WAREHOUSE_INFO_PANEL == null)
+            {
+                this.GAMESTATE_ID_WAREHOUSE_INFO_PANEL = this.prepareLazyWindow(new WarehouseInfoPanel(), "GAMESTATE_ID_WAREHOUSE_INFO_PANEL") as WarehouseInfoPanel;
+                this.GAMESTATE_ID_WAREHOUSE_INFO_PANEL.setStyle("right", 100);
+                this.GAMESTATE_ID_WAREHOUSE_INFO_PANEL.setStyle("left", "auto");
+            }
+            return (this.GAMESTATE_ID_WAREHOUSE_INFO_PANEL);
+        }
+
+        private function ensureTimedPanel(_arg_1:TimedProductionInfoPanel, _arg_2:String, _arg_3:Boolean):TimedProductionInfoPanel
+        {
+            if (_arg_1 == null)
+            {
+                _arg_1 = this.prepareLazyWindow(new TimedProductionInfoPanel(), _arg_2) as TimedProductionInfoPanel;
+                if (_arg_3)
+                {
+                    _arg_1.setStyle("horizontalCenter", 0);
+                    _arg_1.setStyle("verticalCenter", 0);
+                }
+            }
+            return (_arg_1);
+        }
+
+        public function ensureTimedProductionInfoPanel():TimedProductionInfoPanel { return (this.GAMESTATE_ID_TIMED_PRODUCTION_INFO_PANEL = this.ensureTimedPanel(this.GAMESTATE_ID_TIMED_PRODUCTION_INFO_PANEL, "GAMESTATE_ID_TIMED_PRODUCTION_INFO_PANEL", false)); }
+        public function ensureBarracksInfoPanel():TimedProductionInfoPanel { return (this.GAMESTATE_ID_BARRACKS = this.ensureTimedPanel(this.GAMESTATE_ID_BARRACKS, "GAMESTATE_ID_BARRACKS", true)); }
+        public function ensureBarracks3InfoPanel():TimedProductionInfoPanel { return (this.GAMESTATE_ID_BARRACKS3 = this.ensureTimedPanel(this.GAMESTATE_ID_BARRACKS3, "GAMESTATE_ID_BARRACKS3", true)); }
+        public function ensureExpeditionWeaponsmithInfoPanel():TimedProductionInfoPanel { return (this.GAMESTATE_ID_EXPEDITION_WEAPONSMITH = this.ensureTimedPanel(this.GAMESTATE_ID_EXPEDITION_WEAPONSMITH, "GAMESTATE_ID_EXPEDITION_WEAPONSMITH", true)); }
+
+        public function ensureSkillProductionPanel():SkillProductionPanel
+        {
+            if (this.GAMESTATE_ID_SKILL_PRODUCTION_PANEL == null)
+                this.GAMESTATE_ID_SKILL_PRODUCTION_PANEL = this.createLazyWindow(new SkillProductionPanel(), "GAMESTATE_ID_SKILL_PRODUCTION_PANEL") as SkillProductionPanel;
+            return (this.GAMESTATE_ID_SKILL_PRODUCTION_PANEL);
+        }
+
+        public function ensureBattleWindow():BattleWindow
+        {
+            if (this.GAMESTATE_ID_BATTLE_WINDOW == null)
+                this.GAMESTATE_ID_BATTLE_WINDOW = this.prepareLazyWindow(new BattleWindow(), "GAMESTATE_ID_BATTLE_WINDOW") as BattleWindow;
+            return (this.GAMESTATE_ID_BATTLE_WINDOW);
         }
 
         public function setUIScale(_arg_1:Number):void
@@ -269,7 +776,7 @@
 
         protected function applicationCompleteHandler(_arg_1:FlexEvent):void
         {
-            this.bootstrap.add(new StepInitialize()).add(new StepBigbrother()).add(new StepLoadStylesheet()).add(new StepParseSettings()).add(new StepLoadGFXResource()).add(new StepBootWindowManagement()).add(new StepBootEngine()).add(new StepHideLoadingscreen()).add(new StepStartCommuncation()).add(new StepHandover()).add(new StepInitJSCall()).start();
+            this.bootstrap.add(new StepInitialize()).add(new StepBigbrother()).add(new StepLoadStylesheet()).add(new StepParseSettings()).add(new StepLoadGFXResource()).add(new StepBootWindowManagement()).add(new StepBootEngine()).add(new StepHideLoadingscreen()).add(new StepStartCommuncation()).add(new StepHandover()).start();
         }
 
         protected function ExitGame(_arg_1:Event):void
@@ -325,15 +832,12 @@
             GAMESTATE_ID_MINIMAL_INFO_PANEL.setStyle("left", "auto");
             GAMESTATE_ID_TRADE_OFFICE_PANEL.setStyle("left", "auto");
             SPECIALIST_COOLDOWN_PANEL.setStyle("left", "auto");
-            GAMESTATE_ID_BUILDING_INFO_PANEL.setStyle("left", "auto");
             GAMESTATE_ID_RESIDENCE_INFO_PANEL.setStyle("left", "auto");
             GAMESTATE_ID_GENERIC_LINK_BUILDING_INFO_PANEL.setStyle("left", "auto");
             GAMESTATE_ID_ENEMY_BUILDING_INFO_PANEL.setStyle("left", "auto");
             GAMESTATE_ID_MOUNTAIN_INFO_PANEL.setStyle("left", "auto");
             GAMESTATE_ID_WATCHTOWER_INFO_PANEL.setStyle("left", "auto");
-            GAMESTATE_ID_WAREHOUSE_INFO_PANEL.setStyle("left", "auto");
             GAMESTATE_ID_TAVERN_INFO_PANEL.setStyle("left", "auto");
-            GAMESTATE_ID_HELP_WINDOW.setStyle("right", "auto");
             initGameStateLayout();
         }
 
@@ -460,18 +964,6 @@
                 <gui:SpecialistCooldownPanel id="SPECIALIST_COOLDOWN_PANEL" visible="false" right="100" bottom="180" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
-                <gui:MysteryBoxPanel id="GAMESTATE_ID_MYSTERYBOX_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:BuildingInfoPanel id="GAMESTATE_ID_BUILDING_INFO_PANEL" visible="false" right="100" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:EpicWorkyardInfoPanel id="GAMESTATE_ID_EPIC_WORKYARD_INFO_PANEL" visible="false" right="200" bottom="180" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:MoveBuildingPanel id="GAMESTATE_ID_MOVE_BUILDING_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
                 <gui:ResidenceInfoPanel id="GAMESTATE_ID_RESIDENCE_INFO_PANEL" visible="false" right="100" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
@@ -484,34 +976,10 @@
                 <gui:MountainInfoPanel id="GAMESTATE_ID_MOUNTAIN_INFO_PANEL" visible="false" right="100" bottom="180" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
-                <gui:TimedProductionInfoPanel id="GAMESTATE_ID_TIMED_PRODUCTION_INFO_PANEL" visible="false" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:TimedProductionInfoPanel id="GAMESTATE_ID_BARRACKS" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:TimedProductionInfoPanel id="GAMESTATE_ID_BARRACKS3" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:TimedProductionInfoPanel id="GAMESTATE_ID_EXPEDITION_WEAPONSMITH" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:SkillProductionPanel id="GAMESTATE_ID_SKILL_PRODUCTION_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
                 <gui:WatchTowerInfoPanel id="GAMESTATE_ID_WATCHTOWER_INFO_PANEL" visible="false" right="100" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
-                <gui:WarehouseInfoPanel id="GAMESTATE_ID_WAREHOUSE_INFO_PANEL" visible="false" right="100" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
                 <gui:TavernInfoPanel id="GAMESTATE_ID_TAVERN_INFO_PANEL" visible="false" right="100" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:AddFriendsPanel id="GAMESTATE_ID_ADD_FRIENDS_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:FoundGuildPanel id="GAMESTATE_ID_FOUND_GUILD_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:LoadingZonePanel id="GAMESTATE_ID_LOADING_ZONE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
@@ -520,19 +988,7 @@
                 <gui:BuildQueue id="GAMESTATE_ID_BUILD_QUEUE" y="0" visible="false" right="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
-                <gui:HiredTroopsPoolPanel id="GAMESTATE_HIRED_TROOPS_POOL_PANEL" y="0" visible="false" right="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
                 <gui:StarMenu id="GAMESTATE_ID_STAR_MENU" visible="false" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:SpecialistPanel id="GAMESTATE_ID_SPECIALIST_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:CombatPreviewPanel id="GAMESTATE_ID_PRECOMBAT_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:SpecialistTravelPanel id="GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:HintPointer id="GAMESTATE_ID_PVP_LEVEL_UP_HINT_POINTER" visible="false" />
@@ -544,58 +1000,10 @@
                 <gui:DarkenPanel id="GAMESTATE_ID_DARKEN_PANEL" visible="false" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
-                <gui:ShopWindow id="GAMESTATE_ID_SHOP_WINDOW" visible="false" horizontalCenter="0" verticalCenter="-50" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:PvPReportWindow id="GAMESTATE_ID_PVP_REPORT_WINDOW" visible="false" horizontalCenter="0" verticalCenter="-50" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
                 <gui:LoadingMailPanel id="GAMESTATE_ID_LOADING_MAIL_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
-                <gui:TradeWindow id="GAMESTATE_ID_TRADE_WINDOW" visible="false" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:GuildWindow id="GAMESTATE_ID_GUILD_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:AdventurePanel id="GAMESTATE_ID_ADVENTURE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <quest:QuestBook id="GAMESTATE_ID_QUEST_BOOK" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:HelpWindow id="GAMESTATE_ID_HELP_WINDOW" y="58" visible="false" left="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:HelpOverview id="GAMESTATE_ID_HELP_OVERVIEW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:AdventWindow id="GAMESTATE_ID_ADVENT_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:EventPanel id="GAMESTATE_ID_EVENT_WINDOW" visible="false" verticalCenter="0" horizontalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:LevelUpWindow id="GAMESTATE_ID_LEVELUP_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:EconomyOverview id="GAMESTATE_ID_ECONOMY_OVERVIEW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:ColonyWindow id="GAMESTATE_ID_COLONY_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:PvPColoniesWindow id="GAMESTATE_ID_PVPCOLONIES_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
                 <gui:PromotionWindow id="GAMESTATE_ID_PROMOTION" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:WelcomeWindow id="GAMESTATE_ID_WELCOME_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:DailyLoginPanel id="GAMESTATE_ID_DAILY_LOGIN_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:FriendsListMenu id="GAMESTATE_ID_FRIENDS_LIST_MENU" visible="false" />
@@ -610,79 +1018,13 @@
                 <gui:CameraControlPanel id="GAMESTATE_ID_CAMERA_CONTROL_PANEL" y="195" x="130" visible="false" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
-                <gui:MemoryMonitorPanel id="GAMESTATE_ID_MEMORY_MONITOR" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
                 <gui:NewsWindow id="GAMESTATE_ID_NEWS_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:PremiumAccountActivationWindow id="GAMESTATE_ID_ACTIVATE_PREMIUM_ACCOUNT_WINDOW" visible="false" horizontalCenter="0" verticalCenter="-50" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:SkillTreeWindow id="GAMESTATE_ID_SKILLTREEWINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:EventMonster id="GAMESTATE_ID_EVENT_MONSTER" visible="false" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
-                <gui:BlockList id="GAMESTATE_ID_BLOCK_LIST" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:GuildBank id="GAMESTATE_ID_GUILD_BANK_WINDOW" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:TaskBuildingPanel id="GAMESTATE_ID_TASK_BUILDING_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:GuildPayResourcePanel id="GAMESTATE_ID_GUILD_PAY_RESOURCE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:GuildTransferResourcePanel id="GAMESTATE_ID_GUILD_TRANSFER_RESOURCE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:ApplyBuffResourcePanel id="GAMESTATE_ID_APPLY_BUFF_RESOURCE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:DeleteBuffResourcePanel id="GAMESTATE_ID_DELETE_BUFF_RESOURCE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:GuildBankBuyTabPanel id="GAMESTATE_ID_GUILD_BUY_TAB_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:GuildBankEnlargeTabPanel id="GAMESTATE_ID_GUILD_ENLARGE_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:GuildBankTransactionHistory id="GAMESTATE_ID_GUILD_TRANSACTION_HISTORY" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:AchievementPanelViewComponent id="GAMESTATE_ID_ACHIEVEMENT_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
                 <gui:AvatarSelectionViewComponent id="GAMESTATE_ID_AVATAR_SELECTION" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:DefenseBuildingPanel id="GAMESTATE_ID_DEFENSE_BUILDING" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:PvPLevelRewardPanel id="GAMESTATE_ID_PVP_LEVEL_REWARDS" visible="false" horizontalCenter="65" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:PlayerOptionsPanel id="GAMESTATE_ID_PLAYER_OPTIONS" y="180" x="200" visible="false" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:EventInfoPanel id="GAMESTATE_ID_EVENT_INFO_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:ZoneBuffPanel id="GAMESTATE_ID_ZONE_BUFF_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <gui:CultureBuildingPanel id="GAMESTATE_ID_CULTURE_BUILDING_PANEL" visible="false" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <cg:ContentGeneratorPanel id="GAMESTATE_ID_CONTENT_GENERATOR_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
-            </states:GuiAddChild>
-            <states:GuiAddChild position="lastChild">
-                <cg:ContentGeneratorRewardPanel id="GAMESTATE_ID_CONTENT_GENERATOR_REWARD_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:SplashScreen id="GAMESTATE_ID_SPLASH_SCREEN" percentWidth="100" percentHeight="100" visible="true" mouseEnabled="false" />
@@ -702,4 +1044,6 @@
     <gui:LoadingScreenLoader id="loadingScreenLoader" x="0" y="0" percentWidth="100" percentHeight="100" />
     <gui:LoadingScreen id="loadingScreen" x="0" y="0" percentWidth="100" percentHeight="100" visible="false" />
 </mx:Application>
+
+
 

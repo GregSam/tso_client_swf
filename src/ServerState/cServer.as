@@ -358,32 +358,33 @@ package ServerState
                     _local_23.continueTimedProduction(_local_59);
                 };
             };
-            if (globalFlash.gui.mTimedProductionInfoPanel.IsVisible())
+            if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TIMED_PRODUCTION_INFO_PANEL")) && (globalFlash.gui.mTimedProductionInfoPanel.IsVisible())))
             {
                 globalFlash.gui.mTimedProductionInfoPanel.Refresh();
             }
             else
             {
-                if (globalFlash.gui.mSkillProductionPanel.IsVisible())
+                if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_SKILL_PRODUCTION_PANEL")) && (globalFlash.gui.mSkillProductionPanel.IsVisible())))
                 {
                     globalFlash.gui.mSkillProductionPanel.refresh();
                 }
                 else
                 {
-                    if (globalFlash.gui.mBarracksInfoPanel.IsVisible())
+                    if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_BARRACKS")) && (globalFlash.gui.mBarracksInfoPanel.IsVisible())))
                     {
                         globalFlash.gui.mBarracksInfoPanel.Refresh();
                     }
                     else
                     {
-                        if (globalFlash.gui.mBarracks3InfoPanel.IsVisible())
+                        if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_BARRACKS3")) && (globalFlash.gui.mBarracks3InfoPanel.IsVisible())))
                         {
                             globalFlash.gui.mBarracks3InfoPanel.Refresh();
                         };
                     };
                 };
             };
-            globalFlash.gui.mSpecialistTravelPanel.SetBusyOff();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL"))
+                globalFlash.gui.mSpecialistTravelPanel.SetBusyOff();
             for each (_local_25 in _arg_1.landscapes)
             {
                 this.CreateLandscapeFromLandscapeVO(_local_25);
@@ -515,7 +516,7 @@ package ServerState
                 _local_65 = this.mGeneralInterface.mCurrentPlayerZone.getSpecialist(_local_35.playerID, _local_35.uniqueID);
                 cSpecialist.LoadSpecialistTasks(this.mGeneralInterface, _local_35, false, _local_65);
             };
-            if (globalFlash.gui.mSkillTreeWindow.IsVisible())
+            if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_SKILLTREEWINDOW")) && (globalFlash.gui.mSkillTreeWindow.IsVisible())))
             {
                 globalFlash.gui.mSkillTreeWindow.refresh();
             };
@@ -571,11 +572,11 @@ package ServerState
             {
                 this.mGeneralInterface.mCurrentPlayerZone.mHiredTroopsPool[_local_40.unitType_string] = _local_40.amount;
             };
-            if (this.mGeneralInterface.mCurrentPlayer.mIsAdventureZone)
+            if (((this.mGeneralInterface.mCurrentPlayer.mIsAdventureZone) && (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_HIRED_TROOPS_POOL_PANEL"))))
             {
                 globalFlash.gui.mHiredTroopsPoolPanel.SetData(this.mGeneralInterface.mCurrentPlayerZone.mHiredTroopsPool);
             }
-            else
+            else if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_HIRED_TROOPS_POOL_PANEL"))
             {
                 globalFlash.gui.mHiredTroopsPoolPanel.Hide();
             };
@@ -598,7 +599,8 @@ package ServerState
             };
             this.mGeneralInterface.mVotesManager.Init(_arg_1.playerGuildMarketVote);
             this.mGeneralInterface.mVotesManager.SetHistoryVotedShopItems(_arg_1.historyVotedShopItems);
-            globalFlash.gui.mGuildWindow.RefreshGuildMarket();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_GUILD_WINDOW"))
+                globalFlash.gui.mGuildWindow.RefreshGuildMarket();
             if (_arg_1.contentGeneratorDefinitions.length > 0)
             {
                 _local_67 = new Vector.<ContentGeneratorCategory>();
@@ -607,7 +609,8 @@ package ServerState
                     _local_67.push(ContentGeneratorCategory.createCategoryFromVO(_local_68));
                 };
                 ContentGeneratorDefinitions.setInstance(new ContentGeneratorDefinitions(_local_67));
-                globalFlash.gui.mContentGeneratorPanel.updateContentDefinitions();
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_CONTENT_GENERATOR_PANEL"))
+                    globalFlash.gui.mContentGeneratorPanel.updateContentDefinitions();
             };
             if (((!(_arg_7)) && (!(_arg_1.eventToActivate == null))))
             {

@@ -54,6 +54,8 @@ package nLib
         public var mPrivateMemory:Number = 0;
         public var mNativeMemory:Number = 0;
         public var mBitmapAccountingOverlap:Number = 0;
+        public var mGetGfxBitmapMemory:Number = 0;
+        public var mGetGfxBitmapCount:uint = 0;
 
         public function gMemoryMonitor()
         {
@@ -414,6 +416,8 @@ package nLib
             _local_3 = (_local_3 + ((this.LF_string + "Unscaled Bitmaps:       ") + this.AlignRight_string(this.FormatAsMB_string(this.mUsedBytesUnscaled))));
             _local_3 = (_local_3 + ((this.LF_string + "Scaled Bitmaps:         ") + this.AlignRight_string(this.FormatAsMB_string(this.mUsedBytesScaled))));
             _local_3 = (_local_3 + ((this.LF_string + "Asset manager bitmaps:  ") + this.AlignRight_string(this.FormatAsMB_string(this.mAssetBitmapMemory))));
+            _local_3 = (_local_3 + ((this.LF_string + "GetGfx live BitmapData: ") + this.AlignRight_string(this.FormatAsMB_string(this.mGetGfxBitmapMemory))));
+            _local_3 = (_local_3 + ((this.LF_string + "GetGfx BitmapData count:") + this.AlignRight_string(this.mGetGfxBitmapCount.toString())));
             _local_3 = (_local_3 + ((this.LF_string + "AVM2 unclassified:      ") + this.AlignRight_string(this.FormatAsMB_string(this.mOtherMemory))));
             _local_3 = (_local_3 + ((this.LF_string + "Bitmap estimate overlap:") + this.AlignRight_string(this.FormatAsMB_string(this.mBitmapAccountingOverlap))));
             _local_3 = (_local_3 + (this.LF_string + "----------------------------------"));
@@ -506,9 +510,13 @@ package nLib
                 this.mPrivateMemory = System.privateMemory;
                 _debugStage = "gAssetManager.CalculateLoadedBitmapMemory";
                 this.mAssetBitmapMemory = gAssetManager.CalculateLoadedBitmapMemory();
+                _debugStage = "gAssetManager.CalculateGetGfxBitmapStats";
+                var _getGfxStats:Object = gAssetManager.CalculateGetGfxBitmapStats();
+                this.mGetGfxBitmapMemory = Number(_getGfxStats.memory);
+                this.mGetGfxBitmapCount = uint(_getGfxStats.count);
                 _debugStage = "set mOtherMemory";
                 var _tracked:Number = (((this.mUsedBytesSprites + this.mUsedBytesUnscaled)
-                    + this.mUsedBytesScaled) + this.mAssetBitmapMemory);
+                    + this.mUsedBytesScaled) + this.mAssetBitmapMemory) + this.mGetGfxBitmapMemory;
                 var _managedDifference:Number = (Number(this.mTotalMemory) - _tracked);
                 this.mOtherMemory = uint(Math.max(0, _managedDifference));
                 this.mBitmapAccountingOverlap = Math.max(0, -(_managedDifference));

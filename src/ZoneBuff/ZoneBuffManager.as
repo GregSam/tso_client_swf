@@ -189,7 +189,7 @@
                 _local_4.startTime = this.gi.GetClientTime();
                 this.activeBuffs.addItem(_local_4);
                 this.applyBuffEffect(_local_4);
-                globalFlash.gui.mZoneBuffPanel.Refresh();
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_ZONE_BUFF_PANEL")) globalFlash.gui.mZoneBuffPanel.Refresh();
                 notifyPropertyObserver(PROPERTY_ZONE_BUFF_ADDED, _arg_1.GetBuffDefinition().GetName_string());
             }
             else
@@ -238,7 +238,7 @@
                         {
                             this.activeBuffs.removeItemAt(_local_1);
                             this.removeBuffEffect(_local_2);
-                            globalFlash.gui.mZoneBuffPanel.Refresh();
+                            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_ZONE_BUFF_PANEL")) globalFlash.gui.mZoneBuffPanel.Refresh();
                         };
                     };
                 };
@@ -247,7 +247,7 @@
             globalFlash.gui.mInfoBar.SetZoneBuffs(this.activeBuffs.length);
             if (this.guiDirtyFlag)
             {
-                globalFlash.gui.mZoneBuffPanel.Refresh();
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_ZONE_BUFF_PANEL")) globalFlash.gui.mZoneBuffPanel.Refresh();
                 this.guiDirtyFlag = false;
             };
         }
@@ -457,7 +457,7 @@
                 this.activeBuffs.removeItemAt(this.activeBuffs.getItemIndex(_local_5));
                 this.removeBuffEffect(_local_5);
             };
-            globalFlash.gui.mZoneBuffPanel.Refresh();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_ZONE_BUFF_PANEL")) globalFlash.gui.mZoneBuffPanel.Refresh();
             this.guiDirtyFlag = true;
         }
 

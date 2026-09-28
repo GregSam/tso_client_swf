@@ -53,6 +53,18 @@
             return (this.bootstrap);
         }
 
+        public function getLoadingProgressStep():BootstrapStep
+        {
+            var _local_1:BootstrapStep = this;
+            var _local_2:IBootstrap = this.bootstrap;
+            while (((_local_2 is BootstrapStep) && !(_local_2 is Bootstrap)))
+            {
+                _local_1 = BootstrapStep(_local_2);
+                _local_2 = _local_1.bootstrap;
+            };
+            return (_local_1);
+        }
+
         public function getProgress():Number
         {
             return (1);

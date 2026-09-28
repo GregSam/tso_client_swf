@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
-    xmlns:local="GUI.Components.*" width="382" height="375">
+    xmlns:local="GUI.Components.*" width="382" height="395">
 
     <mx:Script><![CDATA[
         import com.bluebyte.tso.util.ClientLogger;
@@ -31,6 +31,7 @@
             valueUnscaled.text = monitor.FormatAsMB_string(monitor.mUsedBytesUnscaled);
             valueScaled.text = monitor.FormatAsMB_string(monitor.mUsedBytesScaled);
             valueAssets.text = monitor.FormatAsMB_string(monitor.mAssetBitmapMemory);
+            valueGetGfx.text = monitor.FormatAsMB_string(monitor.mGetGfxBitmapMemory) + " / " + monitor.mGetGfxBitmapCount;
             valueOther.text = monitor.FormatAsMB_string(monitor.mOtherMemory);
             valueOverlap.text = monitor.FormatAsMB_string(monitor.mBitmapAccountingOverlap);
             valueTotal.text = monitor.FormatAsMB_string(monitor.mTotalMemory);
@@ -80,6 +81,9 @@
         <mx:FormItem label="Asset manager Bitmaps:" labelStyleName="customTextAlignLabel">
             <local:CustomLabel id="valueAssets" width="80" textAlign="right" />
         </mx:FormItem>
+        <mx:FormItem label="GetGfx BitmapData:" labelStyleName="customTextAlignLabel">
+            <local:CustomLabel id="valueGetGfx" width="120" textAlign="right" />
+        </mx:FormItem>
         <mx:FormItem label="AVM2 unclassified:" labelStyleName="customTextAlignLabel">
             <local:CustomLabel id="valueOther" width="80" textAlign="right" />
         </mx:FormItem>
@@ -100,9 +104,9 @@
         </mx:FormItem>
     </mx:Form>
 
-    <local:CustomText x="10" y="264" width="135" height="20"
+    <local:CustomText x="10" y="284" width="135" height="20"
         text="Check Alphapixel (0-255)" />
-    <local:CustomTextInput id="alphaValue" x="153" y="264" width="56" text="64" />
+    <local:CustomTextInput id="alphaValue" x="153" y="284" width="56" text="64" />
 
     <mx:ControlBar horizontalAlign="right">
         <mx:Button id="btnTrace" label="Trace report" />

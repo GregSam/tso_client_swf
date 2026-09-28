@@ -310,10 +310,6 @@
             {
                 this.SendMessageDirectlyToServer(_arg_1, _arg_2, _arg_3, (global.bigBrotherURL + "/amf"));
             };
-            if (this.mNextKeepAlivePing <= getTimer())
-            {
-                this.mNextKeepAlivePing = cConnectionManager.GetInstance().SendKeepAlivePing();
-            };
         }
 
         public function handleKickHome(_arg_1:CloseEvent):void
@@ -1660,10 +1656,6 @@
             {
                 this.SendMessageDirectlyToServer(_arg_1, _arg_2, _arg_3, (global.bigBrotherURL + "/amf"), _arg_4);
             };
-            if (this.mNextKeepAlivePing <= getTimer())
-            {
-                this.mNextKeepAlivePing = cConnectionManager.GetInstance().SendKeepAlivePing();
-            };
         }
 
         private function handleGameErrorCodes(_arg_1:dServerResponse, _arg_2:dServerActionResult):void
@@ -2024,8 +2016,11 @@
                     {
                         this.mGameInterface.mQuestClientCallbacks.SaveQuestPool();
                     };
-                    globalFlash.gui.mQuestBook.SetNotificationQuest(null);
-                    globalFlash.gui.mQuestBook.SetPreselectedQuest(null);
+                    if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_QUEST_BOOK"))
+                    {
+                        globalFlash.gui.mQuestBook.SetNotificationQuest(null);
+                        globalFlash.gui.mQuestBook.SetPreselectedQuest(null);
+                    };
                     gHintManager.HideHints();
                     _local_7 = (_local_2.data as dZoneVO);
                     if (_local_7.zoneOwnerPlayerID == _local_7.zoneVisitorPlayerID)

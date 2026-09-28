@@ -5,6 +5,11 @@
     public class StepParseSettings extends BootstrapSequentialStep 
     {
 
+        override public function getProgressWeight():Number
+        {
+            return (19 + global.skillSettingsFilenames_vector.length);
+        }
+
 
         override protected function execute():void
         {

@@ -32,7 +32,7 @@
     ]]></mx:Script>
     <gui:subComponents>
         <mx:Array>
-            <mx:Canvas id="headerCanvas" styleName="detailsHeader" left="2" top="0" bottom="149">
+            <mx:Canvas id="headerCanvas" styleName="detailsHeader" left="2" right="2" top="0" bottom="149">
                 <gui:CustomText id="enterNameLabel" selectable="false" left="15" right="15" top="8" bottom="25" />
                 <gui:CustomTextInput id="searchInput" left="18" right="18" bottom="7" styleName="standardInput" height="20" />
             </mx:Canvas>

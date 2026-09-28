@@ -21,11 +21,11 @@
         public function WindowCloseTrigger(_arg_1:Triggerable, _arg_2:TriggerVO, _arg_3:cGeneralInterface)
         {
             var _local_4:IGUIBase = cGuiBaseElement.GetPanelController(_arg_2.item_string.split("|")[0]);
-            if (_local_4 == null)
+            if (((_local_4 == null) && (!(globalFlash.gui.IsLazyGuiElement(_arg_2.item_string.split("|")[0])))))
             {
                 cLog.error(("WindowOpenTrigger GUI Element not found! " + _arg_2.toString()));
             }
-            else
+            else if (_local_4 != null)
             {
                 Notifier(_local_4).addPropertyObserver("hide", this);
             };

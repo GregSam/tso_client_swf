@@ -116,7 +116,7 @@
             _local_2.mType = HINT_TYPE.NEW_QUEST;
             _local_2.mOffsetX = 25;
             globalFlash.gui.mQuestHintPointer.SetData(_local_2);
-            globalFlash.gui.mQuestBook.SetNotificationQuest(_arg_1);
+            globalFlash.gui.SetQuestBookNotification(_arg_1);
         }
 
         public static function HideCalendarNotification():void
@@ -134,7 +134,7 @@
             _local_2.mType = HINT_TYPE.FAILED_QUEST;
             _local_2.mOffsetX = 25;
             globalFlash.gui.mQuestHintPointer.SetData(_local_2);
-            globalFlash.gui.mQuestBook.SetNotificationQuest(_arg_1);
+            globalFlash.gui.SetQuestBookNotification(_arg_1);
         }
 
         private static function ApplyHint(_arg_1:QuestHint):void
@@ -201,7 +201,7 @@
             _local_2.mType = HINT_TYPE.COMPLETED_QUEST;
             _local_2.mOffsetX = 25;
             globalFlash.gui.mQuestHintPointer.SetData(_local_2);
-            globalFlash.gui.mQuestBook.SetNotificationQuest(_arg_1);
+            globalFlash.gui.SetQuestBookNotification(_arg_1);
         }
 
 

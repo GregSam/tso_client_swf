@@ -65,7 +65,7 @@
                 global.ui.mClientMessages.SendMessagetoServer(COMMAND.GET_COMPARED_USER_ACHIEVEMENTS, this.mGI.mCurrentPlayer.GetHomeZoneId(), new dIntegerVO(this.mPlayer.id));
             };
             globalFlash.gui.mAchievementPanel.setComparedUserItemVO(this.mPlayer);
-            ApplicationFacade.sendNotification(AchievementConsts.SHOW_HIDE_ACHIEVEMENT_PANEL, _local_2, AchievementConsts.COMPARE_MODE);
+            globalFlash.gui.sendAchievementNotificationWhenReady(AchievementConsts.SHOW_HIDE_ACHIEVEMENT_PANEL, _local_2, AchievementConsts.COMPARE_MODE);
         }
 
         private function ConfirmCancelPvPColony(_arg_1:MouseEvent):void
@@ -97,7 +97,10 @@
             };
             var _local_2:ColonyCommandVO = ColonyCommandVO.Create(COMMAND.COLONY_REMOVE, this.mPlayer.adventureVO.colonyID);
             global.ui.SendServerActionSimple(COMMAND.COLONY_REMOVE, _local_2);
-            globalFlash.gui.mColonyWindow.mPanel.busyOverlay.visible = true;
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_COLONY_WINDOW"))
+            {
+                globalFlash.gui.mColonyWindow.mPanel.busyOverlay.visible = true;
+            };
         }
 
         private function CancelAdventure(_arg_1:CloseEvent):void
@@ -397,7 +400,10 @@
         {
             var _local_2:ColonyCommandVO = ColonyCommandVO.Create(COMMAND.COLONY_ASSIGN, this.mPlayer.adventureVO.zoneID);
             global.ui.SendServerActionSimple(COMMAND.COLONY_ASSIGN, _local_2);
-            globalFlash.gui.mColonyWindow.mPanel.busyOverlay.visible = true;
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_COLONY_WINDOW"))
+            {
+                globalFlash.gui.mColonyWindow.mPanel.busyOverlay.visible = true;
+            };
         }
 
         private function ShowAdventurePlayers(_arg_1:MouseEvent):void

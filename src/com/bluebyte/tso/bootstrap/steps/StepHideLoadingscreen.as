@@ -8,6 +8,12 @@
 
         override protected function execute():void
         {
+            global.getApplication().loadingScreen.finishProgress();
+            global.getApplication().callLater(this.loadingScreenHidden);
+        }
+
+        private function loadingScreenHidden():void
+        {
             global.getApplication().loadingScreen.hide();
             globalFlash.gui.mEventInfoPanel.StartLoadingInfoState();
             next(this);

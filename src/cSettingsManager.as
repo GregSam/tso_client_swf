@@ -1,4 +1,4 @@
-﻿package 
+package 
 {
     import Communication.VO.PlayerOptionsVO;
     import Communication.VO.PlayerOptionVO;
@@ -70,14 +70,14 @@
             {
                 global.ui.mCurrentPlayerZone.mSettlerKIManager.clearAnimals(true);
             };
-            globalFlash.gui.mPlayerOptionsPanel.setShowAnimalsState(this.mShowAnimals);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setShowAnimalsState(this.mShowAnimals);
         }
 
         public function set showSectorMarkers(_arg_1:Boolean):void
         {
             this.mShowSectorMarkers = _arg_1;
             global.ui.mCurrentPlayerZone.SetBackgroundHasChanged(true);
-            globalFlash.gui.mPlayerOptionsPanel.setSectorMarkerState(this.mShowSectorMarkers);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setSectorMarkerState(this.mShowSectorMarkers);
         }
 
         public function get sfxVolume():int
@@ -91,13 +91,13 @@
             {
                 this.mShowMissingResources = _arg_1;
             };
-            globalFlash.gui.mPlayerOptionsPanel.setShowMissingResourcesState(this.mShowMissingResources);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setShowMissingResourcesState(this.mShowMissingResources);
         }
 
         public function set showSettlers(_arg_1:Boolean):void
         {
             this.mShowSettlers = _arg_1;
-            globalFlash.gui.mPlayerOptionsPanel.setShowSettlersState(this.mShowSettlers);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setShowSettlersState(this.mShowSettlers);
         }
 
         public function get playerOptions():PlayerOptionsVO
@@ -137,19 +137,19 @@
         public function set showBuffAnimations(_arg_1:Boolean):void
         {
             this.mShowBuffAnimations = _arg_1;
-            globalFlash.gui.mPlayerOptionsPanel.setBuffAnimationState((!(this.mShowBuffAnimations)));
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setBuffAnimationState((!(this.mShowBuffAnimations)));
         }
 
         public function set showPvpTaskBuildingTasks(_arg_1:Boolean):void
         {
             this.mShowPvpTaskBuildingTasks = _arg_1;
-            globalFlash.gui.mTaskBuildingPanel.setPvpTaskBuildingTasks(this.mShowPvpTaskBuildingTasks);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TASK_BUILDING_PANEL")) globalFlash.gui.mTaskBuildingPanel.setPvpTaskBuildingTasks(this.mShowPvpTaskBuildingTasks);
         }
 
         public function set showSmoke(_arg_1:Boolean):void
         {
             this.mShowSmoke = _arg_1;
-            globalFlash.gui.mPlayerOptionsPanel.setShowSmokeState(this.mShowSmoke);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setShowSmokeState(this.mShowSmoke);
         }
 
         public function get showMissingSettler():Boolean
@@ -165,7 +165,7 @@
         public function set showGeneralMarkers(_arg_1:Boolean):void
         {
             this.mShowGeneralMarkers = _arg_1;
-            globalFlash.gui.mPlayerOptionsPanel.setGeneralMarkerState(this.mShowGeneralMarkers);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setGeneralMarkerState(this.mShowGeneralMarkers);
         }
 
         public function get musicVolume():Number
@@ -253,7 +253,7 @@
                         break;
                 };
             };
-            globalFlash.gui.mPlayerOptionsPanel.Update();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.Update();
         }
 
         public function get uiScale():int
@@ -266,9 +266,9 @@
             var scales:Array = [0.8, 1, 1.1, 1.25, 1.5, 1.75];
             this.mUiScale = (((_arg_1 < 1) || (_arg_1 > 6)) ? 2 : _arg_1);
             global.getApplication().setUIScale(scales[this.mUiScale - 1]);
-            if (((globalFlash.gui != null) && (globalFlash.gui.mPlayerOptionsPanel != null)))
+            if (((globalFlash.gui != null) && (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS"))))
             {
-                globalFlash.gui.mPlayerOptionsPanel.setUiScaleState(this.mUiScale);
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setUiScaleState(this.mUiScale);
             };
         }
 
@@ -280,7 +280,7 @@
         public function set showGeneralName(_arg_1:Boolean):void
         {
             this.mShowGeneralName = _arg_1;
-            globalFlash.gui.mPlayerOptionsPanel.setGeneralNameState((!(this.mShowGeneralName)));
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setGeneralNameState((!(this.mShowGeneralName)));
         }
 
         public function get airshipSkin():int
@@ -332,7 +332,7 @@
             {
                 this.mShowMissingSettler = _arg_1;
             };
-            globalFlash.gui.mPlayerOptionsPanel.setShowMissingSettlerState(this.mShowMissingSettler);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setShowMissingSettlerState(this.mShowMissingSettler);
         }
 
         public function set musicVolume(_arg_1:Number):void
@@ -383,7 +383,7 @@
             {
                 cSoundManager.getInstance().toggleLoops();
                 this.musicVolume = 0;
-                globalFlash.gui.mPlayerOptionsPanel.refreshVolumeControls();
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.refreshVolumeControls();
             }
             else
             {
@@ -391,10 +391,10 @@
                 {
                     cSoundManager.getInstance().toggleLoops();
                     this.musicVolume = 3;
-                    globalFlash.gui.mPlayerOptionsPanel.refreshVolumeControls();
+                    if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.refreshVolumeControls();
                 };
             };
-            globalFlash.gui.mPlayerOptionsPanel.setMusicMutedState(this.mLoopsMuted);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setMusicMutedState(this.mLoopsMuted);
             globalFlash.gui.mOptionsPanel.SetLoopsMutedButtonState(this.mLoopsMuted);
         }
 
@@ -425,7 +425,7 @@
             {
                 cSoundManager.getInstance().toggleEffects();
                 this.sfxVolume = 0;
-                globalFlash.gui.mPlayerOptionsPanel.refreshVolumeControls();
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.refreshVolumeControls();
             }
             else
             {
@@ -433,17 +433,17 @@
                 {
                     cSoundManager.getInstance().toggleEffects();
                     this.sfxVolume = 3;
-                    globalFlash.gui.mPlayerOptionsPanel.refreshVolumeControls();
+                    if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.refreshVolumeControls();
                 };
             };
-            globalFlash.gui.mPlayerOptionsPanel.setSfxMutedState(this.mSfxMuted);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setSfxMutedState(this.mSfxMuted);
             globalFlash.gui.mOptionsPanel.SetEffectsMutedButtonState(this.mSfxMuted);
         }
 
         public function set showHalfSizeGraphics(_arg_1:Boolean):void
         {
             this.mShowHalfSizeGraphics = _arg_1;
-            globalFlash.gui.mPlayerOptionsPanel.setUseHalfSizeGraphicsState(this.mShowHalfSizeGraphics);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setUseHalfSizeGraphicsState(this.mShowHalfSizeGraphics);
         }
 
         public function get loopsMuted():Boolean
@@ -462,7 +462,7 @@
             {
                 this.mShowStoppedProduction = _arg_1;
             };
-            globalFlash.gui.mPlayerOptionsPanel.setShowStoppedProductionState(this.mShowStoppedProduction);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setShowStoppedProductionState(this.mShowStoppedProduction);
         }
 
         public function get showSettlers():Boolean
@@ -486,7 +486,7 @@
             {
                 this.mShowFullWarehouse = _arg_1;
             };
-            globalFlash.gui.mPlayerOptionsPanel.setShowFullWarehouseState(this.mShowFullWarehouse);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_PLAYER_OPTIONS")) globalFlash.gui.mPlayerOptionsPanel.setShowFullWarehouseState(this.mShowFullWarehouse);
         }
 
         public function get showStoppedProduction():Boolean

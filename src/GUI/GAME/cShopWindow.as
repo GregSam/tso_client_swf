@@ -453,7 +453,8 @@
             AddBaseElement(_arg_1);
             this.mPanel = _arg_1;
             this.initBanners();
-            this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            if (this.mPanel.initialized) this.completeHandler(null);
+            else this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
         }
 
         override public function Show():void

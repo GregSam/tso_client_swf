@@ -373,7 +373,7 @@
             };
             if (!defines.ACHIEVEMENT_THROTTLE_MODE_ACTIVE)
             {
-                if (this.finishedAchievementsCounter == 1)
+                if (((this.finishedAchievementsCounter == 1) && (this.initialized)))
                 {
                     _local_2 = globalFlash.gui.mHelpWindow;
                     _local_2.SetDataByString(AchievementConsts.HELP_DEFINITION_NAME);

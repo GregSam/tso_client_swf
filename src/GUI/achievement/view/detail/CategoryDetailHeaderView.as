@@ -111,6 +111,11 @@
             this.playerViewSubComponent = this.viewComponent.playerViewComponent;
         }
 
+        public function isReady():Boolean
+        {
+            return ((this.categoryViewSubComponent != null) && (this.playerViewSubComponent != null));
+        }
+
         public function setXOffset(_arg_1:int):void
         {
             this.viewComponent.x = _arg_1;

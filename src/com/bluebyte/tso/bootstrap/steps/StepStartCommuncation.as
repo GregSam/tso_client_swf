@@ -8,6 +8,11 @@
     public class StepStartCommuncation extends BootstrapStep implements Observer 
     {
 
+        override public function getProgressWeight():Number
+        {
+            return (0);
+        }
+
 
         public function update(_arg_1:Notifier, _arg_2:String, _arg_3:Object):void
         {

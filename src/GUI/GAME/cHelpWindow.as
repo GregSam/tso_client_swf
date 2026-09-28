@@ -90,6 +90,20 @@
             this.forceNext = true;
         }
 
+        public static function wouldShow(_arg_1:String):Boolean
+        {
+            var _local_2:cPlayerData = (((global.ui != null) && (global.ui.mCurrentPlayer != null)) ? global.ui.mCurrentPlayer : null);
+            if (_local_2 == null)
+            {
+                return (true);
+            };
+            if (_local_2.mHideHelp)
+            {
+                return (false);
+            };
+            return (_local_2.mKnownHelp_vector.indexOf(_arg_1) == -1);
+        }
+
         private function completeHandler(_arg_1:FlexEvent):void
         {
             this.mPanel.removeEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);

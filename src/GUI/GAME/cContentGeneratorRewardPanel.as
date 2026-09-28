@@ -90,7 +90,8 @@
             AddBaseElement(_arg_1);
             globalFlash.gui.windowController.addWindow(_arg_1);
             this.gi = (global.ui as cGameInterface);
-            this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            if (this.mPanel.initialized) this.completeHandler(null);
+            else this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
             this.mPanel.claimRewards.addEventListener(MouseEvent.CLICK, this.claimRewardsClickhandler);
             this.mPanel.claimRewards.addEventListener(MouseEvent.MOUSE_OVER, this.claimRewardsMouseOverHandler);
             this.mPanel.claimRewards.addEventListener(MouseEvent.MOUSE_OUT, this.claimRewardsMouseOutHandler);

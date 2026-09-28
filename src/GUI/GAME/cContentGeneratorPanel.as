@@ -142,7 +142,8 @@
             this.gi = (global.ui as cGameInterface);
             this.contentManager = this.gi.mContentGeneratorManager;
             this.contentDefinitions = ContentGeneratorDefinitions.getInstance();
-            this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            if (this.mPanel.initialized) this.completeHandler(null);
+            else this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
             this.mPanel.btnClose.addEventListener(MouseEvent.CLICK, this.closePanel);
             this.mPanel.btnAddCash.addEventListener(MouseEvent.CLICK, this.addHardCurrencyClick);
             this.mPanel.categoryButtonContainer.addEventListener(ListEvent.ITEM_CLICK, this.contentCategoryClickHandler);

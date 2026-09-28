@@ -1,4 +1,4 @@
-﻿package BuffSystem
+package BuffSystem
 {
     import TimedProduction.iTimedProductionItem;
     import Communication.VO.dUniqueID;
@@ -1653,7 +1653,7 @@
                                                             endTime = (playerData.GetPremiumUntil() + duration);
                                                         };
                                                         playerData.ActivatePremiumAccount(startTime, endTime);
-                                                        globalFlash.gui.mZoneBuffPanel.Refresh();
+                                                        if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_ZONE_BUFF_PANEL")) globalFlash.gui.mZoneBuffPanel.Refresh();
                                                         gi.channels.TRADE.send(TriggerUtils.TRADE_QUEUE_SLOT_PROPERTY_NAME, TriggerUtils.TRADE_QUEUE_SLOT_TEMPORARY_TYPE_NAME);
                                                         globalFlash.gui.mAvatarMessageList.AddMessage(AVATAR_MESSAGE_TYPE.PREMIUM_ACCOUNT_ACTIVATED, this, this.GetBuffDefinition().isPreventDefaultAvatarMessage());
                                                     }

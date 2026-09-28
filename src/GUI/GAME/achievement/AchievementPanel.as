@@ -107,6 +107,11 @@
             this.facade.registerMediator(this);
         }
 
+        public function isReady():Boolean
+        {
+            return (((this.userDetailHeaderView != null) && (this.comparedUserDetailHeaderView != null)) && (this.userDetailHeaderView.isReady()) && (this.comparedUserDetailHeaderView.isReady()));
+        }
+
         private function createTriggerObjectPools():void
         {
             this.triggerComponentObjectPools = new Dictionary();

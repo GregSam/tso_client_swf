@@ -929,8 +929,8 @@
         {
             var _local_2:AvatarMessageItemRenderer = (_arg_1.currentTarget as AvatarMessageItemRenderer);
             _local_2.removeEventListener(MouseEvent.CLICK, this.handleAchievementFinishedClickEventListener);
-            ApplicationFacade.sendNotification(AchievementConsts.SHOW_HIDE_ACHIEVEMENT_PANEL);
-            ApplicationFacade.sendNotification(AchievementConsts.CATEGORY_CONTAINER_SELECTED, 0);
+            globalFlash.gui.sendAchievementNotificationWhenReady(AchievementConsts.SHOW_HIDE_ACHIEVEMENT_PANEL);
+            globalFlash.gui.sendAchievementNotificationWhenReady(AchievementConsts.CATEGORY_CONTAINER_SELECTED, 0);
         }
 
         private function getIcon(_arg_1:String):Object

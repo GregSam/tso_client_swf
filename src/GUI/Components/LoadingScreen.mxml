@@ -21,25 +21,49 @@
         private var maxSteps:int;
         private var progressbarOriginalWidth:Number;
         private var currentStep:int;
+        private var targetProgressWidth:Number;
+
+        private function setTargetProgressWidth(_arg_1:Number):void
+        {
+            _arg_1 = Math.max(0, Math.min(this.progressbarOriginalWidth, _arg_1));
+            this.targetProgressWidth = Math.min(this.targetProgressWidth, _arg_1);
+        }
+
+        private function updateSmoothProgress(_arg_1:Event):void
+        {
+            var difference:Number = this.targetProgressWidth - this.loadingScreenProgressbar.width;
+            if (Math.abs(difference) < 0.5)
+            {
+                this.loadingScreenProgressbar.width = this.targetProgressWidth;
+                return;
+            };
+            var movement:Number = difference * 0.16;
+            if (Math.abs(movement) < 1.5)
+                movement = ((difference < 0) ? -1.5 : 1.5);
+            if (Math.abs(movement) > Math.abs(difference))
+                movement = difference;
+            this.loadingScreenProgressbar.width = (this.loadingScreenProgressbar.width + movement);
+        }
 
         public function handleNextStep(_arg_1:BootstrapEvent):void
         {
             this.currentStep = (this.currentStep + _arg_1.step.getProgressWeight());
-            this.loadingScreenProgressbar.width = (this.progressbarOriginalWidth - ((this.progressbarOriginalWidth / this.maxSteps) * (this.currentStep - 1)));
+            this.setTargetProgressWidth(this.progressbarOriginalWidth - ((this.progressbarOriginalWidth / this.maxSteps) * (this.currentStep - 1)));
             if (this.currentStep >= this.maxSteps)
             {
-                this.loadingScreenProgressbar.width = 0;
+                this.setTargetProgressWidth(0);
                 global.getApplication().bootstrap.removeEventListener(BootstrapEvent.NEXT, this.handleNextStep);
                 global.getApplication().bootstrap.removeEventListener(BootstrapEvent.PROGRESS, this.handleProgressStep);
             };
-            validateNow();
         }
 
         public function attachToBootstrap(_arg_1:int):void
         {
             this.maxSteps = _arg_1;
             this.progressbarOriginalWidth = this.loadingScreenProgressbar.width;
+            this.targetProgressWidth = this.progressbarOriginalWidth;
             this.currentStep = 0;
+            global.getApplication().addEventListener(Event.ENTER_FRAME, this.updateSmoothProgress, false, 0, true);
             global.getApplication().bootstrap.addEventListener(BootstrapEvent.NEXT, this.handleNextStep);
             global.getApplication().bootstrap.addEventListener(BootstrapEvent.PROGRESS, this.handleProgressStep);
         }
@@ -84,8 +108,16 @@
             _local_1.addEventListener(StyleEvent.COMPLETE, this._stylesLoaded, false, 0, true);
         }
 
+        public function finishProgress():void
+        {
+            this.targetProgressWidth = 0;
+            this.loadingScreenProgressbar.width = 0;
+            validateNow();
+        }
+
         public function hide():void
         {
+            global.getApplication().removeEventListener(Event.ENTER_FRAME, this.updateSmoothProgress);
             this.loadingScreenFrame.source = null;
             this.loadingScreenLogo.source = null;
             this.loadingScreenOrnamentalLeft.source = null;
@@ -108,8 +140,7 @@
             var _local_2:int = (this.progressbarOriginalWidth - ((this.progressbarOriginalWidth / this.maxSteps) * ((this.currentStep + (_arg_1.step.getProgress() * _arg_1.step.getProgressWeight())) - 1)));
             if (_local_2 != this.loadingScreenProgressbar.width)
             {
-                this.loadingScreenProgressbar.width = _local_2;
-                validateNow();
+                this.setTargetProgressWidth(_local_2);
             };
         }
 

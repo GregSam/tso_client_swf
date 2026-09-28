@@ -59,7 +59,10 @@
             this.mPanel = _arg_1;
             this.mResources = [];
             this.mResourceUpdateCounter = 0;
-            this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            if (this.mPanel.initialized)
+                this.completeHandler(null);
+            else
+                this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
         }
 
         protected function addDonateMenuEntry(items:Vector.<dContextItemVO>, resource:dResource):void

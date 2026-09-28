@@ -58,8 +58,11 @@
                 };
             };
             this.rearrangeOffers(null);
-            globalFlash.gui.mTradeWindow.setPaidSlotsPrice();
-            globalFlash.gui.mTradeWindow.setWaitingForServer(false);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+            {
+                globalFlash.gui.mTradeWindow.setPaidSlotsPrice();
+                globalFlash.gui.mTradeWindow.setWaitingForServer(false);
+            };
         }
 
         public function updateHistoryWithBoughtTrade(_arg_1:dAcceptTradeVO):void
@@ -95,7 +98,10 @@
                     _local_4.isAffordable = _local_3.isAffordable;
                     _local_4.status = this.getTradeStatus(_local_4);
                     this.mTradeHistoryVector.addItem(_local_4);
-                    globalFlash.gui.mTradeWindow.setTradeHistoryData(this.mTradeHistoryVector);
+                    if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+                    {
+                        globalFlash.gui.mTradeWindow.setTradeHistoryData(this.mTradeHistoryVector);
+                    };
                     _local_2 = true;
                     break;
                 };
@@ -143,7 +149,10 @@
                 _local_5.status = this.getTradeStatus(_local_5);
                 this.mTradeHistoryVector.addItem(_local_5);
             };
-            globalFlash.gui.mTradeWindow.setTradeHistoryData(this.mTradeHistoryVector);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+            {
+                globalFlash.gui.mTradeWindow.setTradeHistoryData(this.mTradeHistoryVector);
+            };
         }
 
         public function removeTradeOffer(_arg_1:cTradeObject):void
@@ -190,10 +199,16 @@
                     _local_5.isAffordable = _local_4.isAffordable;
                     _local_5.status = this.getTradeStatus(_local_5);
                     this.mTradeHistoryVector.addItem(_local_5);
-                    globalFlash.gui.mTradeWindow.setTradeHistoryData(this.mTradeHistoryVector);
+                    if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+                    {
+                        globalFlash.gui.mTradeWindow.setTradeHistoryData(this.mTradeHistoryVector);
+                    };
                     if (_local_4.remainingLots > 0)
                     {
-                        globalFlash.gui.mTradeWindow.refreshUserOfferList();
+                        if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+                        {
+                            globalFlash.gui.mTradeWindow.refreshUserOfferList();
+                        };
                     }
                     else
                     {
@@ -322,7 +337,8 @@
             if (!this.mTrigerredOnce)
             {
                 this.mTrigerredOnce = true;
-                globalFlash.gui.mTradeWindow.setWaitingForServer(true);
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+                    globalFlash.gui.mTradeWindow.setWaitingForServer(true);
                 this.mGI.mClientMessages.SendMessagetoServer(COMMAND.TRADE_GET_USER_TRADES, this.mGI.mCurrentViewedZoneID, null);
                 this.mGI.mClientMessages.SendMessagetoServer(COMMAND.GET_TRADE_HISTORY, this.mGI.mCurrentViewedZoneID, null);
             };
@@ -332,7 +348,7 @@
         {
             var _local_4:cTradeObject;
             var _local_5:cTradeObject;
-            if (this.mGI.mCurrentPlayerZone.IsBuildingOnMap(defines.LOGISTICS_NAME_string))
+            if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW")) && (this.mGI.mCurrentPlayerZone.IsBuildingOnMap(defines.LOGISTICS_NAME_string))))
             {
                 if (globalFlash.gui.mTradeWindow.mOffersRefreshed)
                 {
@@ -345,7 +361,7 @@
                     };
                 };
             };
-            var _local_1:int = globalFlash.gui.mTradeWindow.mAvailableOfferVector.length;
+            var _local_1:int = ((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW")) ? globalFlash.gui.mTradeWindow.mAvailableOfferVector.length : 0);
             var _local_2:int = (_local_1 - 1);
             while (_local_2 >= 0)
             {
@@ -405,7 +421,8 @@
             {
                 this.rearrangeOffers(null);
             };
-            globalFlash.gui.mTradeWindow.setPaidSlotsPrice();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+                globalFlash.gui.mTradeWindow.setPaidSlotsPrice();
         }
 
         public function rearrangeOffers(_arg_1:dTradeCompleteVO):void
@@ -535,9 +552,15 @@
             if (_local_2.length > 0)
             {
                 this.mTradeHistoryVector.addAll(_local_2);
-                globalFlash.gui.mTradeWindow.setTradeHistoryData(this.mTradeHistoryVector);
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+                {
+                    globalFlash.gui.mTradeWindow.setTradeHistoryData(this.mTradeHistoryVector);
+                };
             };
-            globalFlash.gui.mTradeWindow.setUserPlacedOffersData(_local_4, true);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TRADE_WINDOW"))
+            {
+                globalFlash.gui.mTradeWindow.setUserPlacedOffersData(_local_4, true);
+            };
         }
 
 

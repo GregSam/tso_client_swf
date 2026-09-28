@@ -107,7 +107,8 @@
                 };
                 this.pickupAmountTotals[_local_5.providerType] = (this.pickupAmountTotals[_local_5.providerType] + _local_5.amount);
             };
-            globalFlash.gui.mColonyWindow.mPanel.yieldPanel.Update();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_COLONY_WINDOW"))
+                globalFlash.gui.mColonyWindow.mPanel.yieldPanel.Update();
         }
 
 

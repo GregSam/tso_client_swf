@@ -350,19 +350,19 @@ package Interface
                 _local_7++;
             };
             _local_3.SetAllProductionWaitingForServer(false);
-            if (globalFlash.gui.mTimedProductionInfoPanel.IsVisible())
+            if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_TIMED_PRODUCTION_INFO_PANEL")) && (globalFlash.gui.mTimedProductionInfoPanel.IsVisible())))
             {
                 globalFlash.gui.mTimedProductionInfoPanel.Refresh();
             }
             else
             {
-                if (globalFlash.gui.mBarracksInfoPanel.IsVisible())
+                if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_BARRACKS")) && (globalFlash.gui.mBarracksInfoPanel.IsVisible())))
                 {
                     globalFlash.gui.mBarracksInfoPanel.Refresh();
                 }
                 else
                 {
-                    if (globalFlash.gui.mBarracks3InfoPanel.IsVisible())
+                    if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_BARRACKS3")) && (globalFlash.gui.mBarracks3InfoPanel.IsVisible())))
                     {
                         globalFlash.gui.mBarracks3InfoPanel.Refresh();
                     }
@@ -1182,7 +1182,7 @@ package Interface
             if (_local_9 != null)
             {
                 mCurrentPlayer.addBuff(_local_9);
-                globalFlash.gui.mStarMenu.Refresh();
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU")) globalFlash.gui.mStarMenu.Refresh();
             };
             return (true);
         }
@@ -1809,7 +1809,7 @@ package Interface
                 {
                     _local_7.SetRecurringChance(_local_12.GetRecurrentChance());
                 };
-                globalFlash.gui.mStarMenu.Refresh();
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU")) globalFlash.gui.mStarMenu.Refresh();
             }
             else
             {
@@ -1934,7 +1934,7 @@ package Interface
                 };
                 if (_arg_1.GetPlayerId() == mHomePlayer.GetPlayerId())
                 {
-                    globalFlash.gui.mStarMenu.Refresh();
+                    if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU")) globalFlash.gui.mStarMenu.Refresh();
                 };
             }
             else
@@ -2920,7 +2920,7 @@ package Interface
             var _local_1:cResources = mCurrentPlayerZone.GetResources(mCurrentPlayer);
             globalFlash.gui.mInfoBar.SetPopulation(_local_1);
             globalFlash.gui.mInfoBar.SetResource(_local_1);
-            if (globalFlash.gui.mWarehouseInfoPanel.IsVisible())
+            if (((globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_WAREHOUSE_INFO_PANEL")) && (globalFlash.gui.mWarehouseInfoPanel.IsVisible())))
             {
                 globalFlash.gui.mWarehouseInfoPanel.UpdateResources();
             };
@@ -3057,7 +3057,8 @@ package Interface
         {
             cBasicPanel.HideCurrentActivePanel();
             globalFlash.gui.mLoadingZonePanel.Show();
-            globalFlash.gui.mStarMenu.ResetScrollPosition();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU"))
+                globalFlash.gui.mStarMenu.ResetScrollPosition();
             mCurrentPlayerZone.SaveZoneStartZoom();
             if (mCurrentPlayer.mIsPlayerZone)
             {
@@ -3605,7 +3606,7 @@ package Interface
             };
             _local_7.SetTask(_local_10);
             globalFlash.gui.mSpecialistPanel.Refresh(_local_7);
-            globalFlash.gui.mStarMenu.Refresh();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU")) globalFlash.gui.mStarMenu.Refresh();
             return (true);
         }
 
@@ -4821,7 +4822,7 @@ package Interface
                 _local_10.DecWaitingForServerCount(this);
                 if (this.mGameTickCommandPlayer.GetPlayerId() == mHomePlayer.GetPlayerId())
                 {
-                    globalFlash.gui.mStarMenu.Refresh();
+                    if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU")) globalFlash.gui.mStarMenu.Refresh();
                 };
             };
             cLog.info(((("Building " + _local_9) + " successfully created at ") + _local_3.grid));
@@ -4939,7 +4940,7 @@ package Interface
                                 globalFlash.gui.mGuildBankWindow.RefreshResourcesList();
                                 _local_14.DecWaitingForServerCount(this);
                                 _arg_1.removeLastFetchedBuff();
-                                globalFlash.gui.mStarMenu.Refresh();
+                                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU")) globalFlash.gui.mStarMenu.Refresh();
                                 globalFlash.gui.mAvatarMessageList.AddMessage(AVATAR_MESSAGE_TYPE.BUFF_DONATION_SUCCESSFUL, [_local_14]);
                             }
                             else
@@ -5183,7 +5184,7 @@ package Interface
             cSoundManager.getInstance().playEffect("BuffPlace", _arg_2.GetBuffDefinition().GetName_string());
             if (_arg_1 == mHomePlayer.GetPlayerId())
             {
-                globalFlash.gui.mStarMenu.RefreshBuff(_arg_2);
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU")) globalFlash.gui.mStarMenu.RefreshBuff(_arg_2);
             };
             if (((mCurrentCursor.mCurrentBuff == _arg_2) && (_arg_2.GetAmount() == 0)))
             {
@@ -5742,7 +5743,7 @@ package Interface
             _playerData.mTradeData.updateHistoryWithBoughtTrade(acceptTradeVO);
             if (((!(newBuff == null)) || (!(tradeCostsBuff == null))))
             {
-                globalFlash.gui.mStarMenu.Refresh();
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU")) globalFlash.gui.mStarMenu.Refresh();
             };
             TrackManager.getInstance().trackTradeAccepted(_playerData, acceptTradeVO, tradeCostsRes, tradeCostsBuff, tradeOfferRes, newBuffVO, lotsRemaining);
             return (true);

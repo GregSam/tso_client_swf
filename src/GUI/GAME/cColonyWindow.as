@@ -166,7 +166,14 @@
             AddBaseElement(_arg_1);
             this.mPanel = _arg_1;
             this.yieldUpdateTimer.addEventListener(TimerEvent.TIMER, this.yieldUpdateTimerHandler);
-            this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            if (this.mPanel.initialized)
+            {
+                this.completeHandler(null);
+            }
+            else
+            {
+                this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            }
             this.mPanel.coloniesList.addEventListener(ListEvent.ITEM_CLICK, this.ItemClickedHandler);
         }
 

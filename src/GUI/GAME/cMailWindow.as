@@ -1899,15 +1899,6 @@
 
         private function replayBattle(_arg_1:MouseEvent):void
         {
-            var _local_2:BattleWindow;
-            if (globalFlash.gui.mBattleWindow == null)
-            {
-                _local_2 = new BattleWindow();
-                _local_2.id = "GAMESTATE_ID_BATTLE_WINDOW";
-                global.getApplication().guiScaleLayer.addChild(_local_2);
-                globalFlash.gui.mBattleWindow = new cBattleWindow();
-                globalFlash.gui.mBattleWindow.Init(_local_2);
-            };
             globalFlash.gui.mBattleWindow.SetData((this.mCurrentMail.attachments as dBattleReportBodyVO).battleScript);
             globalFlash.gui.mBattleWindow.Show();
         }

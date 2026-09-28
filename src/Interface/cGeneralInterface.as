@@ -1182,8 +1182,11 @@ package Interface
                         };
                     };
                 };
-                this.mStreamingPhase++;
-                this.mStreamingPhase = (this.mStreamingPhase % 8);
+                if (this.mBackGroundIsStreamed)
+                {
+                    this.mStreamingPhase++;
+                    this.mStreamingPhase = (this.mStreamingPhase % 8);
+                };
             };
             if (global.backgroundGroup.mStreamIsIdle)
             {

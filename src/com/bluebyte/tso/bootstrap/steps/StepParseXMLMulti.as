@@ -17,6 +17,11 @@
             this.handler = _arg_2;
         }
 
+        override public function getProgressWeight():Number
+        {
+            return (this.fileNames.length);
+        }
+
         override protected function execute():void
         {
             var _local_1:String;

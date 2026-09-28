@@ -144,12 +144,18 @@
                 if ((((_local_4.state == cColony.STATUS_READY_FOR_DEFENSE_MODE) && (_local_4.ownerPlayerId == global.ui.mCurrentPlayer.getPlayerID())) && (_local_4.ownerPlayerId == global.ui.mCurrentViewedZoneID)))
                 {
                     global.ui.mClientMessages.SendMessagetoServer(COMMAND.COLONY_START_DEFENSE_MODE, global.ui.mCurrentViewedZoneID, new dIntegerVO(_local_4.colonyId));
-                    globalFlash.gui.mColonyWindow.mPanel.busyOverlay.visible = true;
+                    if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_COLONY_WINDOW"))
+                    {
+                        globalFlash.gui.mColonyWindow.mPanel.busyOverlay.visible = true;
+                    };
                     _local_4.state = cColony.STATUS_WAIT_FOR_ASSIGNMENT;
                 };
             };
             globalFlash.gui.mTrackedMissionList.Refresh();
-            globalFlash.gui.mColonyWindow.Refresh();
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_COLONY_WINDOW"))
+            {
+                globalFlash.gui.mColonyWindow.Refresh();
+            };
             this.checkRunningCoopAdventures();
             if (((!(this.isMyCoopAdventureRunning)) && (globalFlash.gui.mChatPanel.IsMyCoopChatroomOpen())))
             {
@@ -413,7 +419,8 @@
                 this.adventure_vector.push(_arg_1);
             };
             _arg_1.isTrackedMission = true;
-            globalFlash.gui.mQuestBook.SendTrackedMissionList(true);
+            if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_QUEST_BOOK"))
+                globalFlash.gui.mQuestBook.SendTrackedMissionList(true);
         }
 
         public function getAdventureForColony(_arg_1:int):dAdventureClientInfoVO

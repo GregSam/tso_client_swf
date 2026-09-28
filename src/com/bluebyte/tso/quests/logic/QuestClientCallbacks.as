@@ -266,7 +266,8 @@
             if (this.needsRefreshQuestList)
             {
                 this.needsRefreshQuestList = false;
-                globalFlash.gui.mQuestBook.SetQuestData(this.mClientQuestPool);
+                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_QUEST_BOOK"))
+                    globalFlash.gui.mQuestBook.SetQuestData(this.mClientQuestPool);
             };
         }
 

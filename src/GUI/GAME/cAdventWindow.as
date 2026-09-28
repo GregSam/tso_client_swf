@@ -82,7 +82,14 @@
             AddBaseElement(_arg_1);
             globalFlash.gui.windowController.addWindow(_arg_1);
             this.gi = (global.ui as cGameInterface);
-            this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            if (this.mPanel.initialized)
+            {
+                this.completeHandler(null);
+            }
+            else
+            {
+                this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
+            }
             this.mPanel.headerImage.source = gAssetManager.GetClass((global.adventAssetPrefix + "AdventHeader"));
             this.mPanel.backgroundImage.source = gAssetManager.GetClass((global.adventAssetPrefix + "AdventBackground"));
         }

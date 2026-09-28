@@ -19,7 +19,11 @@
 
         override protected function action():void
         {
-            var _local_1:cGuiBaseElement = cGuiBaseElement.GetPanelController(effect.name_string);
+            if (((globalFlash.gui.IsLazyGuiElement(effect.name_string)) && (!(globalFlash.gui.IsLazyControllerCreated(effect.name_string)))))
+            {
+                return;
+            };
+            var _local_1:cGuiBaseElement = globalFlash.gui.GetPanelControllerById(effect.name_string);
             _local_1.Hide();
         }
 

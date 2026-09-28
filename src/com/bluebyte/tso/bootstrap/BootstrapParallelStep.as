@@ -17,11 +17,21 @@
 
         override public function getProgress():Number
         {
+            var _local_1:BootstrapStep;
+            var _local_2:Number;
             if (this.numSteps == 0)
             {
                 return (0);
             };
-            return (1 - ((1 / this.numSteps) * this.steps.length));
+            _local_2 = (this.numSteps - this.steps.length);
+            for each (_local_1 in this.steps)
+            {
+                if (((_local_1 is BootstrapSequentialStep) || (_local_1 is BootstrapParallelStep)))
+                {
+                    _local_2 = (_local_2 + _local_1.getProgress());
+                };
+            };
+            return (Math.max(0, Math.min(1, (_local_2 / this.numSteps))));
         }
 
         override public function next(_arg_1:BootstrapStep):void
@@ -29,8 +39,8 @@
             var _local_2:int = this.steps.indexOf(_arg_1);
             if (_local_2 > -1)
             {
-                getBootstrap().dispatchEvent(new BootstrapEvent(BootstrapEvent.PROGRESS, _arg_1));
                 this.steps.splice(_local_2, 1);
+                getBootstrap().dispatchEvent(new BootstrapEvent(BootstrapEvent.PROGRESS, _arg_1.getLoadingProgressStep()));
             };
             if (this.steps.length == 0)
             {

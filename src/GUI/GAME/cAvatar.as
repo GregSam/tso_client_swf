@@ -111,7 +111,7 @@
             {
                 this.mAvatar.achievement.addEventListener(MouseEvent.CLICK, function (_arg_1:Event):void
                 {
-                    ApplicationFacade.sendNotification(AchievementConsts.SHOW_HIDE_ACHIEVEMENT_PANEL, null, AchievementConsts.NORMAL_MODE);
+                    globalFlash.gui.sendAchievementNotificationWhenReady(AchievementConsts.SHOW_HIDE_ACHIEVEMENT_PANEL, null, AchievementConsts.NORMAL_MODE);
                 });
             };
             this.mAvatar.btnAdvent.addEventListener(MouseEvent.CLICK, function ():void

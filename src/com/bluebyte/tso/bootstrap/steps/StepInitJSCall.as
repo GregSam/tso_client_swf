@@ -7,6 +7,11 @@
     public class StepInitJSCall extends BootstrapStep 
     {
 
+        override public function getProgressWeight():Number
+        {
+            return (0);
+        }
+
 
         override protected function execute():void
         {
