@@ -1,4 +1,4 @@
-name: Build debug client
+name: Build clients
 
 on:
   push:
@@ -8,6 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - mode: -DebugBuild
+            artifact: client-debug-swf
+          - mode: -MinimalBuild
+            artifact: client-release-swf
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,17 +25,15 @@ jobs:
           distribution: temurin
           java-version: '8'
 
-      - name: Build
+      - name: Build ${{ matrix.artifact }}
         run: |
           chmod +x build.sh
-          ./build.sh -DebugBuild
+          ./build.sh ${{ matrix.mode }}
 
-      - name: Upload client
+      - name: Upload ${{ matrix.artifact }}
         uses: actions/upload-artifact@v4
         with:
-          name: client-debug-swf
-          path: |
-            client.swf
-            assets/theme/swmmo-theme.swf
-            compile.log
+          name: ${{ matrix.artifact }}
+          path: client.swf
           if-no-files-found: error
+          compression-level: 0
