@@ -614,7 +614,8 @@
         private function showContextMenu(_arg_1:MouseEvent):void
         {
             this.mContextMenu.UpdateMenuItemState(this.mSelectedMails, this.isInbox, this.mGI.mCurrentPlayer.GetPlayerId());
-            this.mContextMenu.Move((_arg_1.stageX - this.mPanel.x), (_arg_1.stageY - this.mPanel.y));
+            var localPosition:Point = this.mPanel.globalToLocal(new Point(_arg_1.stageX, _arg_1.stageY));
+            this.mContextMenu.Move(localPosition.x, localPosition.y);
             if (((!(this._mailTypeContextMenu == null)) && (this._mailTypeContextMenu.IsVisible())))
             {
                 this._mailTypeContextMenu.HideMenu();

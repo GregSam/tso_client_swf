@@ -38,13 +38,13 @@
             {
                 this.mContextMenu.y = 0;
             };
-            if (this.mContextMenu.x > (global.getApplication().stage.stageWidth - this.mContextMenu.width))
+            if (this.mContextMenu.x > (globalFlash.gui.mMailWindow.getMPanel().width - this.mContextMenu.width))
             {
-                this.mContextMenu.x = (global.getApplication().stage.stageWidth - this.mContextMenu.width);
+                this.mContextMenu.x = (globalFlash.gui.mMailWindow.getMPanel().width - this.mContextMenu.width);
             };
-            if (this.mContextMenu.y > (global.getApplication().stage.stageHeight - this.mContextMenu.height))
+            if (this.mContextMenu.y > (globalFlash.gui.mMailWindow.getMPanel().height - this.mContextMenu.height))
             {
-                this.mContextMenu.y = (global.getApplication().stage.stageHeight - this.mContextMenu.height);
+                this.mContextMenu.y = (globalFlash.gui.mMailWindow.getMPanel().height - this.mContextMenu.height);
             };
         }
 

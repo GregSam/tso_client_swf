@@ -40,7 +40,16 @@
                 (_arg_1.target as DismissMailsAlert).removeEventListener(FlexEvent.CREATION_COMPLETE, static_creationCompleteHandler);
                 (_arg_1.target as DismissMailsAlert).addButtons();
                 (_arg_1.target as DismissMailsAlert).setTexts();
-                PopUpManager.centerPopUp(IFlexDisplayObject(_arg_1.target));
+                var alert:DismissMailsAlert = _arg_1.target as DismissMailsAlert;
+                PopUpManager.centerPopUp(alert);
+                alert.validateNow();
+                var app:* = global.getApplication();
+                var scale:Number = app.getUIScale();
+                alert.scaleX = scale;
+                alert.scaleY = scale;
+                var bounds:Rectangle = alert.getBounds(app.stage);
+                alert.x += (app.stage.stageWidth / 2) - ((bounds.left + bounds.right) / 2);
+                alert.y += (app.stage.stageHeight / 2) - ((bounds.top + bounds.bottom) / 2);
             };
         }
 
@@ -95,6 +104,7 @@
             _local_14.buttonsList.setConstraintValue("bottom", 15);
             _local_14.content.setStyle("paddingLeft", 0);
             _local_14.content.setStyle("paddingRight", 4);
+            _local_14.content.setStyle("horizontalCenter", 0);
             _local_14.width = 375;
             _local_14.grpCollectable.visible = (_local_14.grpCollectable.includeInLayout = (_arg_7 > 0));
             if (_local_14.grpCollectable.visible)

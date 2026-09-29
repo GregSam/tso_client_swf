@@ -703,7 +703,7 @@ mx|VideoDisplay {
 
 .actionBarBackground {
     backgroundSize: "100%";
-    backgroundImage: Embed(source="../../assets/vector/embedded/actionbar/actionbar_actionbar1_412.swf", symbol="SWMMO__embed_css_____data_src_gfx_embedded_actionbar_actionbar1_png_1806583558");
+    backgroundImage: Embed(source="../../assets/embedded/actionbar/actionbar_actionbar1.png", scaleGridLeft="1", scaleGridRight="9", scaleGridTop="1", scaleGridBottom="2");
 }
 
 .neutral {

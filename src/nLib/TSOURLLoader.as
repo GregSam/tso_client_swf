@@ -125,7 +125,7 @@
                         else
                         {
                             cClientMessagesII.LogMessageToBigBrother(new FaultEvent((((((("CDN ERROR EVENT: While loading file [" + this.filename) + "] from CDN [") + this.lastCDN) + "] an error occured: [") + param1.text) + "] No additional CDN available!")), null);
-                            _loc2_ = "File loading failed! Please check your network connection, clean your browser cache or try again later.";
+                            _loc2_ = "File [" + this.filename + "] loading failed! Please check your network connection, clean your browser cache or try again later.";
                             Alert.show(_loc2_);
                         };
                         return;
