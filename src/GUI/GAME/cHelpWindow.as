@@ -290,7 +290,9 @@
                 _local_3 = global.map_HelpName_HelpDefinition[_arg_1];
                 if (((_local_3 == null) && (_arg_1 == "Help_window_chat_0")))
                 {
-                    _local_3 = global.map_HelpName_HelpDefinition["Help_window_chatupdate_0"];
+                    this.addKnownHelp(_arg_1);
+                    this.gi.mClientMessages.SendMessagetoServer(COMMAND.HELP_SHOWN, _local_2.GetPlayerId(), _arg_1);
+                    return;
                 };
                 if (_local_3 == null)
                 {
