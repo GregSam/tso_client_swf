@@ -43,6 +43,8 @@
                 var alert:DismissMailsAlert = _arg_1.target as DismissMailsAlert;
                 PopUpManager.centerPopUp(alert);
                 alert.validateNow();
+                alert.explicitWidth = alert.width;
+                alert.explicitHeight = alert.height;
                 var app:* = global.getApplication();
                 var scale:Number = app.getUIScale();
                 alert.scaleX = scale;
@@ -101,9 +103,9 @@
             _local_14.titleLabel.visible = true;
             _local_14.width = 350;
             _local_14.minHeight = 175;
-            _local_14.buttonsList.setConstraintValue("bottom", 15);
             _local_14.content.setStyle("paddingLeft", 0);
             _local_14.content.setStyle("paddingRight", 4);
+            _local_14.content.setStyle("paddingBottom", 10);
             _local_14.content.setStyle("horizontalCenter", 0);
             _local_14.width = 375;
             _local_14.grpCollectable.visible = (_local_14.grpCollectable.includeInLayout = (_arg_7 > 0));
