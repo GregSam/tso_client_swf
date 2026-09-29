@@ -288,6 +288,10 @@
             {
                 this.forceNext = false;
                 _local_3 = global.map_HelpName_HelpDefinition[_arg_1];
+                if (((_local_3 == null) && (_arg_1 == "Help_window_chat_0")))
+                {
+                    _local_3 = global.map_HelpName_HelpDefinition["Help_window_chatupdate_0"];
+                };
                 if (_local_3 == null)
                 {
                     cLog.error(("Unknown HelpWindow ID:" + _arg_1));

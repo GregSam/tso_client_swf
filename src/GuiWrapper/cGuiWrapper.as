@@ -1327,6 +1327,7 @@ this.mDefaultGuiElementsLoaded = true;
                 case "GAMESTATE_ID_PVP_REPORT_WINDOW":
                 case "GAMESTATE_ID_GUILD_WINDOW":
                 case "GAMESTATE_ID_HELP_WINDOW":
+                case "GAMESTATE_ID_MAIL_WINDOW":
                 case "GAMESTATE_ID_ECONOMY_OVERVIEW":
                 case "GAMESTATE_ID_PVPCOLONIES_WINDOW":
                 case "GAMESTATE_ID_SKILLTREEWINDOW":
@@ -1420,6 +1421,7 @@ this.mDefaultGuiElementsLoaded = true;
                 case "GAMESTATE_ID_PVP_REPORT_WINDOW": return (this.mPvpReportWindow);
                 case "GAMESTATE_ID_GUILD_WINDOW": return (this.mGuildWindow);
                 case "GAMESTATE_ID_HELP_WINDOW": return (this.mHelpWindow);
+                case "GAMESTATE_ID_MAIL_WINDOW": return (this.mMailWindow);
                 case "GAMESTATE_ID_ECONOMY_OVERVIEW": return (this.mEconomyOverview);
                 case "GAMESTATE_ID_PVPCOLONIES_WINDOW": return (this.mPvPColoniesWindow);
                 case "GAMESTATE_ID_SKILLTREEWINDOW": return (this.mSkillTreeWindow);
