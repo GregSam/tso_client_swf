@@ -318,6 +318,18 @@
         private function _calculateDependencies(_arg_1:cSkill):void
         {
             var _local_2:int;
+            if (((this._gi.mCurrentViewedZoneID > defines.ADVENTUREZONEID) && (!(this._gi.mCurrentPlayer.GetPlayerId() == this._gi.mHomePlayer.GetPlayerId()))))
+            {
+                if (_arg_1.getLevel() > 0)
+                {
+                    _arg_1.unlock();
+                }
+                else
+                {
+                    _arg_1.lock();
+                };
+                return;
+            };
             _local_2 = this.getSumPoints();
             if (((this._gi.mCurrentViewedZoneID <= defines.ADVENTUREZONEID) || ((_arg_1.playerHasMinimumLevel()) && (_local_2 >= _arg_1.getNumPointsAccumulated()))))
             {

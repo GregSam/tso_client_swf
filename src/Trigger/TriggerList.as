@@ -156,10 +156,6 @@
 
         private function triggersCompleted():void
         {
-            if (cLog.isInfoEnabled())
-            {
-                cLog.info("Triggerlist completed");
-            };
             this.disposeTriggers();
             if (this.triggerable != null)
             {
