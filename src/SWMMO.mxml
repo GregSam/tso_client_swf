@@ -871,8 +871,14 @@
 
         private function updateActionBarBottom(event:Event = null):void
         {
-            GAMESTATE_ID_ACTIONBAR.setStyle("bottom", String(GAMESTATE_ID_FRIENDS_LIST.height));
-            blueFireComponent.setStyle("bottom", String(GAMESTATE_ID_FRIENDS_LIST.height));
+            var friendsListEnabled:Boolean = cSettingsManager.getInstance().friendsListVisible;
+            if (((GAMESTATE_ID_ACTIONBAR.actionBarCenter != null) && (GAMESTATE_ID_ACTIONBAR.actionBarCenter.toggleFrindsList != null)))
+            {
+                friendsListEnabled = friendsListEnabled && GAMESTATE_ID_ACTIONBAR.actionBarCenter.toggleFrindsList.visible;
+            };
+            var friendsListHeight:Number = friendsListEnabled ? GAMESTATE_ID_FRIENDS_LIST.height : 0;
+            GAMESTATE_ID_ACTIONBAR.setStyle("bottom", String(friendsListHeight));
+            blueFireComponent.setStyle("bottom", String(friendsListHeight));
         }
 
         private function updateAvatarMessageListX(event:Event = null):void
