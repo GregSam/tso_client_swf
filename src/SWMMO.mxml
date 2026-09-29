@@ -142,6 +142,7 @@
         public var runningState:State;
         private var mUIScale:Number = 1;
         private var uiScaleUpdatePending:Boolean = false;
+        private var actionBarBackgroundUpdatePending:Boolean = false;
         private var appliedUIStageWidth:Number = -1;
         private var appliedUIStageHeight:Number = -1;
         public function getUIScale():Number
@@ -632,6 +633,46 @@
             this.guiScaleLayer.invalidateProperties();
             this.guiScaleLayer.invalidateSize();
             this.guiScaleLayer.invalidateDisplayList();
+            this.scheduleExternalActionBarBackgroundUpdate();
+        }
+
+        private function scheduleExternalActionBarBackgroundUpdate(_arg_1:Event=null):void
+        {
+            if (!this.actionBarBackgroundUpdatePending)
+            {
+                this.actionBarBackgroundUpdatePending = true;
+                callLater(this.updateExternalActionBarBackground);
+            };
+        }
+
+        private function updateExternalActionBarBackground():void
+        {
+            this.actionBarBackgroundUpdatePending = false;
+            if (((this.GAMESTATE_ID_ACTIONBAR == null) || (this.stage == null)))
+            {
+                this.actionBarExternalBackgroundLayer.visible = false;
+                return;
+            };
+            this.actionBarExternalBackgroundLayer.visible = this.GAMESTATE_ID_ACTIONBAR.visible;
+            if (!this.actionBarExternalBackgroundLayer.visible)
+            {
+                return;
+            };
+            this.positionExternalActionBarBackground(this.GAMESTATE_ID_ACTIONBAR.backgroundLeft, this.actionBarBackgroundLeft);
+            this.positionExternalActionBarBackground(this.GAMESTATE_ID_ACTIONBAR.backgroundRight, this.actionBarBackgroundRight);
+            this.positionExternalActionBarBackground(this.GAMESTATE_ID_ACTIONBAR.actionBarLeft, this.actionBarBackgroundButtonsLeft);
+            this.positionExternalActionBarBackground(this.GAMESTATE_ID_ACTIONBAR.actionBarCenter, this.actionBarBackgroundCenter);
+            this.positionExternalActionBarBackground(this.GAMESTATE_ID_ACTIONBAR.actionBarRight, this.actionBarBackgroundButtonsRight);
+        }
+
+        private function positionExternalActionBarBackground(anchor:UIComponent, image:UIComponent):void
+        {
+            var topLeft:Point = anchor.localToGlobal(new Point(0, 0));
+            var bottomRight:Point = anchor.localToGlobal(new Point(anchor.width, anchor.height));
+            image.x = Math.round(topLeft.x);
+            image.y = Math.round(topLeft.y);
+            image.width = Math.max(1, Math.round(bottomRight.x - topLeft.x));
+            image.height = Math.max(1, Math.round(bottomRight.y - topLeft.y));
         }
 
         private function scheduleUIScaleUpdate(_arg_1:Event=null):void
@@ -848,6 +889,11 @@
             GAMESTATE_ID_TRACKED_MISSION_LIST.queue = GAMESTATE_ID_BUILD_QUEUE;
             GAMESTATE_ID_ACTIONBAR.addEventListener("move", updateFriendsListY);
             GAMESTATE_ID_ACTIONBAR.addEventListener("resize", updateFriendsListY);
+            GAMESTATE_ID_ACTIONBAR.addEventListener("move", scheduleExternalActionBarBackgroundUpdate);
+            GAMESTATE_ID_ACTIONBAR.addEventListener("resize", scheduleExternalActionBarBackgroundUpdate);
+            GAMESTATE_ID_ACTIONBAR.addEventListener("show", scheduleExternalActionBarBackgroundUpdate);
+            GAMESTATE_ID_ACTIONBAR.addEventListener("hide", scheduleExternalActionBarBackgroundUpdate);
+            this.addEventListener("resize", scheduleExternalActionBarBackgroundUpdate);
             GAMESTATE_ID_ACTIONBAR.addEventListener("move", updateCancelPanelY);
             GAMESTATE_ID_FRIENDS_LIST.addEventListener("resize", updateActionBarBottom);
             GAMESTATE_ID_CANCEL_ACTION_PANEL.addEventListener("show", updateCancelPanelY);
@@ -862,6 +908,7 @@
             updateAvatarMessageListY();
             updateFriendsListY();
             updateTrackedMissionTop();
+            scheduleExternalActionBarBackgroundUpdate();
         }
 
         private function updateCancelPanelY(event:Event = null):void
@@ -1042,6 +1089,15 @@
         <bridge:NLibFlexBridgeManager id="nLibFlexBridgeManager" />
         <particles:ParticlePlane id="particlePlane" percentWidth="100" percentHeight="100" />
     </local:EngineCanvas>
+    <mx:Canvas id="actionBarExternalBackgroundLayer" x="0" y="0" percentWidth="100" percentHeight="100"
+        includeInLayout="false" mouseEnabled="false" mouseChildren="false" visible="false"
+        horizontalScrollPolicy="off" verticalScrollPolicy="off" clipContent="false">
+        <mx:Canvas id="actionBarBackgroundLeft" styleName="actionBarExternalBackground" />
+        <mx:Canvas id="actionBarBackgroundRight" styleName="actionBarExternalBackground" />
+        <mx:Canvas id="actionBarBackgroundButtonsLeft" styleName="actionBarExternalLeft" />
+        <mx:Canvas id="actionBarBackgroundCenter" styleName="actionBarExternalCenter" />
+        <mx:Canvas id="actionBarBackgroundButtonsRight" styleName="actionBarExternalRight" />
+    </mx:Canvas>
     <mx:Canvas id="guiScaleHost" x="0" y="0" width="800" height="600" includeInLayout="false"
         clipContent="false" horizontalScrollPolicy="off" verticalScrollPolicy="off">
         <mx:Canvas id="guiScaleLayer" x="0" y="0" width="800" height="600" includeInLayout="false"

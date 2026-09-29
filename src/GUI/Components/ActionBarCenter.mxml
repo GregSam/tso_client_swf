@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="GUI.Components.*"
-    width="84" styleName="actionBarCenter" clipContent="false" creationPolicy="all"
+    width="84" clipContent="false" creationPolicy="all"
     horizontalScrollPolicy="off" verticalScrollPolicy="off">
     <mx:Script><![CDATA[
         import GUI.Assets.gAssetManager;
@@ -39,6 +39,7 @@
         override protected function childrenCreated():void
         {
             super.childrenCreated();
+            this.setStyle("backgroundImage", null);
             this.setStyle("bottom", 0);
             toggleFrindsList.addEventListener("click", toggleFriendsArrow);
             configureButtons();
@@ -49,6 +50,4 @@
     <mx:Button id="btnActionBar04" width="66" height="95"  horizontalCenter="0" />
     <mx:Button id="toggleFrindsList" width="25" height="23"  horizontalCenter="0" bottom="3" />
 </mx:Canvas>
-
-
 

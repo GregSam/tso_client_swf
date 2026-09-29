@@ -896,6 +896,26 @@ ActionBarRight {
     paddingRight: 50;
 }
 
+.actionBarExternalBackground {
+    backgroundSize: "100%";
+    backgroundImage: Embed(source="../../assets/embedded/actionbar/actionbar_actionbar1.png", scaleGridLeft="1", scaleGridRight="9", scaleGridTop="1", scaleGridBottom="2");
+}
+
+.actionBarExternalLeft {
+    backgroundSize: "100%";
+    backgroundImage: Embed(source="../../assets/embedded/actionbar/actionbar_actionbar2.png", scaleGridLeft="55", scaleGridRight="60", scaleGridTop="1", scaleGridBottom="2");
+}
+
+.actionBarExternalCenter {
+    backgroundSize: "100%";
+    backgroundImage: Embed(source="../../assets/embedded/actionbar/actionbar_actionbar3.png", scaleGridLeft="18", scaleGridRight="24", scaleGridTop="1", scaleGridBottom="2");
+}
+
+.actionBarExternalRight {
+    backgroundSize: "100%";
+    backgroundImage: Embed(source="../../assets/embedded/actionbar/actionbar_actionbar4.png", scaleGridLeft="2", scaleGridRight="7", scaleGridTop="1", scaleGridBottom="2");
+}
+
 .tierBarRight {
     backgroundSize: "100%";
     backgroundImage: Embed(source="../../assets/vector/embedded/pvpprogressionwindow/pvpprogressionwindow_tier_bar_right_306.swf", symbol="SWMMO__embed_css_____data_src_gfx_embedded_pvpprogressionwindow_tier_bar_right_png_987098922");

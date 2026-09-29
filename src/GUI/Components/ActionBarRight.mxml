@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" styleName="actionBarRight"
-    creationPolicy="all">
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" creationPolicy="all">
     <mx:Script><![CDATA[
         private var updates:ActionBarUpdates;
         
@@ -29,8 +28,12 @@
         override protected function childrenCreated():void
         {
             super.childrenCreated();
+            this.setStyle("backgroundImage", null);
             this.setStyle("bottom", 0);
             this.setStyle("horizontalGap", 0);
+            this.setStyle("paddingBottom", 0);
+            this.setStyle("paddingLeft", 5);
+            this.setStyle("paddingRight", 50);
             configureButtons();
         }
     ]]></mx:Script>
@@ -39,6 +42,3 @@
     <mx:Button id="btnActionBarColony" width="66" height="86" />
     <mx:Button id="btnActionBar07" width="66" height="86" />
 </mx:HBox>
-
-
-

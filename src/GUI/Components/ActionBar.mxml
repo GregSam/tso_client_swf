@@ -53,9 +53,9 @@
             return actionBarLeft.y;
         }
     ]]></mx:Script>
-    <mx:Canvas id="backgroundLeft" percentHeight="100" percentWidth="100" styleName="actionBarBackground" />
+    <mx:Canvas id="backgroundLeft" percentHeight="100" percentWidth="100" />
     <gui:ActionBarLeft id="actionBarLeft" />
     <gui:ActionBarCenter id="actionBarCenter" />
     <gui:ActionBarRight id="actionBarRight" />
-    <mx:Canvas minWidth="0" percentHeight="100" percentWidth="100" styleName="actionBarBackground" />
+    <mx:Canvas id="backgroundRight" minWidth="0" percentHeight="100" percentWidth="100" />
 </mx:HBox>
