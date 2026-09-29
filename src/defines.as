@@ -23,7 +23,7 @@
         public static var USE_EXTERNAL_SERVER:Boolean;
         public static var STATIC_FILES_URL:String;
 
-        public static var VERSION_NR:String = "d120f9b8dd53db559ddf5d5a4dc7f6dadc7cbb77";//"9361-Release_lugia_air"
+        public static var VERSION_NR:String = "92e14614f7718f6efcbb76e8e56e9864e892a05d";
         public static const VERSION_DATE:String = "20210614-1406";
         public static const VERSION_INFO:String = "v9361-Release_lugia_air [Date: 20210614-1406]";
         public static const MIN_DB_VERSION:String = "85";
