@@ -401,7 +401,6 @@ this.mDefaultGuiElementsLoaded = true;
         {
             if (this._mTradeWindow == null)
             {
-                this.logLazyCreation("GAMESTATE_ID_TRADE_WINDOW");
                 this._mTradeWindow = new cTradeWindow();
                 this.initializeLazyController(this._mTradeWindow, global.getApplication().ensureTradeWindow());
             }
@@ -820,7 +819,6 @@ this.mDefaultGuiElementsLoaded = true;
 
         public function get mWarehouseInfoPanel():cWarehouseInfoPanel
         {
-            if (this._mWarehouseInfoPanel == null) this.logLazyCreation("GAMESTATE_ID_WAREHOUSE_INFO_PANEL");
             this.initializeWarehouseControllers();
             return (this._mWarehouseInfoPanel);
         }
