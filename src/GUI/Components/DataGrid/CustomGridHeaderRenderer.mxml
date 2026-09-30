@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ui:CustomLabel xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:ui="GUI.Components.*"
+    implements="mx.controls.listClasses.IListItemRenderer"
     text="{getHeaderText(data)}">
     <mx:Script><![CDATA[
         import mx.controls.dataGridClasses.DataGridColumn;

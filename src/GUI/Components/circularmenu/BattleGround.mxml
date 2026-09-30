@@ -5,6 +5,7 @@
     xmlns:gui="GUI.Components.*"
     xmlns:tpa="com.bluebyte.tso.ui.texturepacker.*"
     xmlns:cloud="com.bluebyte.tso.ui.battle.battlecloud.*"
+    implements="Model.Observer,Utils.Disposable"
     mouseEnabled="false" scaleWithZoom="true">
     <mx:Script><![CDATA[
         import mx.effects.Fade;

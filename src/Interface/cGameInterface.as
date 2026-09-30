@@ -1047,7 +1047,7 @@ package Interface
                 {
                     if ((getTimer() - mLastActivity) > 9000)
                     {
-					    CalculateZoneCheckSum();
+//					    CalculateZoneCheckSum();
                     };
                 };
             };
