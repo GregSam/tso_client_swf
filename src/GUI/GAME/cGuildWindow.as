@@ -1383,12 +1383,14 @@
                     };
                 };
                 this.mPanel.myGuildDescriptionLogView.selectedIndex = 1;
+                this.mPanel._GuildWindow_ViewStack3.selectedIndex = 1;
             }
             else
             {
                 this.mMyRank = null;
                 this.mMyRankPosition = -1;
                 this.mPanel.myGuildDescriptionLogView.selectedIndex = 0;
+                this.mPanel._GuildWindow_ViewStack3.selectedIndex = 0;
                 if (((_arg_1.size >= _arg_1.maxSize) && (_arg_1.maxSize >= global.guildMaxSizeLimit)))
                 {
                     this.mPanel.btnApply.toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "GuildInviteFullMailSubject");
