@@ -36,6 +36,7 @@
     import Communication.VO.UpdateVO.dAdventurePlayerVO;
     import Communication.VO.dAdventurePlayerListItemVO;
     import Communication.VO.dPlayerVO;
+    import Communication.VO.dResourceVO;
     import Communication.VO.dPlayerListItemVO;
     import Communication.VO.ColonyVO;
     import Communication.VO.UpdateVO.dTravellingSpecialistArivalVO;
@@ -60,6 +61,8 @@
     import Communication.VO.UpdateVO.dServerSettingVO;
     import Communication.VO.UpdateVO.BuffAmountDiffVO;
     import __AS3__.vec.Vector;
+    import Enums.RESOURCE_GROUP;
+    import flash.utils.Dictionary;
     import Achievements.UserAchievement;
     import GUI.Controller.dconsole.TsoConsole;
     import Communication.VO.UpdateVO.dAdventureExpiredVO;
@@ -187,6 +190,66 @@
         {
             super();
             this.mGameInterface = (_arg_1 as cGameInterface);
+        }
+
+        private function recordZoneRefreshDiagnostics(_arg_1:dZoneRefreshVO):void
+        {
+            this.mGameInterface.mLastZoneRefreshReason = _arg_1.refreshReason;
+            this.mGameInterface.mLastZoneRefreshReasonText = cGeneralInterface.GetSynchronisationErrorText(_arg_1.refreshReason);
+            this.mGameInterface.mLastZoneRefreshResultString = ((_arg_1.resultString != null) ? _arg_1.resultString : "");
+            this.mGameInterface.mLastZoneRefreshResourceDiff = "";
+            this.mGameInterface.mZoneRefreshCount++;
+            if (((_arg_1.refreshReason & cGeneralInterface.SYNCHRONISATION_ERROR_RESOURCE_MISMATCH) == 0) || (_arg_1.zoneVO == null))
+            {
+                return;
+            };
+            var _local_2:dPlayerVO;
+            var _local_3:dPlayerVO;
+            for each (_local_3 in _arg_1.zoneVO.playersOnMap)
+            {
+                if (_local_3.userID == this.mGameInterface.mCurrentPlayer.GetPlayerId())
+                {
+                    _local_2 = _local_3;
+                    break;
+                };
+            };
+            if (_local_2 == null)
+            {
+                this.mGameInterface.mLastZoneRefreshResourceDiff = "Incoming player resources not found";
+                cLog.info("[SYNC RESOURCE] Incoming player resources not found");
+                return;
+            };
+            var _local_4:Dictionary = new Dictionary();
+            var _local_5:dResourceVO;
+            for each (_local_5 in _local_2.resources)
+            {
+                _local_4[_local_5.name_string] = _local_5.amount;
+            };
+            var _local_6:Vector.<dResource> = this.mGameInterface.mCurrentPlayerZone.GetResources(this.mGameInterface.mCurrentPlayer).GetPlayerResources_vector(RESOURCE_GROUP.ALL);
+            var _local_7:dResource;
+            var _local_8:Array = [];
+            var _local_9:Object;
+            for each (_local_7 in _local_6)
+            {
+                if (_local_4[_local_7.name_string] === undefined)
+                {
+                    _local_8.push((_local_7.name_string + ": local=" + _local_7.amount + ", server=missing"));
+                }
+                else
+                {
+                    if (_local_7.amount != int(_local_4[_local_7.name_string]))
+                    {
+                        _local_8.push((_local_7.name_string + ": local=" + _local_7.amount + ", server=" + _local_4[_local_7.name_string]));
+                    };
+                    delete _local_4[_local_7.name_string];
+                };
+            };
+            for (_local_9 in _local_4)
+            {
+                _local_8.push((_local_9 + ": local=missing, server=" + _local_4[_local_9]));
+            };
+            this.mGameInterface.mLastZoneRefreshResourceDiff = _local_8.join("; ");
+            cLog.info((("[SYNC RESOURCE] checksum=" + this.mGameInterface.mZoneCheckVO.zoneCheckSumResources) + ", differences=" + ((_local_8.length > 0) ? this.mGameInterface.mLastZoneRefreshResourceDiff : "none (possible resource ordering mismatch)")));
         }
 
         private static function logMessageToBigBrotherFailed(_arg_1:Event):void
@@ -673,6 +736,7 @@
                                                             globalFlash.gui.mTradeWindow.allowHistoryUpdate = true;
                                                             globalFlash.gui.mTradeWindow.allowSellingUpdate = true;
                                                             zoneRefreshVO = (updateVO as dZoneRefreshVO);
+                                                            this.recordZoneRefreshDiagnostics(zoneRefreshVO);
                                                             if ((zoneRefreshVO.refreshReason & cGeneralInterface.SYNCHRONISATION_ERROR_PACKET_LOST) != 0)
                                                             {
                                                                 for each (buff1 in this.mGameInterface.mCurrentPlayer.mAvailableBuffs_vector)

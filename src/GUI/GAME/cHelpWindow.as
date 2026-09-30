@@ -15,6 +15,7 @@
     import GUI.Assets.gAssetManager;
     import flash.net.navigateToURL;
     import flash.net.URLRequest;
+    import flash.net.SharedObject;
     import ServerState.cPlayerData;
     import nLib.cLog;
     import __AS3__.vec.*;
@@ -32,6 +33,7 @@
         private var helpDefinition:dHelpDefinitionVO;
         private var clickOffsetX:int;
         private var forceNext:Boolean = false;
+        private var knownHelpPlayerId:int = -1;
 
         private var visibleHelp_vector:Vector.<dHelpDefinitionVO> = new Vector.<dHelpDefinitionVO>();
         private var mKnownHelp_vector:Vector.<String> = new Vector.<String>();
@@ -53,7 +55,62 @@
 
         private function addKnownHelp(_arg_1:String):void
         {
-            this.mKnownHelp_vector.push(_arg_1);
+            if (this.mKnownHelp_vector.indexOf(_arg_1) == -1)
+            {
+                this.mKnownHelp_vector.push(_arg_1);
+            };
+            this.saveKnownHelp();
+        }
+
+        private function syncKnownHelp(_arg_1:cPlayerData):void
+        {
+            var _local_4:String;
+            if (((_arg_1 == null) || (_arg_1.mKnownHelp_vector == null)))
+            {
+                return;
+            };
+            var _local_2:int = _arg_1.GetPlayerId();
+            this.mKnownHelp_vector = _arg_1.mKnownHelp_vector;
+            this.knownHelpPlayerId = _local_2;
+            try
+            {
+                var _local_3:Array = SharedObject.getLocal("tsoKnownHelp").data[("player_" + _local_2)] as Array;
+                if (_local_3 != null)
+                {
+                    for each (_local_4 in _local_3)
+                    {
+                        if (this.mKnownHelp_vector.indexOf(_local_4) == -1)
+                        {
+                            this.mKnownHelp_vector.push(_local_4);
+                        };
+                    };
+                };
+            }
+            catch (_error:Error)
+            {
+            };
+        }
+
+        private function saveKnownHelp():void
+        {
+            if (this.knownHelpPlayerId < 0)
+            {
+                return;
+            };
+            try
+            {
+                var _local_1:SharedObject = SharedObject.getLocal("tsoKnownHelp");
+                var _local_2:Array = [];
+                for each (var _local_3:String in this.mKnownHelp_vector)
+                {
+                    _local_2.push(_local_3);
+                };
+                _local_1.data[("player_" + this.knownHelpPlayerId)] = _local_2;
+                _local_1.flush();
+            }
+            catch (_error:Error)
+            {
+            };
         }
 
         private function ClosePanel(_arg_1:MouseEvent):void
@@ -262,6 +319,19 @@
         {
             this.hideHelp = null;
             this.mKnownHelp_vector = new Vector.<String>();
+            if (this.gi.mCurrentPlayer != null)
+            {
+                this.knownHelpPlayerId = this.gi.mCurrentPlayer.GetPlayerId();
+                try
+                {
+                    var _local_1:SharedObject = SharedObject.getLocal("tsoKnownHelp");
+                    delete _local_1.data[("player_" + this.knownHelpPlayerId)];
+                    _local_1.flush();
+                }
+                catch (_error:Error)
+                {
+                };
+            };
         }
 
         private function isHelpKnown(_arg_1:String):Boolean
@@ -279,10 +349,14 @@
         {
             var _local_3:dHelpDefinitionVO;
             var _local_2:cPlayerData = this.gi.mCurrentPlayer;
-            if (this.hideHelp == null)
+            if (_local_2 == null)
+            {
+                return;
+            };
+            if (((this.hideHelp == null) || (!(this.knownHelpPlayerId == _local_2.GetPlayerId()))) || (!(this.mKnownHelp_vector == _local_2.mKnownHelp_vector)))
             {
                 this.hideHelp = _local_2.mHideHelp;
-                this.mKnownHelp_vector = _local_2.mKnownHelp_vector;
+                this.syncKnownHelp(_local_2);
             };
             if ((((!(this.hideHelp)) && (!(this.isHelpKnown(_arg_1)))) || (this.forceNext)))
             {

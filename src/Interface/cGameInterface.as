@@ -228,6 +228,11 @@ package Interface
         private var fr:FileReference;
         public var mIsVisitFriendsQuestActive:Boolean = false;
         public var mLastGfxDeltaTicksUpdate:Number = -1;
+        public var mLastZoneRefreshReason:int = 0;
+        public var mLastZoneRefreshReasonText:String = "";
+        public var mLastZoneRefreshResultString:String = "";
+        public var mLastZoneRefreshResourceDiff:String = "";
+        public var mZoneRefreshCount:int = 0;
 
         public var mEnabledShopItems_vector:HashSetWrapper = new HashSetWrapper();
         public var mRequirements:dRequirementListsVO = new dRequirementListsVO();

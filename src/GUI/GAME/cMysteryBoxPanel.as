@@ -85,7 +85,7 @@
                 return;
             };
             var _local_2:cBuff = this.mGI.mCurrentCursor.mCurrentBuff;
-            this.mGI.SendServerAction(COMMAND.APPLY_BUFF, 0, this.mGI.mCurrentPlayerZone.mStreetDataMap.GetMayorHouse().GetGrid(), 0, _local_2.GetUniqueId());
+            this.mGI.SendServerAction(COMMAND.APPLY_BUFF, 0, this.mGI.mCurrentPlayerZone.mStreetDataMap.GetMayorHouse().GetGrid(), 1, _local_2.GetUniqueId());
             _local_2.IncWaitingForServerCount(this.mGI);
             this.mGI.mCurrentCursor.mCurrentBuff = null;
             this.mGI.mCurrentCursor.SetCursorEditMode(COMMAND.SELECT_BUILDING);
