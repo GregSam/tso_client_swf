@@ -109,6 +109,8 @@
             this.mPanel.busy.visible = _arg_1;
             this.mPanel.busyAnim.visible = _arg_1;
             this.mPanel.btnOK.visible = (_local_2 < 1);
+            this.mPanel.cooldownRemainingLabel.visible = !(this.mPanel.btnOK.visible);
+            this.mPanel.btnSkipCooldown.visible = !(this.mPanel.btnOK.visible);
             this.SelectOrderType(this.mSelectedOrderType);
             this.mPanel.cooldownRemainingLabel.text = ((cLocaManager.GetInstance().getLabel("Cooldown") + " : ") + cLocaManager.GetInstance().FormatDuration(_local_2, cLocaManager.DURATION_FORMAT_SHORT));
             this.mPanel.btnSkipCooldown.enabled = ((_local_2 > 0) && (this.mGI.mCurrentPlayerZone.GetResources(this.mGI.mCurrentPlayer).HasPlayerResource(defines.HARD_CURRENCY_RESOURCE_NAME_string, this.mBuilding.GetSkipCooldownGemCost())));
@@ -139,6 +141,8 @@
             this.mPanel.availableOrdersList.selectedIndex = 0;
             _local_4 = this.mBuilding.getRemainingCooldown();
             this.mPanel.btnOK.visible = (_local_4 < 1);
+            this.mPanel.cooldownRemainingLabel.visible = !(this.mPanel.btnOK.visible);
+            this.mPanel.btnSkipCooldown.visible = !(this.mPanel.btnOK.visible);
             this.mPanel.cooldownRemainingLabel.text = ((cLocaManager.GetInstance().getLabel("Cooldown") + " : ") + cLocaManager.GetInstance().FormatDuration(_local_4, cLocaManager.DURATION_FORMAT_SHORT));
             this.mPanel.btnSkipCooldown.enabled = ((_local_4 > 0) && (this.mGI.mCurrentPlayerZone.GetResources(this.mGI.mCurrentPlayer).HasPlayerResource(defines.HARD_CURRENCY_RESOURCE_NAME_string, this.mBuilding.GetSkipCooldownGemCost())));
             this.mPanel.busy.visible = false;
