@@ -113,14 +113,32 @@
             };
         }
 
+        private function getHelpPlayer():cPlayerData
+        {
+            if (((this.gi != null) && (this.gi.mHomePlayer != null)) && (this.gi.mHomePlayer.GetPlayerId() > 0))
+            {
+                return (this.gi.mHomePlayer);
+            };
+            return (((this.gi != null) ? this.gi.mCurrentPlayer : null));
+        }
+
         private function ClosePanel(_arg_1:MouseEvent):void
         {
             this.visibleHelp_vector.length = 0;
             if (this.mPanel.helpHide.selected)
             {
-                this.gi.mCurrentPlayer.mHideHelp = true;
+                var _local_2:cPlayerData = this.getHelpPlayer();
+                if (_local_2 == null)
+                {
+                    Hide();
+                    return;
+                };
+                _local_2.mHideHelp = true;
                 this.hideHelp = true;
-                global.ui.mClientMessages.SendMessagetoServer(COMMAND.SET_HIDE_HELP, this.gi.mCurrentPlayer.GetPlayerId(), true);
+                if (this.gi.mCurrentViewedZoneID == _local_2.GetHomeZoneId())
+                {
+                    global.ui.mClientMessages.SendMessagetoServer(COMMAND.SET_HIDE_HELP, this.gi.mCurrentViewedZoneID, true);
+                };
             };
             Hide();
         }
@@ -149,10 +167,18 @@
 
         public static function wouldShow(_arg_1:String):Boolean
         {
-            var _local_2:cPlayerData = (((global.ui != null) && (global.ui.mCurrentPlayer != null)) ? global.ui.mCurrentPlayer : null);
+            var _local_2:cPlayerData = (((global.ui != null) && (global.ui.mHomePlayer != null)) ? global.ui.mHomePlayer : null);
+            if (((_local_2 == null) || (_local_2.GetPlayerId() <= 0)) && ((global.ui != null) && (global.ui.mCurrentPlayer != null)))
+            {
+                _local_2 = global.ui.mCurrentPlayer;
+            };
             if (_local_2 == null)
             {
                 return (true);
+            };
+            if (global.ui.mCurrentViewedZoneID != _local_2.GetHomeZoneId())
+            {
+                return (false);
             };
             if (_local_2.mHideHelp)
             {
@@ -319,9 +345,10 @@
         {
             this.hideHelp = null;
             this.mKnownHelp_vector = new Vector.<String>();
-            if (this.gi.mCurrentPlayer != null)
+            var _local_2:cPlayerData = this.getHelpPlayer();
+            if (_local_2 != null)
             {
-                this.knownHelpPlayerId = this.gi.mCurrentPlayer.GetPlayerId();
+                this.knownHelpPlayerId = _local_2.GetPlayerId();
                 try
                 {
                     var _local_1:SharedObject = SharedObject.getLocal("tsoKnownHelp");
@@ -348,9 +375,16 @@
         override public function SetDataByString(_arg_1:String):void
         {
             var _local_3:dHelpDefinitionVO;
-            var _local_2:cPlayerData = this.gi.mCurrentPlayer;
+            var _local_2:cPlayerData = this.getHelpPlayer();
             if (_local_2 == null)
             {
+                return;
+            };
+            if (this.gi.mCurrentViewedZoneID != _local_2.GetHomeZoneId())
+            {
+                this.forceNext = false;
+                this.visibleHelp_vector.length = 0;
+                Hide();
                 return;
             };
             if (((this.hideHelp == null) || (!(this.knownHelpPlayerId == _local_2.GetPlayerId()))) || (!(this.mKnownHelp_vector == _local_2.mKnownHelp_vector)))
@@ -365,7 +399,7 @@
                 if (((_local_3 == null) && (_arg_1 == "Help_window_chat_0")))
                 {
                     this.addKnownHelp(_arg_1);
-                    this.gi.mClientMessages.SendMessagetoServer(COMMAND.HELP_SHOWN, _local_2.GetPlayerId(), _arg_1);
+                    this.gi.mClientMessages.SendMessagetoServer(COMMAND.HELP_SHOWN, this.gi.mCurrentViewedZoneID, _arg_1);
                     return;
                 };
                 if (_local_3 == null)
@@ -374,7 +408,7 @@
                     return;
                 };
                 this.addKnownHelp(_arg_1);
-                this.gi.mClientMessages.SendMessagetoServer(COMMAND.HELP_SHOWN, _local_2.GetPlayerId(), _arg_1);
+                this.gi.mClientMessages.SendMessagetoServer(COMMAND.HELP_SHOWN, this.gi.mCurrentViewedZoneID, _arg_1);
                 if (((this.visibleHelp_vector.length == 0) || (!(this.visibleHelp_vector[(this.visibleHelp_vector.length - 1)].helpName_string == _local_3.helpName_string))))
                 {
                     this.visibleHelp_vector.push(_local_3);
