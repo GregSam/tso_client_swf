@@ -11,6 +11,8 @@
     public class CustomToggleButtonBar extends ToggleButtonBar 
     {
 
+        private var deferredSelectedIndex:int = -1;
+
         public function CustomToggleButtonBar()
         {
             super();
@@ -33,7 +35,7 @@
                 return;
             };
             this.setStyle("buttonWidth", (this.width / this.dataProvider.length));
-            var _local_2:int = this.dataProvider.length;
+            var _local_2:int = Math.min(this.dataProvider.length, this.numChildren);
             var _local_3:int;
             while (_local_3 < _local_2)
             {
@@ -41,9 +43,37 @@
                 _local_4.setStyle("paddingTop", -5);
                 _local_3++;
             };
-            if (this.selectedIndex > -1)
+            if (((this.selectedIndex > -1) && (this.selectedIndex < this.numChildren)))
             {
                 (this.getChildAt(this.selectedIndex) as Button).setStyle("paddingTop", 0);
+            };
+            this.applyDeferredSelectedIndex();
+        }
+
+        override public function set selectedIndex(_arg_1:int):void
+        {
+            if (((_arg_1 >= 0) && (_arg_1 >= this.numChildren)))
+            {
+                this.deferredSelectedIndex = _arg_1;
+                super.selectedIndex = -1;
+                return;
+            };
+            this.deferredSelectedIndex = -1;
+            super.selectedIndex = _arg_1;
+        }
+
+        override public function get selectedIndex():int
+        {
+            return (super.selectedIndex);
+        }
+
+        private function applyDeferredSelectedIndex():void
+        {
+            if (((this.deferredSelectedIndex >= 0) && (this.deferredSelectedIndex < this.numChildren)))
+            {
+                var _local_1:int = this.deferredSelectedIndex;
+                this.deferredSelectedIndex = -1;
+                super.selectedIndex = _local_1;
             };
         }
 

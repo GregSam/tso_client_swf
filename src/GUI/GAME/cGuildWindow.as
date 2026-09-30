@@ -95,6 +95,8 @@
         private var mSelectedMember:dGuildPlayerListItemVO;
         private var mMaxPage:int;
         private var mCurrentPage:int;
+        private var mCreationComplete:Boolean = false;
+        private var mShowPending:Boolean = false;
 
 
         public function RefreshOwnGuild():void
@@ -237,6 +239,11 @@
 
         override public function Show():void
         {
+            if (!this.mCreationComplete)
+            {
+                this.mShowPending = true;
+                return;
+            };
             this.GetGuildListPage(1);
             var _local_1:dGuildVO = this.mGI.GetCurrentPlayerGuild();
             if (_local_1)
@@ -1315,6 +1322,12 @@
             this.mPanel.btnGuildMarketToShop.addEventListener(MouseEvent.CLICK, this.OpenShopWindow);
             this.mPanel.btnGuildMarketToggleHistory.addEventListener(MouseEvent.CLICK, this.ToggleMarketHistory);
             this.mPanel.btnHelp.addEventListener(MouseEvent.CLICK, this.ShowHelp);
+            this.mCreationComplete = true;
+            if (this.mShowPending)
+            {
+                this.mShowPending = false;
+                this.Show();
+            };
         }
 
         public function SetGuild(_arg_1:dGuildVO):void
