@@ -2198,6 +2198,10 @@
                             if (_local_18.id < 0)
                             {
                                 _local_16.splice(_local_17, 1);
+                                if (_local_18.adventureVO != null)
+                                {
+                                    _local_18.adventureVO.isTrackedMission = true;
+                                };
                                 _local_15.push(_local_18.adventureVO);
                             };
                             _local_17--;

@@ -107,7 +107,6 @@
         public var GAMESTATE_ID_PRECOMBAT_PANEL:CombatPreviewPanel = null;
         public var GAMESTATE_ID_COLONY_WINDOW:ColonyWindow = null;
         public var GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL:SpecialistTravelPanel = null;
-        public var GAMESTATE_ID_QUEST_BOOK:QuestBook = null;
         public var GAMESTATE_ID_HELP_OVERVIEW:HelpOverview = null;
         public var GAMESTATE_ID_ADVENTURE_PANEL:AdventurePanel = null;
         public var GAMESTATE_ID_ADVENT_WINDOW:AdventWindow = null;
@@ -415,13 +414,6 @@
             if (this.GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL == null)
                 this.GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL = this.createLazyWindow(new SpecialistTravelPanel(), "GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL") as SpecialistTravelPanel;
             return (this.GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL);
-        }
-
-        public function ensureQuestBook():QuestBook
-        {
-            if (this.GAMESTATE_ID_QUEST_BOOK == null)
-                this.GAMESTATE_ID_QUEST_BOOK = this.createLazyWindow(new QuestBook(), "GAMESTATE_ID_QUEST_BOOK") as QuestBook;
-            return (this.GAMESTATE_ID_QUEST_BOOK);
         }
 
         public function ensureHelpOverview():HelpOverview
@@ -1041,6 +1033,9 @@
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:LoadingMailPanel id="GAMESTATE_ID_LOADING_MAIL_PANEL" visible="false" horizontalCenter="0" verticalCenter="0" />
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
+                <quest:QuestBook id="GAMESTATE_ID_QUEST_BOOK" visible="false" horizontalCenter="0" verticalCenter="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:PromotionWindow id="GAMESTATE_ID_PROMOTION" visible="false" horizontalCenter="0" verticalCenter="0" />

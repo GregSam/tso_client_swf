@@ -148,6 +148,10 @@
                 if (((_local_6.isTrackedMission) && (((!(_local_6.colonyStatus == cColony.STATUS_ASSIGNED)) || (_local_6.colonyStatus == cColony.STATUS_UNDER_PVP_ATTACK)) || (_local_6.colonyStatus == cColony.STATUS_NPC_OWNED))))
                 {
                     _local_8 = cAdventureDefinition.FindAdventureDefinition(_local_6.adventureName);
+                    if (_local_8 == null)
+                    {
+                        continue;
+                    };
                     if (this._itemRendererMap[(_local_6.adventureName + _local_6.zoneID)])
                     {
                         _local_1 = this._itemRendererMap[(_local_6.adventureName + _local_6.zoneID)];

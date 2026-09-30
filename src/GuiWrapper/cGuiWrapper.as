@@ -311,6 +311,8 @@ package GuiWrapper
             this.mLoadingMailPanel = new cLoadingMailPanel();
             this.mLoadingMailPanel.init(_local_2.GAMESTATE_ID_LOADING_MAIL_PANEL);
             this.mMailWindow = new cMailWindow();
+            this._mQuestBook = new cQuestBook();
+            this._mQuestBook.Init(_local_2.GAMESTATE_ID_QUEST_BOOK);
             this._mHelpWindow = new cHelpWindow();
             this._mHelpWindow.Init(_local_2.GAMESTATE_ID_HELP_WINDOW);
             this.mQuestHintPointer = new cHintPointer();
@@ -635,15 +637,6 @@ this.mDefaultGuiElementsLoaded = true;
 
         public function get mQuestBook():cQuestBook
         {
-            if (this._mQuestBook == null)
-            {
-                this._mQuestBook = new cQuestBook();
-                var panel:* = global.getApplication().ensureQuestBook();
-                this._mQuestBook.Init(panel);
-                global.getApplication().mountLazyWindow(panel);
-                this._mQuestBook.SetQuestData(global.ui.mQuestClientCallbacks.GetClientQuestPool());
-                this._mQuestBook.SetNotificationQuest(this.mPendingQuestNotification);
-            }
             return (this._mQuestBook);
         }
 
@@ -1321,8 +1314,6 @@ this.mDefaultGuiElementsLoaded = true;
                 case "GAMESTATE_ID_SHOP_WINDOW":
                 case "GAMESTATE_ID_PVP_REPORT_WINDOW":
                 case "GAMESTATE_ID_GUILD_WINDOW":
-                case "GAMESTATE_ID_HELP_WINDOW":
-                case "GAMESTATE_ID_MAIL_WINDOW":
                 case "GAMESTATE_ID_ECONOMY_OVERVIEW":
                 case "GAMESTATE_ID_PVPCOLONIES_WINDOW":
                 case "GAMESTATE_ID_SKILLTREEWINDOW":
@@ -1352,7 +1343,6 @@ this.mDefaultGuiElementsLoaded = true;
                 case "GAMESTATE_ID_PRECOMBAT_PANEL":
                 case "GAMESTATE_ID_COLONY_WINDOW":
                 case "GAMESTATE_ID_SPECIALIST_TRAVEL_PANEL":
-                case "GAMESTATE_ID_QUEST_BOOK":
                 case "GAMESTATE_ID_HELP_OVERVIEW":
                 case "GAMESTATE_ID_ADVENTURE_PANEL":
                 case "GAMESTATE_ID_ADVENT_WINDOW":
