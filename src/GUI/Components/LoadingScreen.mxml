@@ -70,7 +70,6 @@
 
         public function updateImages(_arg_1:gLoadingScreenInterface):void
         {
-            this.loadingScreenFrame.source = _arg_1.LoadIcon("LoadingScreenFrame");
             this.loadingScreenLogo.source = LoadingScreenLoca.getLogoBitmap(_arg_1, this.realmLang, this.realmBeta);
             this.loadingScreenOrnamentalLeft.source = _arg_1.LoadIcon("LoadingScreenOrnamental");
             this.loadingScreenOrnamentalRight.source = _arg_1.LoadIcon("LoadingScreenOrnamental");
@@ -118,7 +117,6 @@
         public function hide():void
         {
             global.getApplication().removeEventListener(Event.ENTER_FRAME, this.updateSmoothProgress);
-            this.loadingScreenFrame.source = null;
             this.loadingScreenLogo.source = null;
             this.loadingScreenOrnamentalLeft.source = null;
             this.loadingScreenOrnamentalRight.source = null;
@@ -208,7 +206,8 @@
                     horizontalScrollPolicy="off" verticalScrollPolicy="off" />
             </mx:Canvas>
             <mx:Image id="loadingScreenBetaBanner" visible="false" horizontalCenter="0" top="30" />
-            <mx:Image id="loadingScreenFrame" width="732" height="470" left="0" />
+            <mx:Image id="loadingScreenFrame" width="732" height="470" left="0"
+                source="@Embed(source='../../../assets/gAssetManager/LoadingScreenFrame.png')" />
             <mx:Canvas id="loadingScreenProgressbar" width="525" height="9" alpha="0.85" right="106" top="316" backgroundColor="597293" />
             <mx:Canvas id="copyrightContainer" height="90" creationPolicy="all" horizontalCenter="-11" verticalCenter="184">
                 <gui:CustomTextArea id="loadingScreenImpress" width="370" height="90" horizontalCenter="0"
