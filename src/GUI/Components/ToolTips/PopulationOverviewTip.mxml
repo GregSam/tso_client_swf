@@ -175,6 +175,15 @@
             this.freeMilitary.dataProvider = _local_6;
             this.freeMilitaryLabel.text = _local_8.toString();
             _local_6 = [];
+            for each (_local_7 in cMilitaryUnitDescription.GetAllUnitDescriptions(true))
+            {
+                _local_23 = new dResource();
+                _local_23.group_string = "activated";
+                _local_23.name_string = _local_7.GetType();
+                _local_23.amount = 0;
+                _local_6.push(_local_23);
+            };
+            _local_10 = 0;
             for each (_local_11 in global.ui.mCurrentPlayerZone.GetSpecialists_vector())
             {
                 if (((_local_11.GetSpecialistDescription().isUsedFor10MilitaryAmountCalculation()) && (_local_11.getPlayerID() == global.ui.mCurrentPlayer.getPlayerID())))
