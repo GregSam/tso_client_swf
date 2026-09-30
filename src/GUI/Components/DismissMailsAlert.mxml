@@ -154,7 +154,14 @@
             }
             else
             {
-                chkStarMenu.selected = !chkStorage.selected;
+                if (defines.MAIL_DEF_ROUTE_0 == 1)
+                {
+                    chkStorage.selected = !chkStarMenu.selected;
+                }
+                else
+                {
+                    chkStarMenu.selected = !chkStorage.selected;
+                };
             };
         }
 
