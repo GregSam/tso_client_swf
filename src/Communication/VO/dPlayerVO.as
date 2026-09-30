@@ -25,6 +25,7 @@
         public var landingZoneID:int;
         public var zoneID:int;
         public var currentMaximumBuildingsCountAll:int;
+        public var specialistGroupSizeIncrease:int;
         public var premiumUntil:Number;
         public var permanentBuildQueueSlotsCount:int = 0;
         public var avatarId:int;

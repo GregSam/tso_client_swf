@@ -5,6 +5,7 @@
     import Communication.VO.Tasks.TaskDataVO;
     import Communication.VO.Votes.dPlayerVoteVO;
     import Communication.VO.collectibles.PickupsDataVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupsVO;
     import Collections.CollectionsConsts;
     import Enums.TIMED_PRODUCTION_TYPE;
 
@@ -55,6 +56,7 @@
         public var streetMapMinUsableY:int = 2;
         public var serverTimeStamp:Number;
         public var zoneVisitorPlayerID:int;
+        public var specialistGroups:dSpecialistGroupsVO = new dSpecialistGroupsVO();
 
         public var itemRegistryEntries:ArrayCollection = new ArrayCollection();
         public var zoneBuffs:ArrayCollection = new ArrayCollection();

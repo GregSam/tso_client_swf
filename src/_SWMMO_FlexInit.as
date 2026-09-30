@@ -15,6 +15,7 @@
     import Communication.VO.Guild.*;
     import Communication.VO.Mail.*;
     import Communication.VO.Skill.*;
+    import Communication.VO.SpecialistGroup.*;
     import Communication.VO.Tasks.*;
     import Communication.VO.TradeWindow.*;
     import Communication.VO.UpdateVO.*;
@@ -308,6 +309,7 @@
                 ["defaultGame.Communication.VO.dSpecialistTask_TravelToZoneVO", dSpecialistTask_TravelToZoneVO],
                 ["defaultGame.Communication.VO.dSpecialistTask_WaitForConfirmationVO", dSpecialistTask_WaitForConfirmationVO],
                 ["defaultGame.Communication.VO.dSpecialistVO", dSpecialistVO],
+                ["defaultGame.Communication.VO.SpecialistGroup.dSpecialistGroupsVO", dSpecialistGroupsVO],
                 ["defaultGame.Communication.VO.dSquadVO", dSquadVO],
                 ["defaultGame.Communication.VO.dStartSpecialistTaskVO", dStartSpecialistTaskVO],
                 ["defaultGame.Communication.VO.dStreetVO", dStreetVO],
