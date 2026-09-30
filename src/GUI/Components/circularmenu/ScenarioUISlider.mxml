@@ -116,7 +116,9 @@
 
         public function set limit(value:Number):void
         {
+            value = Math.min(value, this.maximum);
             this._limit = value;
+            this.value = this._limit;
         }
 
         public function onSliderBar_click(event:MouseEvent):void

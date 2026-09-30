@@ -154,10 +154,10 @@
 
         override protected function updateDisplayList(_arg_1:Number, _arg_2:Number):void
         {
+            super.updateDisplayList(_arg_1, _arg_2);
             var _local_3:BitmapData = ((this.isMouseOver) ? this.renderSourceHovered : this.renderSourceNormal);
             if (!_local_3)
             {
-                super.updateDisplayList(_arg_1, _arg_2);
                 return;
             };
             var _local_4:Graphics = graphics;
@@ -165,7 +165,19 @@
             _local_4.beginBitmapFill(_local_3);
             _local_4.drawRect(0, 0, _local_3.width, _local_3.height);
             _local_4.endFill();
-            super.updateDisplayList(_arg_1, _arg_2);
+        }
+
+        public function refreshSkin():void
+        {
+            this.renderSourceHovered = ((this.imageHovered) ? this.getBitmapData(this.imageHovered) : null);
+            this.renderSourceNormal = ((this.imageNormal) ? this.getBitmapData(this.imageNormal) : null);
+            this.maskSprite.graphics.clear();
+            if (this.renderSourceNormal)
+            {
+                this.drawHitArea(this.maskSprite.graphics, this.renderSourceNormal);
+            };
+            invalidateSize();
+            invalidateDisplayList();
         }
 
         private function rollOutHandler(_arg_1:MouseEvent):void

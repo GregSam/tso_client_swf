@@ -41,6 +41,7 @@
     import Communication.VO.ColonyVO;
     import Communication.VO.UpdateVO.dTravellingSpecialistArivalVO;
     import Communication.VO.dZoneRefreshVO;
+    import Communication.VO.dZoneCheckVO;
     import BuffSystem.cBuff;
     import Communication.VO.Mail.dNewMailCountVO;
     import Communication.VO.UpdateVO.dFindTreasureResponseVO;
@@ -199,8 +200,27 @@
             this.mGameInterface.mLastZoneRefreshResultString = ((_arg_1.resultString != null) ? _arg_1.resultString : "");
             this.mGameInterface.mLastZoneRefreshResourceDiff = "";
             this.mGameInterface.mZoneRefreshCount++;
-            if (((_arg_1.refreshReason & cGeneralInterface.SYNCHRONISATION_ERROR_RESOURCE_MISMATCH) == 0) || (_arg_1.zoneVO == null))
+            if ((_arg_1.refreshReason & cGeneralInterface.SYNCHRONISATION_ERROR_RESOURCE_MISMATCH) == 0)
             {
+                return;
+            };
+            var _local_10:dZoneCheckVO = this.mGameInterface.mZoneCheckVO;
+            var _local_11:Array = [];
+            var _local_12:Vector.<dResource> = this.mGameInterface.mCurrentPlayerZone.GetResources(this.mGameInterface.mCurrentPlayer).GetPlayerResources_vector(RESOURCE_GROUP.ALL);
+            var _local_13:dResource;
+            for each (_local_13 in _local_12)
+            {
+                _local_11.push((_local_13.name_string + "=" + _local_13.amount));
+            };
+            var _local_14:String = ("[SYNC RESOURCE] mismatch reason=" + _arg_1.refreshReason);
+            _local_14 = (_local_14 + (", zoneVO=" + (!(_arg_1.zoneVO == null))));
+            _local_14 = (_local_14 + (", resources=" + _local_10.zoneCheckSumResources));
+            cLog.info(_local_14);
+            cLog.info(("[SYNC RESOURCE ORDER] " + _local_11.join("; ")));
+            if (_arg_1.zoneVO == null)
+            {
+                this.mGameInterface.mLastZoneRefreshResourceDiff = "Incoming zoneVO is null";
+                cLog.info("[SYNC RESOURCE] Incoming zoneVO is null; server values are unavailable");
                 return;
             };
             var _local_2:dPlayerVO;

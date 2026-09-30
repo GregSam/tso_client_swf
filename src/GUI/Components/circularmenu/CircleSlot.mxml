@@ -132,7 +132,7 @@
                 _CircleSlot_Image1.source = data.icon;
                 var amount:* = data.amount;
                 amountLabel.text = ((amount == undefined) ? null : String(amount));
-                amountLabel.visible = (int(data.amount) > -1);
+                amountLabel.visible = ((int(data.amount) > -1) && this.isMouseOver);
             };
             _CircleSlot_Image1.setStyle("horizontalCenter", String(iconX));
             _CircleSlot_Image1.setStyle("verticalCenter", String(iconY));

@@ -27,6 +27,7 @@
     import mx.collections.Sort;
     import mx.collections.SortField;
     import GUI.Components.data.dCombatUnitData;
+    import GUI.Assets.gAssetManager;
 
     public class cCombatScenarioTooltip extends cCombatUIBase implements Observer 
     {
@@ -355,6 +356,20 @@
             this.mPanel.slot1.visible = this.mPanel.slot1.data;
             this.mPanel.slot2.visible = this.mPanel.slot2.data;
             this.mPanel.slot3.visible = this.mPanel.slot3.data;
+            this.refreshScenarioSlots();
+        }
+
+        private function refreshScenarioSlots():void
+        {
+            this.mPanel.slot1.imageHovered = gAssetManager.GetClass("scenarioUICircle1Hoverd");
+            this.mPanel.slot1.imageNormal = gAssetManager.GetClass("scenarioUICircle1");
+            this.mPanel.slot2.imageHovered = gAssetManager.GetClass("scenarioUICircle2Hoverd");
+            this.mPanel.slot2.imageNormal = gAssetManager.GetClass("scenarioUICircle2");
+            this.mPanel.slot3.imageHovered = gAssetManager.GetClass("scenarioUICircle3Hoverd");
+            this.mPanel.slot3.imageNormal = gAssetManager.GetClass("scenarioUICircle3");
+            this.mPanel.slot1.callLater(this.mPanel.slot1.refreshVisuals);
+            this.mPanel.slot2.callLater(this.mPanel.slot2.refreshVisuals);
+            this.mPanel.slot3.callLater(this.mPanel.slot3.refreshVisuals);
         }
 
         private function squadNameToItemRenderer(_arg_1:String):Combat3ArmyToolTipRenderer

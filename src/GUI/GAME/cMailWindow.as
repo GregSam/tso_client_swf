@@ -131,6 +131,7 @@
         private var mfocusOnMailBody:Boolean = true;
         private var mReplySubject:String;
         private var mReciepientGuildApplication:dPlayerListItemVO;
+        private var mPreselectedRecipient:dPlayerListItemVO;
 
         private var mMailsToDelete:ArrayCollection = new ArrayCollection();
         private var mMailCache:Dictionary = new Dictionary(false);
@@ -774,11 +775,16 @@
 
         public function editMailPreselected(_arg_1:dPlayerListItemVO):void
         {
+            this.ensureViewIsAvailable();
             if (this.mPanel.currentState != this.mPanel.stateEdit.name)
             {
+                this.mPreselectedRecipient = _arg_1;
                 this.mPanel.currentState = this.mPanel.stateEdit.name;
+            }
+            else
+            {
+                this.addRecipient(_arg_1);
             };
-            this.addRecipient(_arg_1);
             globalFlash.gui.windowController.setTop(this.mPanel, true);
             this.Show();
         }
@@ -852,6 +858,11 @@
             this.mPanel.toTileList.dataProvider = this.mRecipients;
             this.mPanel.subjectInput.maxChars = (MAX_SUBJECT_CHAR + 1);
             this.resetRecipients();
+            if (this.mPreselectedRecipient != null)
+            {
+                this.addRecipient(this.mPreselectedRecipient);
+                this.mPreselectedRecipient = null;
+            };
             if (this.mReciepientGuild)
             {
                 this.addGuildRecipient(this.mReciepientGuild);

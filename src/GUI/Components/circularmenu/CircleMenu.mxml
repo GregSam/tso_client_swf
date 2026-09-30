@@ -56,7 +56,7 @@
                     _local_2 = new ArrayCollection();
                     for each (_local_3 in _arg_1)
                     {
-                        _local_2.addItem(_local_2);
+                        _local_2.addItem(_local_3);
                     };
                     this._dataProvider = _local_2;
                 }

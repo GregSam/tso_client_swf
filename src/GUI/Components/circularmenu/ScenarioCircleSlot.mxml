@@ -204,6 +204,13 @@
             syncAmountLabel();
         }
 
+        public function refreshVisuals():void
+        {
+            refreshSkin();
+            refreshLayout();
+            validateNow();
+        }
+
         override protected function childrenCreated():void
         {
             super.childrenCreated();
@@ -220,6 +227,7 @@
             amountSlider.addEventListener("change", onSliderChange);
             addEventListener("rollOverChanged", refreshLayout);
             refreshLayout();
+            callLater(refreshVisuals);
         }
     ]]></mx:Script>
     <mx:Image id="image" autoLoad="true" mouseEnabled="false" smoothBitmapContent="true" />
