@@ -38,6 +38,11 @@
         protected var mPanel:CultureBuildingPanel;
         private var mSelectedOrderType:EffectTimedProductionDefinition;
         private var mRecipes:ArrayCollection = new ArrayCollection();
+        private var mCreationComplete:Boolean = false;
+        private var mShowPending:Boolean = false;
+        private var mPendingBuilding:cBuilding;
+        private var mWaitingStatePending:Boolean = false;
+        private var mPendingWaitingState:Boolean = false;
 
 
         private function createToolTipHandler(_arg_1:ToolTipEvent):void
@@ -105,6 +110,12 @@
 
         public function SetIsWaitingForServer(_arg_1:Boolean):void
         {
+            if (!this.mCreationComplete)
+            {
+                this.mWaitingStatePending = true;
+                this.mPendingWaitingState = _arg_1;
+                return;
+            };
             var _local_2:Number = this.mBuilding.getRemainingCooldown();
             this.mPanel.busy.visible = _arg_1;
             this.mPanel.busyAnim.visible = _arg_1;
@@ -120,6 +131,11 @@
         {
             var _local_4:Number;
             this.mBuilding = _arg_1;
+            if (!this.mCreationComplete)
+            {
+                this.mPendingBuilding = _arg_1;
+                return;
+            };
             this.mPanel.enableUpgradeColumn = (!(this.mBuilding.GetUpgradeLevelBonusesForLevel(2) == null));
             this.mPanel.upgradeColumn.SetData(this.mBuilding, this, this.mPanel);
             var _local_2:cResources = this.mGI.mCurrentPlayerZone.GetResources(this.mGI.mCurrentPlayer);
@@ -157,6 +173,24 @@
             this.mPanel.btnSkipCooldown.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, this.createToolTipHandler);
             this.mPanel.btnSkipCooldown.addEventListener(MouseEvent.CLICK, this.HandleResetCooldownClick);
             EnableDragging();
+            this.mCreationComplete = true;
+            if (this.mPendingBuilding != null)
+            {
+                var _local_2:cBuilding = this.mPendingBuilding;
+                this.mPendingBuilding = null;
+                this.SetData(_local_2);
+            };
+            if (this.mWaitingStatePending)
+            {
+                var _local_3:Boolean = this.mPendingWaitingState;
+                this.mWaitingStatePending = false;
+                this.SetIsWaitingForServer(_local_3);
+            };
+            if (this.mShowPending)
+            {
+                this.mShowPending = false;
+                this.Show();
+            };
         }
 
         private function ClosePanel(_arg_1:Event):void
@@ -171,6 +205,11 @@
 
         override public function Show():void
         {
+            if (!this.mCreationComplete)
+            {
+                this.mShowPending = true;
+                return;
+            };
             if (!IsVisible())
             {
                 this.mPanel.x = ((global.getApplication().stage.width / 2) - (this.mPanel.width / 2));
