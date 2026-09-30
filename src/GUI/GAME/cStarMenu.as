@@ -59,6 +59,9 @@
         public static const GROUP_BUILDINGS:int = 4;
         public static const GROUP_ADVENTURES:int = 5;
         public static const GROUP_MISC:int = 6;
+        public static const GROUP_GEOLOGISTS:int = 7;
+        public static const GROUP_GENERALS:int = 8;
+        public static const GROUP_EXPLORERS:int = 9;
 
         private var selectedBuff:cBuff;
         private var mGI:cGameInterface;
@@ -214,7 +217,14 @@
 
         private function filterList(_arg_1:Object, _arg_2:int=0, _arg_3:Vector.<Object>=null):Boolean
         {
-            if (((!(this.mSelectedGroup == cStarMenu.GROUP_ALL)) && (!(this.collectionBuffSortOptions[_arg_1].Group == this.mSelectedGroup))))
+            if (this.mSelectedGroup >= cStarMenu.GROUP_GEOLOGISTS)
+            {
+                if (!this.matchesSpecialistGroup(_arg_1 as cSpecialist, this.mSelectedGroup))
+                {
+                    return (false);
+                };
+            }
+            else if (((!(this.mSelectedGroup == cStarMenu.GROUP_ALL)) && (!(this.collectionBuffSortOptions[_arg_1].Group == this.mSelectedGroup))))
             {
                 return (false);
             };
@@ -223,6 +233,25 @@
                 return (this.collectionBuffSortOptions[_arg_1].filter(this.searchFilterString));
             };
             return (true);
+        }
+
+        private function matchesSpecialistGroup(_arg_1:cSpecialist, _arg_2:int):Boolean
+        {
+            if (_arg_1 == null)
+            {
+                return (false);
+            };
+            var _local_3:int = _arg_1.GetBaseType();
+            switch (_arg_2)
+            {
+                case GROUP_GEOLOGISTS:
+                    return (_local_3 == SPECIALIST_TYPE.GEOLOGIST);
+                case GROUP_EXPLORERS:
+                    return (_local_3 == SPECIALIST_TYPE.EXPLORER);
+                case GROUP_GENERALS:
+                    return (((_local_3 == SPECIALIST_TYPE.GENERAL) || (_local_3 == SPECIALIST_TYPE.TRANSPORTER_GENERAL)) || (_local_3 == SPECIALIST_TYPE.ADMIRAL));
+            };
+            return (false);
         }
 
         public function Refresh():void
@@ -306,7 +335,16 @@
         private function changeTab(_arg_1:ItemClickEvent):void
         {
             var _local_2:int = ((_arg_1) ? _arg_1.index : 0);
-            this.mSelectedGroup = ((this.mPanel.buttonBar.dataProvider as ArrayCollection).getItemAt(_local_2).group as int);
+            var _local_3:* = (_arg_1.currentTarget == this.mPanel.buttonBar2) ? this.mPanel.buttonBar2 : this.mPanel.buttonBar;
+            this.mSelectedGroup = ((_local_3.dataProvider as ArrayCollection).getItemAt(_local_2).group as int);
+            if (_local_3 == this.mPanel.buttonBar)
+            {
+                this.mPanel.buttonBar2.selectedIndex = -1;
+            }
+            else
+            {
+                this.mPanel.buttonBar.selectedIndex = -1;
+            };
             this.ResetScrollPosition();
             this.refreshScrollPosition();
             this.collection.refresh();
@@ -394,6 +432,7 @@
             this.mPanel.addEventListener(cStarMenu.CLICK_ITEM, this.itemClickHandler);
             this.mPanel.addEventListener(cStarMenu.CLICK_DELETE_BUTTON, this.removeButtonClick);
             this.mPanel.buttonBar.addEventListener(ListEvent.ITEM_CLICK, this.changeTab);
+            this.mPanel.buttonBar2.addEventListener(ListEvent.ITEM_CLICK, this.changeTab);
             this.mPanel.searchInput.addEventListener(Event.CHANGE, this.refreshSearchFilteredList);
             this.mPanel.itemList.addEventListener(FlexEvent.UPDATE_COMPLETE, this.changedItemListHandler);
             this.mPanel.itemList.addEventListener(ScrollEvent.SCROLL, this.mouseWheelHandler);
@@ -410,6 +449,19 @@
                 "group":cStarMenu.GROUP_SPECIALISTS,
                 "icon":gAssetManager.GetClass("StarMenuTabIconSpecialist")
             }, {
+                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Geologist"),
+                "group":cStarMenu.GROUP_GEOLOGISTS,
+                "icon":StarMenuGeologistTabIcon
+            }, {
+                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "General"),
+                "group":cStarMenu.GROUP_GENERALS,
+                "icon":StarMenuGeneralTabIcon
+            }, {
+                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Explorer"),
+                "group":cStarMenu.GROUP_EXPLORERS,
+                "icon":StarMenuExplorerTabIcon
+            }];
+            this.mPanel.buttonBar2.dataProvider = [{
                 "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Resources"),
                 "group":cStarMenu.GROUP_RESOURCES,
                 "icon":gAssetManager.GetClass("StarMenuTabIconResource")
@@ -430,6 +482,7 @@
                 "group":cStarMenu.GROUP_MISC,
                 "icon":gAssetManager.GetClass("StarMenuTabIconMisc")
             }];
+            this.mPanel.buttonBar2.selectedIndex = -1;
             this.initialiseBuffList();
             this.mGI.mCurrentPlayerZone.addPropertyObserver("mSpecialists_vector", this);
             this.mGI.mCurrentPlayer.addPropertyObserver("mAvailableBuffs_vector", this);
@@ -915,6 +968,54 @@ import BuffSystem.cBuff;
 import GUI.Loca.cLocaManager;
 import Enums.LOCA_GROUP;
 import AdventureSystem.cAdventureDefinition;
+import GUI.Assets.gAssetManager;
+import flash.display.BitmapData;
+import flash.geom.Matrix;
+import flash.geom.Rectangle;
+import mx.core.BitmapAsset;
+
+class StarMenuSpecialistTabIcon extends BitmapAsset
+{
+    public function StarMenuSpecialistTabIcon(_arg_1:String)
+    {
+        super(createBitmap(_arg_1));
+    }
+
+    private static function createBitmap(_arg_1:String):BitmapData
+    {
+        var _local_2:BitmapData = gAssetManager.GetBitmap(_arg_1).bitmapData;
+        var _local_3:Rectangle = _local_2.getColorBoundsRect(0xFF000000, 0, false);
+        var _local_4:Number = Math.min(20 / _local_3.width, 20 / _local_3.height);
+        var _local_5:BitmapData = new BitmapData(22, 22, true, 0);
+        var _local_6:Matrix = new Matrix(_local_4, 0, 0, _local_4, ((22 - (_local_3.width * _local_4)) / 2) - (_local_3.x * _local_4), ((22 - (_local_3.height * _local_4)) / 2) - (_local_3.y * _local_4));
+        _local_5.draw(_local_2, _local_6, null, null, null, true);
+        return (_local_5);
+    }
+}
+
+class StarMenuGeologistTabIcon extends StarMenuSpecialistTabIcon
+{
+    public function StarMenuGeologistTabIcon()
+    {
+        super("IconAllGeologists");
+    }
+}
+
+class StarMenuGeneralTabIcon extends StarMenuSpecialistTabIcon
+{
+    public function StarMenuGeneralTabIcon()
+    {
+        super("IconAllGenerals");
+    }
+}
+
+class StarMenuExplorerTabIcon extends StarMenuSpecialistTabIcon
+{
+    public function StarMenuExplorerTabIcon()
+    {
+        super("IconAllExplorers");
+    }
+}
 
 class SortOptions 
 {

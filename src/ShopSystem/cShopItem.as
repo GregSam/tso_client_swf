@@ -36,6 +36,7 @@
         private var quality:int;
 
         private var costs_vector:Vector.<dResource> = new Vector.<dResource>();
+        private var costOptions:Array = [];
         private var itemContent_vector:Vector.<cItemContent> = new Vector.<cItemContent>();
 
         public function cShopItem(_arg_1:int, _arg_2:String, _arg_3:int, _arg_4:Vector.<dResource>, _arg_5:int, _arg_6:Vector.<cItemContent>, _arg_7:int, _arg_8:int, _arg_9:int, _arg_10:String, _arg_11:int, _arg_12:Boolean, _arg_13:String, _arg_14:String, _arg_15:String, _arg_16:Boolean, _arg_17:String, _arg_18:int, _arg_19:int, _arg_20:int, _arg_21:String, _arg_22:String, _arg_23:int)
@@ -75,6 +76,11 @@
             var _local_27:int;
             var _local_28:cShopItem;
             var _local_29:cItemContent;
+            var _local_30:Array = [];
+            var _local_31:cXML;
+            var _local_32:Vector.<dResource>;
+            var _local_33:Vector.<cXML>;
+            var _local_34:cXML;
             var _local_3:int = _arg_1.GetAttributeInt("id");
             var _local_4:String = _arg_1.GetAttributeString_string("name");
             var _local_5:int = _arg_1.GetAttributeInt("sortIndex");
@@ -88,7 +94,37 @@
             var _local_13:Boolean = _arg_1.GetAttributeBool("hideInShop");
             var _local_14:String = _arg_1.GetAttributeString_string("requiresEvent");
             var _local_15:int = _arg_1.GetAttributeInt("percentIncCosts");
-            var _local_16:Vector.<dResource> = gParse.ParseCosts(_arg_1.MoveToSubNode("Costs"));
+            var _local_16:Vector.<dResource> = new Vector.<dResource>();
+            if (_arg_1.HasSubNode("Costs"))
+            {
+                _local_16 = gParse.ParseCosts(_arg_1.MoveToSubNode("Costs"));
+            }
+            else if (_arg_1.HasSubNode("CostOptions"))
+            {
+                for each (_local_31 in _arg_1.MoveToSubNodeAndCreateChildrenArray("CostOptions"))
+                {
+                    _local_32 = gParse.ParseCosts(_local_31.MoveToSubNode("Costs"));
+                    if (_local_31.GetAttributeString_string("id") == "default")
+                    {
+                        _local_16 = _local_32;
+                    }
+                    else
+                    {
+                        _local_33 = _local_31.MoveToSubNodeAndCreateChildrenArray("Conditions");
+                        for each (_local_34 in _local_33)
+                        {
+                            if (((_local_34.GetName_string() == "Compare") && (_local_34.GetAttributeString_string("operator") == "GreaterThan")) && (_local_34.GetAttributeString_string("left") == "AlreadyPurchased"))
+                            {
+                                _local_30.push({
+                                    "minimumPurchases":(_local_34.GetAttributeInt("right") + 1),
+                                    "costs":_local_32
+                                });
+                            };
+                        };
+                    };
+                };
+                _local_30.sortOn("minimumPurchases", (Array.NUMERIC | Array.DESCENDING));
+            };
             var _local_17:String = _arg_1.GetAttributeString_string("giftable");
             var _local_18:int = _arg_1.GetAttributeInt("perEvent");
             var _local_19:String = _arg_1.GetAttributeString_string("includeItemsInLimit", "");
@@ -113,6 +149,7 @@
             _local_26 = _arg_1.GetAttributeString_string("votePoolName");
             _local_27 = _arg_1.GetAttributeInt("perVoteRound");
             _local_28 = new cShopItem(_local_3, _local_4, _arg_2, _local_16, _local_15, _local_22, _local_5, _local_6, _local_8, _local_9, _local_11, _local_13, _local_12, _local_10, _local_25, _local_20, _local_14, _local_21, _local_7, _local_18, _local_19, _local_26, _local_27);
+            _local_28.costOptions = _local_30;
             map_ShopItemName_ShopItem[_local_3] = _local_28;
             return (_local_28);
         }
@@ -210,6 +247,27 @@
             {
                 return (this.GetIncCosts_vector(-1));
             };
+            return (this.GetActiveCosts_vector(-1));
+        }
+
+        private function GetActiveCosts_vector(_arg_1:int):Vector.<dResource>
+        {
+            var _local_3:Object;
+            var _local_2:int = _arg_1;
+            if (((_local_2 < 0) && (global.ui != null)) && (global.ui.mCurrentPlayer != null))
+            {
+                _local_2 = global.ui.mCurrentPlayer.GetPurchasedShopItemAmount(this.GetId());
+            };
+            if (_local_2 >= 0)
+            {
+                for each (_local_3 in this.costOptions)
+                {
+                    if (_local_2 >= _local_3.minimumPurchases)
+                    {
+                        return (_local_3.costs as Vector.<dResource>);
+                    };
+                };
+            };
             return (this.costs_vector);
         }
 
@@ -233,7 +291,7 @@
             };
             var _local_2:Vector.<dResource> = new Vector.<dResource>();
             var _local_3:int = ((global.ui != null) ? global.ui.mCurrentPlayer.GetPurchasedShopItemAmount(this.GetId()) : _arg_1);
-            for each (_local_4 in this.costs_vector)
+            for each (_local_4 in this.GetActiveCosts_vector(_local_3))
             {
                 _local_5 = new dResource();
                 _local_5.name_string = _local_4.name_string;
