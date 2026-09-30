@@ -78,7 +78,6 @@
         public var GAMESTATE_ID_SHOP_WINDOW:ShopWindow = null;
         public var GAMESTATE_ID_PVP_REPORT_WINDOW:PvPReportWindow = null;
         public var GAMESTATE_ID_GUILD_WINDOW:GuildWindow = null;
-        public var GAMESTATE_ID_HELP_WINDOW:HelpWindow = null;
         public var GAMESTATE_ID_ECONOMY_OVERVIEW:EconomyOverview = null;
         public var GAMESTATE_ID_PVPCOLONIES_WINDOW:PvPColoniesWindow = null;
         public var GAMESTATE_ID_SKILLTREEWINDOW:SkillTreeWindow = null;
@@ -201,21 +200,6 @@
             if (this.GAMESTATE_ID_GUILD_WINDOW == null)
                 this.GAMESTATE_ID_GUILD_WINDOW = this.createLazyWindow(new GuildWindow(), "GAMESTATE_ID_GUILD_WINDOW") as GuildWindow;
             return (this.GAMESTATE_ID_GUILD_WINDOW);
-        }
-
-        public function ensureHelpWindow():HelpWindow
-        {
-            if (this.GAMESTATE_ID_HELP_WINDOW == null)
-            {
-                this.GAMESTATE_ID_HELP_WINDOW = new HelpWindow();
-                this.GAMESTATE_ID_HELP_WINDOW.id = "GAMESTATE_ID_HELP_WINDOW";
-                this.GAMESTATE_ID_HELP_WINDOW.visible = false;
-                this.GAMESTATE_ID_HELP_WINDOW.y = 58;
-                this.GAMESTATE_ID_HELP_WINDOW.setStyle("left", 0);
-                this.GAMESTATE_ID_HELP_WINDOW.setStyle("right", "auto");
-                this.guiScaleLayer.addChild(this.GAMESTATE_ID_HELP_WINDOW);
-            }
-            return (this.GAMESTATE_ID_HELP_WINDOW);
         }
 
         public function ensureEconomyOverview():EconomyOverview
@@ -967,6 +951,9 @@
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:CombatScenarioTooltip id="GAMESTATE_ID_COMBAT_SCENARIO_TOOLTIP" visible="false" />
+            </states:GuiAddChild>
+            <states:GuiAddChild position="lastChild">
+                <gui:HelpWindow id="GAMESTATE_ID_HELP_WINDOW" visible="false" y="58" left="0" />
             </states:GuiAddChild>
             <states:GuiAddChild position="lastChild">
                 <gui:ActionBar id="GAMESTATE_ID_ACTIONBAR" visible="false" />

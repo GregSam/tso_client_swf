@@ -1,4 +1,9 @@
-﻿package GUI.GAME
+﻿// Decompiled by AS3 Sorcerer 6.78
+// www.buraks.com/as3sorcerer
+
+//GUI.GAME.cHelpWindow
+
+package GUI.GAME
 {
     import GUI.cGuiBaseElement;
     import GUI.Components.HelpWindow;
@@ -15,7 +20,6 @@
     import GUI.Assets.gAssetManager;
     import flash.net.navigateToURL;
     import flash.net.URLRequest;
-    import flash.net.SharedObject;
     import ServerState.cPlayerData;
     import nLib.cLog;
     import __AS3__.vec.*;
@@ -33,7 +37,6 @@
         private var helpDefinition:dHelpDefinitionVO;
         private var clickOffsetX:int;
         private var forceNext:Boolean = false;
-        private var knownHelpPlayerId:int = -1;
 
         private var visibleHelp_vector:Vector.<dHelpDefinitionVO> = new Vector.<dHelpDefinitionVO>();
         private var mKnownHelp_vector:Vector.<String> = new Vector.<String>();
@@ -55,71 +58,7 @@
 
         private function addKnownHelp(_arg_1:String):void
         {
-            if (this.mKnownHelp_vector.indexOf(_arg_1) == -1)
-            {
-                this.mKnownHelp_vector.push(_arg_1);
-            };
-            this.saveKnownHelp();
-        }
-
-        private function syncKnownHelp(_arg_1:cPlayerData):void
-        {
-            var _local_4:String;
-            if (((_arg_1 == null) || (_arg_1.mKnownHelp_vector == null)))
-            {
-                return;
-            };
-            var _local_2:int = _arg_1.GetPlayerId();
-            this.mKnownHelp_vector = _arg_1.mKnownHelp_vector;
-            this.knownHelpPlayerId = _local_2;
-            try
-            {
-                var _local_3:Array = SharedObject.getLocal("tsoKnownHelp").data[("player_" + _local_2)] as Array;
-                if (_local_3 != null)
-                {
-                    for each (_local_4 in _local_3)
-                    {
-                        if (this.mKnownHelp_vector.indexOf(_local_4) == -1)
-                        {
-                            this.mKnownHelp_vector.push(_local_4);
-                        };
-                    };
-                };
-            }
-            catch (_error:Error)
-            {
-            };
-        }
-
-        private function saveKnownHelp():void
-        {
-            if (this.knownHelpPlayerId < 0)
-            {
-                return;
-            };
-            try
-            {
-                var _local_1:SharedObject = SharedObject.getLocal("tsoKnownHelp");
-                var _local_2:Array = [];
-                for each (var _local_3:String in this.mKnownHelp_vector)
-                {
-                    _local_2.push(_local_3);
-                };
-                _local_1.data[("player_" + this.knownHelpPlayerId)] = _local_2;
-                _local_1.flush();
-            }
-            catch (_error:Error)
-            {
-            };
-        }
-
-        private function getHelpPlayer():cPlayerData
-        {
-            if (((this.gi != null) && (this.gi.mHomePlayer != null)) && (this.gi.mHomePlayer.GetPlayerId() > 0))
-            {
-                return (this.gi.mHomePlayer);
-            };
-            return (((this.gi != null) ? this.gi.mCurrentPlayer : null));
+            this.mKnownHelp_vector.push(_arg_1);
         }
 
         private function ClosePanel(_arg_1:MouseEvent):void
@@ -127,18 +66,9 @@
             this.visibleHelp_vector.length = 0;
             if (this.mPanel.helpHide.selected)
             {
-                var _local_2:cPlayerData = this.getHelpPlayer();
-                if (_local_2 == null)
-                {
-                    Hide();
-                    return;
-                };
-                _local_2.mHideHelp = true;
+                this.gi.mCurrentPlayer.mHideHelp = true;
                 this.hideHelp = true;
-                if (this.gi.mCurrentViewedZoneID == _local_2.GetHomeZoneId())
-                {
-                    global.ui.mClientMessages.SendMessagetoServer(COMMAND.SET_HIDE_HELP, this.gi.mCurrentViewedZoneID, true);
-                };
+                global.ui.mClientMessages.SendMessagetoServer(COMMAND.SET_HIDE_HELP, this.gi.mCurrentPlayer.GetPlayerId(), true);
             };
             Hide();
         }
@@ -163,28 +93,6 @@
         public function ForceNextHelpWindow():void
         {
             this.forceNext = true;
-        }
-
-        public static function wouldShow(_arg_1:String):Boolean
-        {
-            var _local_2:cPlayerData = (((global.ui != null) && (global.ui.mHomePlayer != null)) ? global.ui.mHomePlayer : null);
-            if (((_local_2 == null) || (_local_2.GetPlayerId() <= 0)) && ((global.ui != null) && (global.ui.mCurrentPlayer != null)))
-            {
-                _local_2 = global.ui.mCurrentPlayer;
-            };
-            if (_local_2 == null)
-            {
-                return (true);
-            };
-            if (global.ui.mCurrentViewedZoneID != _local_2.GetHomeZoneId())
-            {
-                return (false);
-            };
-            if (_local_2.mHideHelp)
-            {
-                return (false);
-            };
-            return (_local_2.mKnownHelp_vector.indexOf(_arg_1) == -1);
         }
 
         private function completeHandler(_arg_1:FlexEvent):void
@@ -345,20 +253,6 @@
         {
             this.hideHelp = null;
             this.mKnownHelp_vector = new Vector.<String>();
-            var _local_2:cPlayerData = this.getHelpPlayer();
-            if (_local_2 != null)
-            {
-                this.knownHelpPlayerId = _local_2.GetPlayerId();
-                try
-                {
-                    var _local_1:SharedObject = SharedObject.getLocal("tsoKnownHelp");
-                    delete _local_1.data[("player_" + this.knownHelpPlayerId)];
-                    _local_1.flush();
-                }
-                catch (_error:Error)
-                {
-                };
-            };
         }
 
         private function isHelpKnown(_arg_1:String):Boolean
@@ -375,40 +269,23 @@
         override public function SetDataByString(_arg_1:String):void
         {
             var _local_3:dHelpDefinitionVO;
-            var _local_2:cPlayerData = this.getHelpPlayer();
-            if (_local_2 == null)
-            {
-                return;
-            };
-            if (this.gi.mCurrentViewedZoneID != _local_2.GetHomeZoneId())
-            {
-                this.forceNext = false;
-                this.visibleHelp_vector.length = 0;
-                Hide();
-                return;
-            };
-            if (((this.hideHelp == null) || (!(this.knownHelpPlayerId == _local_2.GetPlayerId()))) || (!(this.mKnownHelp_vector == _local_2.mKnownHelp_vector)))
+            var _local_2:cPlayerData = this.gi.mCurrentPlayer;
+            if (this.hideHelp == null)
             {
                 this.hideHelp = _local_2.mHideHelp;
-                this.syncKnownHelp(_local_2);
+                this.mKnownHelp_vector = _local_2.mKnownHelp_vector;
             };
             if ((((!(this.hideHelp)) && (!(this.isHelpKnown(_arg_1)))) || (this.forceNext)))
             {
                 this.forceNext = false;
                 _local_3 = global.map_HelpName_HelpDefinition[_arg_1];
-                if (((_local_3 == null) && (_arg_1 == "Help_window_chat_0")))
-                {
-                    this.addKnownHelp(_arg_1);
-                    this.gi.mClientMessages.SendMessagetoServer(COMMAND.HELP_SHOWN, this.gi.mCurrentViewedZoneID, _arg_1);
-                    return;
-                };
                 if (_local_3 == null)
                 {
                     cLog.error(("Unknown HelpWindow ID:" + _arg_1));
                     return;
                 };
                 this.addKnownHelp(_arg_1);
-                this.gi.mClientMessages.SendMessagetoServer(COMMAND.HELP_SHOWN, this.gi.mCurrentViewedZoneID, _arg_1);
+                this.gi.mClientMessages.SendMessagetoServer(COMMAND.HELP_SHOWN, _local_2.GetPlayerId(), _arg_1);
                 if (((this.visibleHelp_vector.length == 0) || (!(this.visibleHelp_vector[(this.visibleHelp_vector.length - 1)].helpName_string == _local_3.helpName_string))))
                 {
                     this.visibleHelp_vector.push(_local_3);
@@ -437,4 +314,5 @@
 
 
     }
-}
+}//package GUI.GAME
+

@@ -311,6 +311,8 @@ package GuiWrapper
             this.mLoadingMailPanel = new cLoadingMailPanel();
             this.mLoadingMailPanel.init(_local_2.GAMESTATE_ID_LOADING_MAIL_PANEL);
             this.mMailWindow = new cMailWindow();
+            this._mHelpWindow = new cHelpWindow();
+            this._mHelpWindow.Init(_local_2.GAMESTATE_ID_HELP_WINDOW);
             this.mQuestHintPointer = new cHintPointer();
             this.mQuestHintPointer.Init(_local_2.GAMESTATE_ID_QUEST_HINT_POINTER);
             this.mPvPLevelUpHintPointer = new cHintPointer();
@@ -921,11 +923,6 @@ this.mDefaultGuiElementsLoaded = true;
 
         public function get mHelpWindow():cHelpWindow
         {
-            if (this._mHelpWindow == null)
-            {
-                this._mHelpWindow = new cHelpWindow();
-                this.initializeLazyController(this._mHelpWindow, global.getApplication().ensureHelpWindow());
-            }
             return (this._mHelpWindow);
         }
 

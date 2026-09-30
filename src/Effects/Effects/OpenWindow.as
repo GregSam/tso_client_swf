@@ -1,10 +1,14 @@
-﻿package Effects.Effects
+﻿// Decompiled by AS3 Sorcerer 6.78
+// www.buraks.com/as3sorcerer
+
+//Effects.Effects.OpenWindow
+
+package Effects.Effects
 {
     import Effects.Effect;
     import Communication.VO.EffectVO;
     import Interface.cGameInterface;
     import GUI.cGuiBaseElement;
-    import GUI.GAME.cHelpWindow;
 
     public final class OpenWindow extends Effect 
     {
@@ -20,15 +24,12 @@
 
         override protected function action():void
         {
-            if (((effect.name_string == "GAMESTATE_ID_HELP_WINDOW") && (!(cHelpWindow.wouldShow(effect.item_string)))))
-            {
-                return;
-            };
-            var _local_1:cGuiBaseElement = globalFlash.gui.GetPanelControllerById(effect.name_string);
+            var _local_1:cGuiBaseElement = cGuiBaseElement.GetPanelController(effect.name_string);
             _local_1.SetDataByString(effect.item_string);
             globalFlash.gui.TryShowPanel(_local_1);
         }
 
 
     }
-}
+}//package Effects.Effects
+
