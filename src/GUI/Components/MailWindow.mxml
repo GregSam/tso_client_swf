@@ -142,7 +142,7 @@
             mailsList.setStyle("headerColors", [3155998]);
             mailsList.setStyle("headerSeparatorSkin", CustomDataGridHeaderSeparator);
             _MailWindow_PagerControl1.pager = mailPager;
-            mailPager.addEventListener(CollectionEvent.COLLECTION_CHANGE, refreshPagerVisibility, false, 0, true);
+            mailPager.addEventListener(CollectionEvent.COLLECTION_CHANGE, refreshMailPager, false, 0, true);
             pulsate.target = deleteIcon;
             _MailWindow_Fade1.easingFunction = Cubic.easeOut;
             _MailWindow_Fade2.easingFunction = Cubic.easeIn;
@@ -211,6 +211,12 @@
         private function refreshPagerVisibility(event:Event = null):void
         {
             _MailWindow_PagerControl1.visible = mailPager.numPages > 1;
+        }
+
+        private function refreshMailPager(event:Event = null):void
+        {
+            mailsList.dataProvider = mailPager.view;
+            refreshPagerVisibility(event);
         }
 
         private function updateStateVisibility(event:Event = null):void
