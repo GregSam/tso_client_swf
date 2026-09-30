@@ -15,6 +15,7 @@
         import GUI.Assets.gAssetManager;
         import GUI.Components.DataGrid.CustomDataGridHeaderBackgroundSkin;
         import GUI.Components.DataGrid.CustomDataGridHeaderSeparator;
+        import GUI.Components.DataGrid.CustomGridHeaderRenderer;
         import GUI.Components.ItemRenderer.GuildListItemRenderer;
         import GUI.Components.ItemRenderer.GuildLogItemRenderer;
         import GUI.Components.ItemRenderer.GuildMarketItemRenderer;
@@ -189,14 +190,23 @@
         public function refreshLabels(event:Event = null):void
         {
             _GuildWindow_DataGridColumn1.headerText = loca("Guild");
+            _GuildWindow_DataGridColumn1.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             _GuildWindow_DataGridColumn2.headerText = loca("GuildTag");
+            _GuildWindow_DataGridColumn2.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             _GuildWindow_DataGridColumn3.headerText = loca("GuildPlayerCount");
+            _GuildWindow_DataGridColumn3.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             _GuildWindow_DataGridColumn4.headerText = loca("GuildMember");
+            _GuildWindow_DataGridColumn4.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             _GuildWindow_DataGridColumn5.headerText = loca("GuildLevel");
+            _GuildWindow_DataGridColumn5.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             _GuildWindow_DataGridColumn6.headerText = loca("GuildRank");
+            _GuildWindow_DataGridColumn6.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             _GuildWindow_DataGridColumn7.headerText = loca("GuildOnlineLast24");
+            _GuildWindow_DataGridColumn7.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             _GuildWindow_DataGridColumn8.headerText = loca("GuildQuestStatus");
+            _GuildWindow_DataGridColumn8.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             _GuildWindow_DataGridColumn9.headerText = loca("GuildSuccession");
+            _GuildWindow_DataGridColumn9.headerRenderer = new ClassFactory(CustomGridHeaderRenderer);
             guildList.invalidateProperties();
             guildList.invalidateDisplayList();
             membersList.invalidateProperties();

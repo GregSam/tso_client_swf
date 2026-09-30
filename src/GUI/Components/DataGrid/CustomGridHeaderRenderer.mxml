@@ -7,8 +7,19 @@
 
         private function getHeaderText(value:Object):String
         {
-            var headerText:* = (value as DataGridColumn).headerText;
+            var column:DataGridColumn = (value as DataGridColumn);
+            if (column == null)
+            {
+                return null;
+            };
+            var headerText:* = column.headerText;
             return ((headerText == undefined) ? null : String(headerText));
+        }
+
+        override public function set data(value:Object):void
+        {
+            super.data = value;
+            text = getHeaderText(value);
         }
     ]]></mx:Script>
 </ui:CustomLabel>

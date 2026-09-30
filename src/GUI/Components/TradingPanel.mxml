@@ -476,9 +476,9 @@
                         <gui:CustomLabel id="maxLotLabel" fontSize="10" color="0xFFFFFF" />
                     </mx:HBox>
                     <gui:ExtendedHSlider id="lotAmountSlider" width="140" horizontalCenter="0" minimum="1" maximum="4" />
+                    <gui:StandardButton id="btnUnlimitedLots" width="140" height="26" horizontalCenter="0" enabled="false"
+                        icon="{gAssetManager.GetClass('IconMailTypeHardCurrency')}" />
                 </mx:VBox>
-                <gui:StandardButton id="btnUnlimitedLots" width="140" height="26" horizontalCenter="0" enabled="false"
-                    icon="{gAssetManager.GetClass('IconMailTypeHardCurrency')}" />
                 <gui:StandardButton id="btnSendTrade" width="140" height="50" horizontalCenter="0" bottom="40" enabled="false" />
                 <gui:StandardButton id="btnBackToWindow" width="100" height="26" horizontalCenter="0" bottom="2"
                     icon="{gAssetManager.GetClass('LoopBackward')}" />

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bridge:NLibFlexBridge xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:bridge="com.bluebyte.tso.ui.bridge.*" xmlns:gui="GUI.Components.*">
+<bridge:NLibFlexBridge xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:bridge="com.bluebyte.tso.ui.bridge.*" xmlns:gui="GUI.Components.*"
+    minWidth="150" direction="vertical" mouseEnabled="false" horizontalAlign="center" verticalGap="0">
     <mx:Script><![CDATA[
         import Enums.LOCA_GROUP;
         import GUI.Assets.gAssetManager;
@@ -31,11 +32,6 @@
         override protected function childrenCreated():void
         {
             super.childrenCreated();
-            this.minWidth = 150;
-            this.direction = "vertical";
-            this.mouseEnabled = false;
-            this.setStyle("horizontalAlign", "center");
-            this.setStyle("verticalGap", 0);
             this.setStyle("showEffect", fadeIn);
             this.setStyle("hideEffect", fadeOut);
             bossBox.itemRenderer = new ClassFactory(Combat3BossToolTipRenderer);
