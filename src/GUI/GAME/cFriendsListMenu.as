@@ -33,6 +33,7 @@
     import Tracks.TrackManager;
     import mx.events.ResizeEvent;
     import flash.desktop.NativeApplication;
+    import flash.geom.Point;
     import __AS3__.vec.*;
 
     public class cFriendsListMenu extends cGuiBaseElement 
@@ -477,6 +478,12 @@
 
         private function ResizeHandler(_arg_1:ResizeEvent):void
         {
+            if (this.mMenu.parent == null)
+            {
+                return;
+            };
+            var _local_2:Number = this.mMenu.parent.width;
+            var _local_3:Number = this.mMenu.parent.height;
             if (this.mMenu.x < 0)
             {
                 this.mMenu.x = 0;
@@ -485,13 +492,13 @@
             {
                 this.mMenu.y = 0;
             };
-            if (this.mMenu.x > (global.getApplication().stage.stageWidth - this.mMenu.width))
+            if (this.mMenu.x > (_local_2 - this.mMenu.width))
             {
-                this.mMenu.x = (global.getApplication().stage.stageWidth - this.mMenu.width);
+                this.mMenu.x = Math.max(0, (_local_2 - this.mMenu.width));
             };
-            if (this.mMenu.y > (global.getApplication().stage.stageHeight - this.mMenu.height))
+            if (this.mMenu.y > (_local_3 - this.mMenu.height))
             {
-                this.mMenu.y = (global.getApplication().stage.stageHeight - this.mMenu.height);
+                this.mMenu.y = Math.max(0, (_local_3 - this.mMenu.height));
             };
         }
 
@@ -517,8 +524,13 @@
 
         public function Move(_arg_1:int, _arg_2:int):void
         {
-            this.mMenu.x = (_arg_1 - (this.mMenu.width >> 1));
-            this.mMenu.y = _arg_2;
+            if (this.mMenu.parent == null)
+            {
+                return;
+            };
+            var _local_3:Point = this.mMenu.parent.globalToLocal(new Point(_arg_1, _arg_2));
+            this.mMenu.x = (_local_3.x - (this.mMenu.width / 2));
+            this.mMenu.y = _local_3.y;
         }
 
         private function ConfirmCancelAdventure(_arg_1:MouseEvent):void
