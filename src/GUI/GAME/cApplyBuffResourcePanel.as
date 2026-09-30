@@ -26,6 +26,10 @@
         public var buff:cBuff;
         private var gi:cGameInterface;
         private var cursorGrid:int;
+        private var creationComplete:Boolean = false;
+        private var showPending:Boolean = false;
+        private var pendingBuff:cBuff;
+        private var pendingCursorGrid:int;
 
 
         private function completeHandler(_arg_1:FlexEvent):void
@@ -37,6 +41,19 @@
             this.panel.amountSlider.addEventListener(SliderEvent.CHANGE, this.setAmountBySlider);
             this.panel.selectedAmount.addEventListener(SliderEvent.CHANGE, this.setAmountByText);
             this.panel.selectedAmount.addEventListener(FocusEvent.FOCUS_OUT, this.amountTextFocusOutHandler);
+            this.creationComplete = true;
+            if (this.pendingBuff != null)
+            {
+                var _local_2:cBuff = this.pendingBuff;
+                var _local_3:int = this.pendingCursorGrid;
+                this.pendingBuff = null;
+                this.setData(_local_2, _local_3);
+            };
+            if (this.showPending)
+            {
+                this.showPending = false;
+                this.Show();
+            };
         }
 
         private function setAmountBySlider(_arg_1:SliderEvent):void
@@ -69,6 +86,11 @@
 
         override public function Show():void
         {
+            if (!this.creationComplete)
+            {
+                this.showPending = true;
+                return;
+            };
             this.panel.visible = true;
             notifyPropertyObserver("show", this.panel.id);
             globalFlash.gui.mCancelActionPanel.Hide();
@@ -115,6 +137,12 @@
             var _local_7:int;
             this.buff = _arg_1;
             this.cursorGrid = _arg_2;
+            if (!this.creationComplete)
+            {
+                this.pendingBuff = _arg_1;
+                this.pendingCursorGrid = _arg_2;
+                return;
+            };
             var _local_3:Number = _arg_1.GetInstantAmount();
             if (this.lastBuff == _arg_1)
             {
