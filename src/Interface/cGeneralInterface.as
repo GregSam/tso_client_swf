@@ -1455,6 +1455,7 @@ package Interface
             };
             this.mZoneCheckVO.zoneCheckSumBuffs = _local_26;
             this.mZoneCheckVO.zoneCheckSumBlackMarketAuction = -1;
+            this.mZoneCheckVO.zoneCheckSumSpecialistGroups = 31;
             this.mZoneCheckUpdateVO = this.mZoneCheckVO;
         }
 

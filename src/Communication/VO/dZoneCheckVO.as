@@ -12,6 +12,7 @@
         public var zoneId:int;
         public var zoneCheckSumBuildingModes:int;
         public var zoneCheckSumCollectionParts:int;
+        public var zoneCheckSumSpecialistGroups:int;
         public var zoneCheckSumResources:int;
         public var gameTickRefreshCounter:int;
         public var clientTime:int;
