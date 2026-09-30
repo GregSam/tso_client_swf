@@ -223,25 +223,15 @@
                 cLog.info("[SYNC RESOURCE] Incoming zoneVO is null; server values are unavailable");
                 return;
             };
-            var _local_2:dPlayerVO;
-            var _local_3:dPlayerVO;
-            for each (_local_3 in _arg_1.zoneVO.playersOnMap)
+            if (_arg_1.zoneVO.resourcesVO == null)
             {
-                if (_local_3.userID == this.mGameInterface.mCurrentPlayer.GetPlayerId())
-                {
-                    _local_2 = _local_3;
-                    break;
-                };
-            };
-            if (_local_2 == null)
-            {
-                this.mGameInterface.mLastZoneRefreshResourceDiff = "Incoming player resources not found";
-                cLog.info("[SYNC RESOURCE] Incoming player resources not found");
+                this.mGameInterface.mLastZoneRefreshResourceDiff = "Incoming resourcesVO is null";
+                cLog.info("[SYNC RESOURCE] Incoming resourcesVO is null; server values are unavailable");
                 return;
             };
             var _local_4:Dictionary = new Dictionary();
             var _local_5:dResourceVO;
-            for each (_local_5 in _local_2.resources)
+            for each (_local_5 in _arg_1.zoneVO.resourcesVO.resources_vector)
             {
                 _local_4[_local_5.name_string] = _local_5.amount;
             };
