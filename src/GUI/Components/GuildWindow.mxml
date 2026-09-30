@@ -186,7 +186,7 @@
             return value == undefined ? null : String(value);
         }
 
-        private function refreshLabels(event:Event = null):void
+        public function refreshLabels(event:Event = null):void
         {
             _GuildWindow_DataGridColumn1.headerText = loca("Guild");
             _GuildWindow_DataGridColumn2.headerText = loca("GuildTag");
@@ -197,6 +197,10 @@
             _GuildWindow_DataGridColumn7.headerText = loca("GuildOnlineLast24");
             _GuildWindow_DataGridColumn8.headerText = loca("GuildQuestStatus");
             _GuildWindow_DataGridColumn9.headerText = loca("GuildSuccession");
+            guildList.invalidateProperties();
+            guildList.invalidateDisplayList();
+            membersList.invalidateProperties();
+            membersList.invalidateDisplayList();
             btnMyGuild.label = loca("GuildMy");
             btnFoundGuild.label = loca("GuildFound");
             btnApply.label = loca("GuildApply");
@@ -276,12 +280,14 @@
             _GuildWindow_DataGridColumn1.draggable = false;
             _GuildWindow_DataGridColumn1.width = 300;
             _GuildWindow_DataGridColumn1.dataField = "name";
+            _GuildWindow_DataGridColumn1.headerText = loca("Guild");
             _GuildWindow_DataGridColumn1.itemRenderer = new ClassFactory(MailGridTextItemRenderer);
             _GuildWindow_DataGridColumn2 = new DataGridColumn();
             _GuildWindow_DataGridColumn2.resizable = false;
             _GuildWindow_DataGridColumn2.draggable = false;
             _GuildWindow_DataGridColumn2.width = 100;
             _GuildWindow_DataGridColumn2.dataField = "tag";
+            _GuildWindow_DataGridColumn2.headerText = loca("GuildTag");
             _GuildWindow_DataGridColumn2.itemRenderer = new ClassFactory(MailGridTextItemRenderer);
             _GuildWindow_DataGridColumn2.setStyle("textAlign", "center");
             _GuildWindow_DataGridColumn3 = new DataGridColumn();
@@ -289,6 +295,7 @@
             _GuildWindow_DataGridColumn3.draggable = false;
             _GuildWindow_DataGridColumn3.width = 100;
             _GuildWindow_DataGridColumn3.dataField = "size";
+            _GuildWindow_DataGridColumn3.headerText = loca("GuildPlayerCount");
             _GuildWindow_DataGridColumn3.itemRenderer = new ClassFactory(GuildListItemRenderer);
             guildList.columns = [_GuildWindow_DataGridColumn1, _GuildWindow_DataGridColumn2, _GuildWindow_DataGridColumn3];
             _GuildWindow_DataGridColumn4 = new DataGridColumn();
@@ -296,6 +303,7 @@
             _GuildWindow_DataGridColumn4.draggable = false;
             _GuildWindow_DataGridColumn4.width = 120;
             _GuildWindow_DataGridColumn4.dataField = "username";
+            _GuildWindow_DataGridColumn4.headerText = loca("GuildMember");
             _GuildWindow_DataGridColumn4.itemRenderer = new ClassFactory(MailGridTextItemRenderer);
             _GuildWindow_DataGridColumn4.setStyle("paddingLeft", 2);
             _GuildWindow_DataGridColumn5 = new DataGridColumn();
@@ -303,6 +311,7 @@
             _GuildWindow_DataGridColumn5.draggable = false;
             _GuildWindow_DataGridColumn5.width = 60;
             _GuildWindow_DataGridColumn5.dataField = "playerLevel";
+            _GuildWindow_DataGridColumn5.headerText = loca("GuildLevel");
             _GuildWindow_DataGridColumn5.labelFunction = formatLevel;
             _GuildWindow_DataGridColumn5.itemRenderer = new ClassFactory(MailGridTextItemRenderer);
             _GuildWindow_DataGridColumn5.setStyle("paddingLeft", 0);
@@ -312,6 +321,7 @@
             _GuildWindow_DataGridColumn6.draggable = false;
             _GuildWindow_DataGridColumn6.width = 120;
             _GuildWindow_DataGridColumn6.dataField = "rankID";
+            _GuildWindow_DataGridColumn6.headerText = loca("GuildRank");
             _GuildWindow_DataGridColumn6.labelFunction = formatRanks;
             _GuildWindow_DataGridColumn6.itemRenderer = new ClassFactory(MailGridTextItemRenderer);
             _GuildWindow_DataGridColumn6.setStyle("paddingLeft", 4);
@@ -320,6 +330,7 @@
             _GuildWindow_DataGridColumn7.draggable = false;
             _GuildWindow_DataGridColumn7.width = 90;
             _GuildWindow_DataGridColumn7.dataField = "onlineLast24";
+            _GuildWindow_DataGridColumn7.headerText = loca("GuildOnlineLast24");
             _GuildWindow_DataGridColumn7.labelFunction = formatOnlineLast24;
             _GuildWindow_DataGridColumn7.itemRenderer = new ClassFactory(MailGridTextItemRenderer);
             _GuildWindow_DataGridColumn7.setStyle("paddingLeft", 4);
@@ -328,6 +339,7 @@
             _GuildWindow_DataGridColumn8.draggable = false;
             _GuildWindow_DataGridColumn8.width = 90;
             _GuildWindow_DataGridColumn8.dataField = "questsStatus";
+            _GuildWindow_DataGridColumn8.headerText = loca("GuildQuestStatus");
             _GuildWindow_DataGridColumn8.labelFunction = formatGuildQuestStatus;
             _GuildWindow_DataGridColumn8.itemRenderer = new ClassFactory(MailGridTextItemRenderer);
             _GuildWindow_DataGridColumn8.setStyle("paddingLeft", 4);
@@ -336,6 +348,7 @@
             _GuildWindow_DataGridColumn9.draggable = false;
             _GuildWindow_DataGridColumn9.width = 90;
             _GuildWindow_DataGridColumn9.dataField = "successorOrder";
+            _GuildWindow_DataGridColumn9.headerText = loca("GuildSuccession");
             membersList.columns = [_GuildWindow_DataGridColumn4, _GuildWindow_DataGridColumn5, _GuildWindow_DataGridColumn6, _GuildWindow_DataGridColumn7, _GuildWindow_DataGridColumn8, _GuildWindow_DataGridColumn9];
         }
 

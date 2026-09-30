@@ -119,29 +119,28 @@
             var _local_7:String;
             var _local_8:cAdventureDefinition;
             var _local_9:Task;
-            if (!this.mGI.mQuestClientCallbacks.GetClientQuestPool())
-            {
-                return;
-            };
             var _local_3:Object = {};
             var _local_4:int;
-            for each (_local_5 in this.mGI.mQuestClientCallbacks.GetClientQuestPool().mQuestVO_vector)
+            if (this.mGI.mQuestClientCallbacks.GetClientQuestPool())
             {
-                if (((((!(_local_5.mQuestDefinition == null)) && (_local_5.IsQuestModeAllowedForQuestList(this.mGI))) && ((_local_5.mQuestDefinition.showQuestWindow) || (_local_5.mQuestDefinition.showRewardWindow))) && (_local_5.mIsTrackedMission)))
+                for each (_local_5 in this.mGI.mQuestClientCallbacks.GetClientQuestPool().mQuestVO_vector)
                 {
-                    if (this._itemRendererMap[_local_5.getQuestName_string()])
+                    if (((((!(_local_5.mQuestDefinition == null)) && (_local_5.IsQuestModeAllowedForQuestList(this.mGI))) && ((_local_5.mQuestDefinition.showQuestWindow) || (_local_5.mQuestDefinition.showRewardWindow))) && (_local_5.mIsTrackedMission)))
                     {
-                        _local_2 = this._itemRendererMap[_local_5.getQuestName_string()];
-                    }
-                    else
-                    {
-                        _local_2 = new TrackedQuestItemRenderer();
-                        this._itemRendererMap[_local_5.getQuestName_string()] = _local_2;
-                        this.mPanel.list.addChild(_local_2);
+                        if (this._itemRendererMap[_local_5.getQuestName_string()])
+                        {
+                            _local_2 = this._itemRendererMap[_local_5.getQuestName_string()];
+                        }
+                        else
+                        {
+                            _local_2 = new TrackedQuestItemRenderer();
+                            this._itemRendererMap[_local_5.getQuestName_string()] = _local_2;
+                            this.mPanel.list.addChild(_local_2);
+                        };
+                        _local_2.data = _local_5;
+                        _local_3[_local_5.getQuestName_string()] = _local_5;
+                        _local_4++;
                     };
-                    _local_2.data = _local_5;
-                    _local_3[_local_5.getQuestName_string()] = _local_5;
-                    _local_4++;
                 };
             };
             for each (_local_6 in AdventureManager.getInstance().getAdventures())

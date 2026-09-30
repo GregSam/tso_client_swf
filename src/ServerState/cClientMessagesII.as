@@ -2215,6 +2215,7 @@
                         globalFlash.gui.mFriendsList.SetData(_local_16);
                     };
                     AdventureManager.getInstance().setAdventures(_local_15);
+                    globalFlash.gui.mTrackedMissionList.Refresh();
                     if (TSOChatMediator.received == 1)
                     {
                         return;
