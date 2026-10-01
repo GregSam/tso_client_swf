@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="GUI.Components.*">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="GUI.Components.*" width="120" height="40">
     <mx:Script><![CDATA[
         import GUI.Assets.gAssetManager;
         import flash.events.Event;
@@ -9,19 +9,23 @@
             super.childrenCreated();
             setStyle("showEffect", show);
             setStyle("hideEffect", hide);
-            addEventListener("yChanged", updateEffectPositions);
-            updateEffectPositions();
+            addEventListener("show", onPanelShow);
+            addEventListener("hide", onPanelHide);
         }
 
-        private function updateEffectPositions(event:Event = null):void
+        private function onPanelShow(event:Event):void
         {
             show.yFrom = y;
             show.yTo = y - 130;
+        }
+
+        private function onPanelHide(event:Event):void
+        {
             hide.yFrom = y;
             hide.yTo = y + 130;
         }
     ]]></mx:Script>
     <mx:Move id="show" duration="300" />
     <mx:Move id="hide" duration="300" />
-    <gui:StandardButton id="cancel" width="120" height="40" icon="{gAssetManager.GetClass('ButtonIconAbort')}" />
+    <gui:StandardButton id="cancel" width="120" height="40" horizontalCenter="0" verticalCenter="0" icon="{gAssetManager.GetClass('ButtonIconAbort')}" />
 </mx:Canvas>

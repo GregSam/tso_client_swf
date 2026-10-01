@@ -449,15 +449,15 @@
                 "group":cStarMenu.GROUP_SPECIALISTS,
                 "icon":gAssetManager.GetClass("StarMenuTabIconSpecialist")
             }, {
-                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Geologist"),
+                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.SPECIALISTS, "Geologist"),
                 "group":cStarMenu.GROUP_GEOLOGISTS,
                 "icon":StarMenuGeologistTabIcon
             }, {
-                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "General"),
+                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.SPECIALISTS, "General"),
                 "group":cStarMenu.GROUP_GENERALS,
                 "icon":StarMenuGeneralTabIcon
             }, {
-                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Explorer"),
+                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.SPECIALISTS, "Explorer"),
                 "group":cStarMenu.GROUP_EXPLORERS,
                 "icon":StarMenuExplorerTabIcon
             }];

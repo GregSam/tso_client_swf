@@ -12,7 +12,7 @@
     public class TradeBuyingTabDataGrid extends CustomDataGrid 
     {
 
-        private var selectionUpward:Boolean;
+    private var selectionUpward:Boolean;
 
 
         override protected function finishKeySelection():void

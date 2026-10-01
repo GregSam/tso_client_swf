@@ -75,7 +75,6 @@
             btnPlaceOffer.addEventListener("toolTipCreate", __btnPlaceOffer_toolTipCreate);
             btnBuySlot.addEventListener("toolTipCreate", __btnBuySlot_toolTipCreate);
             btnBuySlotWithGem.addEventListener("toolTipCreate", __btnBuySlotWithGem_toolTipCreate);
-            offersList.setStyle("alternatingItemColors", []);
             offersList.setStyle("headerBackgroundSkin", CustomDataGridHeaderBackgroundSkin);
             offersList.setStyle("headerColors", [3155998]);
             offersList.setStyle("headerSeparatorSkin", CustomDataGridHeaderSeparator);

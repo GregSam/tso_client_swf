@@ -871,6 +871,10 @@
             GAMESTATE_ID_ACTIONBAR.addEventListener("hide", scheduleExternalActionBarBackgroundUpdate);
             this.addEventListener("resize", scheduleExternalActionBarBackgroundUpdate);
             GAMESTATE_ID_ACTIONBAR.addEventListener("move", updateCancelPanelY);
+            GAMESTATE_ID_ACTIONBAR.addEventListener("resize", updateCancelPanelY);
+            GAMESTATE_ID_ACTIONBAR.addEventListener("show", updateCancelPanelY);
+            GAMESTATE_ID_ACTIONBAR.addEventListener("hide", updateCancelPanelY);
+            this.addEventListener("resize", updateCancelPanelY);
             GAMESTATE_ID_FRIENDS_LIST.addEventListener("resize", updateActionBarBottom);
             GAMESTATE_ID_CANCEL_ACTION_PANEL.addEventListener("show", updateCancelPanelY);
             GAMESTATE_ID_CANCEL_ACTION_PANEL.addEventListener("hide", updateCancelPanelY);
@@ -889,7 +893,7 @@
 
         private function updateCancelPanelY(event:Event = null):void
         {
-            GAMESTATE_ID_CANCEL_ACTION_PANEL.y = GAMESTATE_ID_ACTIONBAR.y + (GAMESTATE_ID_CANCEL_ACTION_PANEL.visible ? -35 : 85);
+            GAMESTATE_ID_CANCEL_ACTION_PANEL.y = GAMESTATE_ID_ACTIONBAR.y + (GAMESTATE_ID_CANCEL_ACTION_PANEL.visible ? -45 : 85);
         }
 
         private function updateActionBarBottom(event:Event = null):void

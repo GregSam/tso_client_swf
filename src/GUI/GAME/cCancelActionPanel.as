@@ -17,7 +17,7 @@
 
         override public function Hide():void
         {
-            mUiElement.y = (global.getApplication().GAMESTATE_ID_ACTIONBAR.y + ((globalFlash.gui.mCancelActionPanel.IsVisible()) ? -35 : 85));
+            mUiElement.y = (global.getApplication().GAMESTATE_ID_ACTIONBAR.y + ((globalFlash.gui.mCancelActionPanel.IsVisible()) ? -45 : 85));
             HotkeyManager.getInstance().clearConfirmActions();
             super.Hide();
         }
@@ -38,7 +38,7 @@
 
         override public function Show():void
         {
-            mUiElement.y = (global.getApplication().GAMESTATE_ID_ACTIONBAR.y + ((globalFlash.gui.mCancelActionPanel.IsVisible()) ? -35 : 85));
+            mUiElement.y = (global.getApplication().GAMESTATE_ID_ACTIONBAR.y + ((globalFlash.gui.mCancelActionPanel.IsVisible()) ? -45 : 85));
             HotkeyManager.getInstance().setConfirmActions(null, this.CancelAction);
             super.Show();
         }
