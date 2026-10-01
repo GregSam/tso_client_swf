@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-    width="40" height="12">
+    width="40" height="12" backgroundAlpha="0">
     <mx:Script><![CDATA[
         import flash.events.Event;
         import flash.events.MouseEvent;
@@ -115,6 +115,7 @@
             _minimum = (_value = value);
             dispatchEvent(new SliderEvent(SliderEvent.CHANGE));
             updateIntervalWidthAndHandle();
+            updateEnabled();
         }
 
         [Bindable("change")]
@@ -129,6 +130,7 @@
             _value = _minimum;
             dispatchEvent(new SliderEvent(SliderEvent.CHANGE));
             updateIntervalWidthAndHandle();
+            updateEnabled();
         }
 
         [Bindable("change")]
@@ -223,6 +225,7 @@
             {
                 _value = newValue;
                 updateIntervalWidthAndHandle();
+                updateEnabled();
                 dispatchEvent(new SliderEvent(SliderEvent.CHANGE, false, false, -1, newValue));
             };
         }
@@ -259,6 +262,10 @@
         {
             super.childrenCreated();
             this.setStyle("disabledOverlayAlpha", 0);
+            leftArrow.setStyle("disabledOverlayAlpha", 0);
+            rightArrow.setStyle("disabledOverlayAlpha", 0);
+            leftArrow.setStyle("backgroundAlpha", 0);
+            rightArrow.setStyle("backgroundAlpha", 0);
             sliderBar.setStyle("backgroundImage", barBackgroundSymbol);
             leftArrow.setStyle("upSkin", arrowWStandard);
             leftArrow.setStyle("downSkin", arrowWHighlight);
@@ -287,8 +294,12 @@
 
         private function updateEnabled(event:Event = null):void
         {
-            leftArrow.enabled = enabled;
-            rightArrow.enabled = enabled;
+            if (!leftArrow || !rightArrow)
+            {
+                return;
+            }
+            leftArrow.enabled = enabled && value > minimum;
+            rightArrow.enabled = enabled && value < maximum;
             handle.visible = enabled;
         }
 
