@@ -1,4 +1,4 @@
-﻿package GUI.GAME
+package GUI.GAME
 {
     import Model.Observer;
     import BuffSystem.cBuff;
@@ -337,11 +337,10 @@
         private function changeTab(_arg_1:ItemClickEvent):void
         {
             var _local_2:int = ((_arg_1) ? _arg_1.index : 0);
-            var _local_3:* = (_arg_1.currentTarget == this.mPanel.buttonBar2) ? this.mPanel.buttonBar2 : this.mPanel.buttonBar;
+            var _local_3:* = this.mPanel.buttonBar;
             this.mSelectedGroup = ((_local_3.dataProvider as ArrayCollection).getItemAt(_local_2).group as int);
             if (_local_3 == this.mPanel.buttonBar)
             {
-                this.mPanel.buttonBar2.selectedIndex = -1;
             }
             else
             {
@@ -434,7 +433,6 @@
             this.mPanel.addEventListener(cStarMenu.CLICK_ITEM, this.itemClickHandler);
             this.mPanel.addEventListener(cStarMenu.CLICK_DELETE_BUTTON, this.removeButtonClick);
             this.mPanel.buttonBar.addEventListener(ListEvent.ITEM_CLICK, this.changeTab);
-            this.mPanel.buttonBar2.addEventListener(ListEvent.ITEM_CLICK, this.changeTab);
             this.mPanel.searchInput.addEventListener(Event.CHANGE, this.refreshSearchFilteredList);
             this.mPanel.itemList.addEventListener(FlexEvent.UPDATE_COMPLETE, this.changedItemListHandler);
             this.mPanel.itemList.addEventListener(ScrollEvent.SCROLL, this.mouseWheelHandler);
@@ -462,8 +460,7 @@
                 "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.SPECIALISTS, "Explorer"),
                 "group":cStarMenu.GROUP_EXPLORERS,
                 "icon":StarMenuExplorerTabIcon
-            }];
-            this.mPanel.buttonBar2.dataProvider = [{
+            }, {
                 "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Resources"),
                 "group":cStarMenu.GROUP_RESOURCES,
                 "icon":gAssetManager.GetClass("StarMenuTabIconResource")
@@ -488,7 +485,6 @@
                 "group":cStarMenu.GROUP_MISC,
                 "icon":gAssetManager.GetClass("StarMenuTabIconMisc")
             }];
-            this.mPanel.buttonBar2.selectedIndex = -1;
             this.initialiseBuffList();
             this.mGI.mCurrentPlayerZone.addPropertyObserver("mSpecialists_vector", this);
             this.mGI.mCurrentPlayer.addPropertyObserver("mAvailableBuffs_vector", this);
@@ -1231,5 +1227,6 @@ class SortOptions
 
 
 }
+
 
 
