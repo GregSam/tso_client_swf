@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-    width="40" height="12" backgroundAlpha="0">
+    width="40" height="12">
     <mx:Script><![CDATA[
         import flash.events.Event;
         import flash.events.MouseEvent;
@@ -261,6 +261,7 @@
         override protected function childrenCreated():void
         {
             super.childrenCreated();
+            this.setStyle("backgroundAlpha", 0);
             this.setStyle("disabledOverlayAlpha", 0);
             leftArrow.setStyle("disabledOverlayAlpha", 0);
             rightArrow.setStyle("disabledOverlayAlpha", 0);
