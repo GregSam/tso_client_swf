@@ -45,6 +45,7 @@
     import GUI.Components.CustomAlert;
     import Enums.HALLOWEEN_EVENT;
     import Enums.BUFF_TYPE;
+    import Enums.BUFF_TARGET_ZONE;
     import com.bluebyte.tso.adventure.logic.AdventureManager;
 
     public class cStarMenu extends cBasicPanel implements Observer 
@@ -62,6 +63,7 @@
         public static const GROUP_GEOLOGISTS:int = 7;
         public static const GROUP_GENERALS:int = 8;
         public static const GROUP_EXPLORERS:int = 9;
+        public static const GROUP_ADVENTURE_TARGETS:int = 10;
 
         private var selectedBuff:cBuff;
         private var mGI:cGameInterface;
@@ -217,7 +219,7 @@
 
         private function filterList(_arg_1:Object, _arg_2:int=0, _arg_3:Vector.<Object>=null):Boolean
         {
-            if (this.mSelectedGroup >= cStarMenu.GROUP_GEOLOGISTS)
+            if ((this.mSelectedGroup >= cStarMenu.GROUP_GEOLOGISTS) && (this.mSelectedGroup <= cStarMenu.GROUP_EXPLORERS))
             {
                 if (!this.matchesSpecialistGroup(_arg_1 as cSpecialist, this.mSelectedGroup))
                 {
@@ -477,6 +479,10 @@
                 "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Adventures"),
                 "group":cStarMenu.GROUP_ADVENTURES,
                 "icon":gAssetManager.GetClass("StarMenuTabIconAdventure")
+            }, {
+                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "zonewidebuffs"),
+                "group":cStarMenu.GROUP_ADVENTURE_TARGETS,
+                "icon":gAssetManager.GetClass("ChatTabIconGlobal")
             }, {
                 "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Misc"),
                 "group":cStarMenu.GROUP_MISC,
@@ -1161,6 +1167,12 @@ class SortOptions
                     };
                 };
                 _local_9 = this.getEffectType(_local_8);
+                if ((_local_12.GetBuffDefinition().getTargetZoneTypes() & (Enums.BUFF_TARGET_ZONE.ADVENTURE | Enums.BUFF_TARGET_ZONE.EXPEDITION)) != 0)
+                {
+                    _local_5 = cStarMenu.GROUP_ADVENTURE_TARGETS;
+                }
+                else
+                {
                 if (_local_10 == 0)
                 {
                     _local_10 = EFFECT_TYPES[_local_9];
@@ -1172,6 +1184,7 @@ class SortOptions
                 else
                 {
                     _local_5 = cStarMenu.GROUP_MISC;
+                };
                 };
                 _local_4 = _local_12.GetAmount();
                 _local_6 = _local_12.GetUniqueId();
