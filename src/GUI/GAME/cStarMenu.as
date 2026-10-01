@@ -477,7 +477,7 @@ package GUI.GAME
                 "group":cStarMenu.GROUP_ADVENTURES,
                 "icon":gAssetManager.GetClass("StarMenuTabIconAdventure")
             }, {
-                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "zonewidebuffs"),
+                "toolTip":cLocaManager.GetInstance().GetText(LOCA_GROUP.QUEST_LABELS, "TutAdvancedReadyArmy"),
                 "group":cStarMenu.GROUP_ADVENTURE_TARGETS,
                 "icon":gAssetManager.GetClass("ChatTabIconGlobal")
             }, {
