@@ -47,7 +47,7 @@
             this.mPanel.btnHelp.addEventListener(MouseEvent.CLICK, this.OpenHelp);
             this.mPanel.btnEventWindow.addEventListener(MouseEvent.CLICK, this.OpenEventWindow);
             this.mPanel.btnSupport.addEventListener(MouseEvent.CLICK, this.OpenSupport);
-            this.mPanel.btnForum.addEventListener(MouseEvent.CLICK, this.OpenForum);
+            this.mPanel.btnForum.addEventListener(MouseEvent.CLICK, this.ToggleMemoryPanel);
             this.mPanel.btnLogout.addEventListener(MouseEvent.CLICK, this.Logout);
             this.mPanel.btnPlayerOptions.addEventListener(MouseEvent.CLICK, this.OpenOptions);
             this.mPanel.btnToggleEffects.selected = cSettingsManager.getInstance().sfxMuted;
@@ -78,6 +78,18 @@
             else
             {
                 globalFlash.gui.mCameraControlPanel.Show();
+            };
+        }
+		
+        private function ToggleMemoryPanel(_arg_1:MouseEvent):void
+        {
+            if (globalFlash.gui.mMemoryMonitorPanel.IsVisible())
+            {
+                globalFlash.gui.mMemoryMonitorPanel.Hide();
+            }
+            else
+            {
+                globalFlash.gui.mMemoryMonitorPanel.Show();
             };
         }
 

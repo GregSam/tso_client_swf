@@ -39,7 +39,9 @@
             triggerList.itemRenderer = new ClassFactory(TaskTriggerItemRenderer);
             btnOK.setStyle("icon", gAssetManager.GetClass("ButtonIconOK"));
             btnPay.setStyle("icon", gAssetManager.GetClass("ButtonIconPay"));
-            btnPay.visible = !(btnOK.visible);
+            btnOK.addEventListener("show", updatePayButtonVisibility);
+            btnOK.addEventListener("hide", updatePayButtonVisibility);
+            updatePayButtonVisibility();
             btnClosePanel.setStyle("icon", gAssetManager.GetClass("ButtonIconAbort"));
             btnClosePanel.addEventListener("toolTipCreate", __btnClosePanel_toolTipCreate);
             pvpTaskBuildingTasksButton.setStyle("upSkin", _embed_mxml_____data_src_gfx_embedded_options_panel_icon_disable_pvp_std_png_1013674197);
@@ -52,6 +54,11 @@
             pvpTaskBuildingTasksButton.setStyle("selectedDisabledSkin", _embed_mxml_____data_src_gfx_embedded_options_panel_icon_disable_pvp_off_std_png_712453813);
             refreshLabels();
             cLocaManager.GetInstance().addEventListener("languageChanged", refreshLabels, false, 0, true);
+        }
+
+        private function updatePayButtonVisibility(event:Event = null):void
+        {
+            btnPay.visible = !btnOK.visible;
         }
 
         private function refreshLabels(event:Event = null):void
