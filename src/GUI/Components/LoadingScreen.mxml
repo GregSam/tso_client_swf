@@ -15,6 +15,10 @@
         import mx.events.StyleEvent;
         import mx.events.FlexEvent;
         import flash.events.Event;
+        import flash.utils.ByteArray;
+
+        [Embed(source="../../../assets/version.txt", mimeType="application/octet-stream")]
+        private static var SwfCommit:Class;
 
         private var realmLang:String;
         private var realmBeta:Boolean;
@@ -22,6 +26,13 @@
         private var progressbarOriginalWidth:Number;
         private var currentStep:int;
         private var targetProgressWidth:Number;
+
+        private function getSwfCommit():String
+        {
+            var bytes:ByteArray = new SwfCommit() as ByteArray;
+            bytes.position = 0;
+            return bytes.readUTFBytes(bytes.length).replace(/^\s+|\s+$/g, "");
+        }
 
         private function setTargetProgressWidth(_arg_1:Number):void
         {
@@ -180,6 +191,8 @@
             loadingScreenBetaBackground.setStyle("fillColors", [0xFFFFFF, 0xCCCCCC, 0xFFFFFF, 0xEEEEEE]);
             loadingScreenBetaBackground.setStyle("fillAlphas", [0.6, 0.4, 0.75, 0.65]);
             loadingScreenBetaBackground.setStyle("highlightAlphas", [0.3, 0]);
+			swfCommitLabel.text = "swf commit: " + getSwfCommit();
+			gameVersionLabel.text = "game version: " + defines.VERSION_NR;
 			setStyle("fontAntiAliasType", "advanced");
             setStyle("fontGridFitType", "pixel");
             setStyle("fontSharpness", 0);
@@ -209,6 +222,8 @@
             <mx:Image id="loadingScreenFrame" width="732" height="470" left="0"
                 source="@Embed(source='../../../assets/gAssetManager/LoadingScreenFrame.png')" />
             <mx:Canvas id="loadingScreenProgressbar" width="525" height="9" alpha="0.85" right="106" top="316" backgroundColor="597293" />
+            <mx:Label id="swfCommitLabel" horizontalCenter="0" top="352" color="0x000000" fontSize="11" />
+            <mx:Label id="gameVersionLabel" horizontalCenter="0" top="370" color="0x000000" fontSize="11" />
             <mx:Canvas id="copyrightContainer" height="90" creationPolicy="all" horizontalCenter="-11" verticalCenter="184">
                 <gui:CustomTextArea id="loadingScreenImpress" width="370" height="90" horizontalCenter="0"
                     verticalCenter="0" fontSize="11" textAlign="center"

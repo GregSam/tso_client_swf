@@ -24,6 +24,9 @@ jobs:
           distribution: temurin
           java-version: '8'
 
+      - name: Write SWF commit
+        run: printf '%s\n' "$GITHUB_SHA" > assets/version.txt
+
       - name: Build ${{ matrix.output }}
         run: |
           chmod +x build.sh
