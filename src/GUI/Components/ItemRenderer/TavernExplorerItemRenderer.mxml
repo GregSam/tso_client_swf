@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="GUI.Components.ItemRenderer.*"
+    width="56" height="70">
+    <mx:Script><![CDATA[
+        import flash.events.MouseEvent;
+        import GUI.Assets.gAssetManager;
+
+        private var ready:Boolean = false;
+
+        override protected function childrenCreated():void
+        {
+            super.childrenCreated();
+            horizontalScrollPolicy = "off";
+            verticalScrollPolicy = "off";
+            specialist.allowItemClick = false;
+            memberMarker.source = gAssetManager.GetClass("ChatTabIconCoopAdventure");
+            addEventListener(MouseEvent.CLICK, clicked);
+            ready = true;
+            displayData();
+        }
+
+        override public function set data(_arg_1:Object):void
+        {
+            super.data = _arg_1;
+            displayData();
+        }
+
+        private function displayData():void
+        {
+            if (!ready || data == null) return;
+            specialist.data = data.specialist;
+            selection.visible = data.editing;
+            selection.alpha = data.available ? 1 : 0.45;
+            drawSelection(Boolean(data.selected));
+            memberMarker.visible = int(data.owner) >= 0;
+        }
+
+        private function drawSelection(_arg_1:Boolean):void
+        {
+            selection.graphics.clear();
+            selection.graphics.lineStyle(1, 0xD88D36, 1);
+            selection.graphics.beginFill(0x26221A, 0.95);
+            selection.graphics.drawRoundRect(2, 2, 16, 16, 3, 3);
+            selection.graphics.endFill();
+            if (_arg_1)
+            {
+                selection.graphics.lineStyle(3, 0xC3D800, 1);
+                selection.graphics.moveTo(5, 10);
+                selection.graphics.lineTo(9, 14);
+                selection.graphics.lineTo(16, 5);
+            }
+        }
+
+        private function clicked(_arg_1:MouseEvent):void
+        {
+            _arg_1.stopPropagation();
+            dispatchEvent(new TavernGroupRendererEvent(data.editing ? "toggleExplorer" : "openExplorer", int(data.groupIndex), 0, "", data.uid));
+        }
+    ]]></mx:Script>
+    <local:StarMenuItemRenderer id="specialist" x="0" y="0" />
+    <mx:Canvas id="selection" x="34" y="44" width="21" height="21" visible="false" />
+    <mx:Image id="memberMarker" x="2" y="49" width="14" height="14" visible="false" mouseEnabled="false" />
+</mx:Canvas>

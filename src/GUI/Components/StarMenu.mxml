@@ -7,6 +7,7 @@
         import mx.core.ClassFactory;
         import mx.collections.ArrayCollection;
         import mx.events.PropertyChangeEvent;
+        import mx.events.FlexEvent;
         import GUI.Assets.gAssetManager;
         import GUI.Loca.cLocaManager;
         import GUI.Components.ItemRenderer.StarMenuItemRenderer;
@@ -22,6 +23,7 @@
         private var resizeStartMouseY:Number;
         private var resizeStartWidth:Number;
         private var resizeStartHeight:Number;
+        private var resizeActive:Boolean = false;
 
         [Embed(source="../../../assets/vector/StarMenu/_embed_mxml__105903956.swf", symbol="GUI.Components.StarMenu__embed_mxml__105903956")]
         private var toolbarSkin:Class;
@@ -66,13 +68,22 @@
             updateTexts();
             updateSortArrow();
             updateDragonPosition();
+            addEventListener(FlexEvent.CREATION_COMPLETE, activateResizeHandle, false, 0, true);
+        }
+
+        private function activateResizeHandle(event:FlexEvent):void
+        {
+            removeEventListener(FlexEvent.CREATION_COMPLETE, activateResizeHandle);
             drawResizeHandle();
-            resizeHandle.addEventListener(MouseEvent.MOUSE_DOWN, startResize);
+            resizeHandle.addEventListener(MouseEvent.MOUSE_DOWN, startResize, false, 0, true);
         }
 
         private function drawResizeHandle():void
         {
             resizeHandle.graphics.clear();
+            resizeHandle.graphics.beginFill(0x302719, 0.92);
+            resizeHandle.graphics.drawRect(0, 0, 16, 16);
+            resizeHandle.graphics.endFill();
             resizeHandle.graphics.lineStyle(2, 0xD6A94C, 1);
             resizeHandle.graphics.moveTo(5, 13);
             resizeHandle.graphics.lineTo(13, 5);
@@ -82,29 +93,38 @@
 
         private function startResize(event:MouseEvent):void
         {
-            event.stopPropagation();
-            resizeStartMouseX = parent.mouseX;
-            resizeStartMouseY = parent.mouseY;
+            event.stopImmediatePropagation();
+            if (stage == null) return;
+            resizeActive = true;
+            resizeStartMouseX = event.stageX;
+            resizeStartMouseY = event.stageY;
             resizeStartWidth = width;
             resizeStartHeight = height;
-            systemManager.addEventListener(MouseEvent.MOUSE_MOVE, resizePanel, false, 0, true);
-            systemManager.addEventListener(MouseEvent.MOUSE_UP, stopResize, false, 0, true);
+            stage.addEventListener(MouseEvent.MOUSE_MOVE, resizePanel, false, 0, true);
+            stage.addEventListener(MouseEvent.MOUSE_UP, stopResize, false, 0, true);
+            stage.addEventListener(Event.MOUSE_LEAVE, stopResize, false, 0, true);
         }
 
         private function resizePanel(event:MouseEvent):void
         {
-            width = Math.max(MIN_STAR_MENU_WIDTH, resizeStartWidth + parent.mouseX - resizeStartMouseX);
-            height = Math.max(MIN_STAR_MENU_HEIGHT, resizeStartHeight + parent.mouseY - resizeStartMouseY);
+            if (!resizeActive || stage == null) return;
+            var maximumWidth:Number = Math.max(MIN_STAR_MENU_WIDTH, stage.stageWidth - x);
+            var maximumHeight:Number = Math.max(MIN_STAR_MENU_HEIGHT, stage.stageHeight - y);
+            width = Math.min(maximumWidth, Math.max(MIN_STAR_MENU_WIDTH, resizeStartWidth + event.stageX - resizeStartMouseX));
+            height = Math.min(maximumHeight, Math.max(MIN_STAR_MENU_HEIGHT, resizeStartHeight + event.stageY - resizeStartMouseY));
             buttonBar.minWidth = 0;
             buttonBar.invalidateSize();
             buttonBar.invalidateDisplayList();
             event.updateAfterEvent();
         }
 
-        private function stopResize(event:MouseEvent):void
+        private function stopResize(event:Event = null):void
         {
-            systemManager.removeEventListener(MouseEvent.MOUSE_MOVE, resizePanel);
-            systemManager.removeEventListener(MouseEvent.MOUSE_UP, stopResize);
+            resizeActive = false;
+            if (stage == null) return;
+            stage.removeEventListener(MouseEvent.MOUSE_MOVE, resizePanel);
+            stage.removeEventListener(MouseEvent.MOUSE_UP, stopResize);
+            stage.removeEventListener(Event.MOUSE_LEAVE, stopResize);
         }
 
         private function updateSortArrow():void
@@ -200,4 +220,3 @@
         </mx:Array>
     </gui:subComponents>
 </gui:BasicPanel>
-

@@ -1,59 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <gui:BasicPanel xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="GUI.Components.*"
-    width="435" height="384" implements="GUI.Components.IGUIList">
+    width="705" height="425" implements="GUI.Components.IGUIList">
     <mx:Script><![CDATA[
         import flash.display.DisplayObject;
         import __AS3__.vec.Vector;
         import GUI.Components.ItemRenderer.BuySpecialistItemRenderer;
         import flash.events.Event;
+        import mx.core.ClassFactory;
+        import GUI.Components.ItemRenderer.TavernGroupItemRenderer;
+        import GUI.Components.ItemRenderer.TavernExplorerItemRenderer;
 
         public function getAllItems(_arg_1:String):Vector.<DisplayObject>
         {
             var _local_4:DisplayObject;
-            if (_arg_1 == null)
-            {
-                return (null);
-            };
+            if (_arg_1 == null) return null;
             var _local_2:Vector.<DisplayObject> = new Vector.<DisplayObject>();
             var _local_3:int;
             while (_local_3 < this.list.numChildren)
             {
                 _local_4 = this.list.getChildAt(_local_3);
-                if (((_local_4 is BuySpecialistItemRenderer) && ((_local_4 as BuySpecialistItemRenderer).id == _arg_1)))
-                {
-                    _local_2.push(_local_4);
-                };
+                if ((_local_4 is BuySpecialistItemRenderer) && ((_local_4 as BuySpecialistItemRenderer).id == _arg_1)) _local_2.push(_local_4);
                 _local_3++;
             };
-            if (hasOwnProperty(_arg_1))
-            {
-                _local_2.push(this[_arg_1]);
-            };
-            return (_local_2);
+            if (hasOwnProperty(_arg_1)) _local_2.push(this[_arg_1]);
+            return _local_2;
         }
 
         public function getFirstItem(_arg_1:String):DisplayObject
         {
             var _local_3:DisplayObject;
-            if (_arg_1 == null)
-            {
-                return (null);
-            };
+            if (_arg_1 == null) return null;
             var _local_2:int;
             while (_local_2 < this.list.numChildren)
             {
                 _local_3 = this.list.getChildAt(_local_2);
-                if (((_local_3 is BuySpecialistItemRenderer) && ((_local_3 as BuySpecialistItemRenderer).id == _arg_1)))
-                {
-                    return (_local_3);
-                };
+                if ((_local_3 is BuySpecialistItemRenderer) && ((_local_3 as BuySpecialistItemRenderer).id == _arg_1)) return _local_3;
                 _local_2++;
             };
-            if (hasOwnProperty(_arg_1))
-            {
-                return (this[_arg_1]);
-            };
-            return (null);
+            if (hasOwnProperty(_arg_1)) return this[_arg_1];
+            return null;
         }
 
         override protected function childrenCreated():void
@@ -61,6 +46,19 @@
             super.childrenCreated();
             LegacyMxmlContent.createChildren(upgradeContainer);
             LegacyMxmlContent.createChildren(listContainer);
+            LegacyMxmlContent.createChildren(groupsCanvas);
+            LegacyMxmlContent.createChildren(rightPanel);
+            groupsCanvas.horizontalScrollPolicy = "off";
+            groupsCanvas.verticalScrollPolicy = "off";
+            rightPanel.horizontalScrollPolicy = "off";
+            rightPanel.verticalScrollPolicy = "off";
+            groupsList.itemRenderer = new ClassFactory(TavernGroupItemRenderer);
+            explorersTile.itemRenderer = new ClassFactory(TavernExplorerItemRenderer);
+            groupsList.horizontalScrollPolicy = "off";
+            groupsList.verticalScrollPolicy = "auto";
+            explorersTile.horizontalScrollPolicy = "off";
+            explorersTile.verticalScrollPolicy = "auto";
+            explorersTile.mouseWheelStep = 0.5;
             updateBottom();
             globalFlash.staticEventDispatcher.addEventListener("propertyChange", updateBottom, false, 0, true);
         }
@@ -73,13 +71,29 @@
     <gui:subComponents>
         <mx:Array>
             <gui:BuildingWindowHeader id="buildingHeader" />
-            <mx:Canvas id="upgradeContainer" top="62" left="8" bottom="5">
+            <mx:Canvas id="upgradeContainer" top="62" left="8" bottom="28">
                 <gui:BuildingUpgrade id="upgradeColumn" />
             </mx:Canvas>
-            <mx:Canvas id="listBackground" styleName="listBackgroundShadow"  left="165" right="23" top="63" bottom="5" />
-            <mx:Canvas id="listContainer" horizontalScrollPolicy="off" verticalScrollPolicy="auto" left="168" right="6" top="65" bottom="8">
-                <mx:VBox id="list"  verticalGap="0" left="0" top="0" bottom="0" />
+            <mx:Canvas id="listBackground" styleName="listBackgroundShadow" left="163" right="8" top="62" bottom="28" />
+            <mx:Canvas id="listContainer" horizontalScrollPolicy="off" verticalScrollPolicy="auto" left="166" right="5" top="62" bottom="31">
+                <mx:Tile id="list" left="0" right="0" top="0" horizontalGap="0" verticalGap="0" />
             </mx:Canvas>
+            <mx:Canvas id="groupsCanvas" left="8" right="8" top="62" bottom="28" visible="false">
+                <mx:List id="groupsList" width="245" left="0" top="0" bottom="0" rowHeight="100"
+                    selectable="false" useRollOver="false" borderThickness="0" backgroundAlpha="0" />
+                <mx:Canvas id="rightPanel" left="255" right="0" top="0" bottom="0" styleName="listBackgroundShadow">
+                    <mx:ComboBox id="sortMode" x="5" y="4" width="170" height="29" selectedIndex="0" />
+                    <gui:StandardButton id="sortDirection" x="179" y="8" width="20" label="" labelPlacement="left" />
+                    <gui:StandardCheckBox id="selectAllBox" x="223" y="6" width="25" height="25" visible="false" />
+                    <gui:CustomTextInput id="searchInput" right="8" y="4" width="165" height="29" styleName="standardInput" />
+                    <gui:CustomTileList id="explorersTile" left="5" right="5" top="38" bottom="5"
+                        rowHeight="70" columnWidth="56" selectable="false" useRollOver="false"
+                        borderThickness="0" backgroundAlpha="0" />
+                    <gui:StandardButton id="editOk" left="145" bottom="4" width="70" height="28" visible="false" />
+                    <gui:StandardButton id="editCancel" left="220" bottom="4" width="70" height="28" visible="false" />
+                </mx:Canvas>
+            </mx:Canvas>
+            <gui:CustomToggleButtonBar id="tabBar" buttonStyleName="tab" selectedButtonTextStyleName="tabSelected" left="2" right="2" bottom="0" height="27" />
         </mx:Array>
     </gui:subComponents>
 </gui:BasicPanel>

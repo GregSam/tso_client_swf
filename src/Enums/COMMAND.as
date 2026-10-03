@@ -1,4 +1,4 @@
-﻿package Enums
+package Enums
 {
     public final class COMMAND 
     {
@@ -258,6 +258,7 @@
         public static const CHEAT_GET_GENERIC_VALUES:int = 14005;
         public static const CHEAT_SET_GENERIC_VALUE:int = 14006;
         public static const CHEAT_APPLY_EFFECT:int = 14007;
+        public static const SPECIALIST_GROUP:int = 30000;
 
 
         public static function GetString(_arg_1:int):String
@@ -694,6 +695,8 @@
                     return ("CHEAT_CONTENT_GENERATOR_COLLECTION_PART");
                 case CHEAT_DESTROY_CAMP:
                     return ("CHEAT_DESTROY_CAMP");
+                case SPECIALIST_GROUP:
+                    return ("SPECIALIST_GROUP");
             };
             return ("UNDEFINED_" + _arg_1);
         }

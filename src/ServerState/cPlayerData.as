@@ -105,6 +105,7 @@
         private var mBonusValidXP:int = 0;
         private var mAvailableBuffsCurrentIndex:int = -1;
         public var mBlackMarketUnlocked:Boolean = false;
+        public var mSpecialistGroupSizeIncrease:int = 0;
 
         public const mAvailableBuffs_vector:Vector.<cBuff> = new Vector.<cBuff>();
         private var mCurrentlyBuildingsCount:Dictionary = new Dictionary();
@@ -562,6 +563,7 @@
             _local_2.guildId = this.getGuildID();
             _local_2.guildMaxSize = this.getGuildMaxSize();
             _local_2.landingZoneID = this.mLandingZoneID;
+            _local_2.specialistGroupSizeIncrease = this.mSpecialistGroupSizeIncrease;
             if (!_arg_1)
             {
                 _local_2.xp = this.GetXP();

@@ -205,6 +205,14 @@ package Interface
     import Communication.VO.collectibles.PickupsDataVO;
     import Communication.VO.Skill.ChangeSkillsVO;
     import Communication.VO.Achievements.UserAchievementDataVO;
+    import Communication.VO.SpecialistGroup.dSpecialistReferenceVO;
+    import Communication.VO.SpecialistGroup.dBuyVO;
+    import Communication.VO.SpecialistGroup.dRenameVO;
+    import Communication.VO.SpecialistGroup.dSpecialistActionVO;
+    import Communication.VO.SpecialistGroup.dStartTaskVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupEntryVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupIdVO;
     import __AS3__.vec.*;
 
     public class cGameInterface extends cGeneralInterface 
@@ -3976,6 +3984,162 @@ package Interface
         {
         }
 
+        private function HandleSpecialistGroupCommand(_arg_1:cPlayerData, _arg_2:dGameTickCommandVO):Boolean
+        {
+            var payload:Object = _arg_2.data;
+            var entries:Object = mCurrentPlayerZone.mSpecialistGroups != null ? mCurrentPlayerZone.mSpecialistGroups.SpecialistGroups : null;
+            var entry:dSpecialistGroupEntryVO;
+            var group:dSpecialistGroupVO;
+            var groupId:dSpecialistGroupIdVO;
+            var targetGroupId:dSpecialistGroupIdVO;
+            var renameVO:dRenameVO;
+            var specialistActionVO:dSpecialistActionVO;
+            var groupTaskVO:dStartTaskVO;
+            var reference:dSpecialistReferenceVO;
+            var references:Object;
+            var value:dUniqueID;
+            var added:ArrayCollection;
+            var removed:ArrayCollection;
+            var newReferences:Array;
+            var newReference:dSpecialistReferenceVO;
+            var startVO:dStartSpecialistTaskVO;
+            var action:dServerAction;
+            var individualCommand:dGameTickCommandVO;
+            if(payload == null || entries == null)
+            {
+                return (false);
+            };
+            if(payload is dBuyVO)
+            {
+                // The buy command does not contain the id assigned by the server.
+                // Reloading here keeps that exceptional synchronization inside the
+                // common tick-command path instead of the Tavern UI callback.
+                this.mClientMessages.SendGetZoneMessageToServer(COMMAND.GET_ZONE,_arg_1.GetPlayerId(),false);
+                return (true);
+            };
+            if(payload is dRenameVO)
+            {
+                renameVO = payload as dRenameVO;
+                targetGroupId = renameVO.SpecialistGroupId;
+            }
+            else if(payload is dSpecialistActionVO)
+            {
+                specialistActionVO = payload as dSpecialistActionVO;
+                targetGroupId = specialistActionVO.SpecialistGroupId;
+            }
+            else if(payload is dStartTaskVO)
+            {
+                groupTaskVO = payload as dStartTaskVO;
+                targetGroupId = groupTaskVO.SpecialistGroupId;
+            }
+            else
+            {
+                return (false);
+            };
+            for each (entry in entries)
+            {
+                group = entry != null ? entry.SpecialistGroup : null;
+                groupId = group != null ? group.Id : null;
+                if(groupId != null && targetGroupId != null && groupId.Type == targetGroupId.Type && groupId.Id == targetGroupId.Id)
+                {
+                    if(renameVO != null)
+                    {
+                        group.Name = renameVO.Name;
+                    }
+                    else if(specialistActionVO != null)
+                    {
+                        removed = specialistActionVO.RemovedSpecialistUniqueID;
+                        added = specialistActionVO.AddedSpecialistUniqueID;
+                        newReferences = [];
+                        references = entry.SpecialistReferences;
+                        for each (reference in references)
+                        {
+                            value = reference != null ? reference.UniqueID : null;
+                            if(!this.specialistGroupContainsUniqueId(removed,value))
+                            {
+                                newReferences.push(reference);
+                            };
+                        };
+                        for each (value in added)
+                        {
+                            if(!this.specialistGroupReferencesContain(newReferences,value))
+                            {
+                                newReference = new dSpecialistReferenceVO();
+                                newReference.PlayerID = _arg_1.GetPlayerId();
+                                newReference.UniqueID = value as dUniqueID;
+                                newReferences.push(newReference);
+                            };
+                        };
+                        entry.SpecialistReferences = references is ArrayCollection ? new ArrayCollection(newReferences) : newReferences;
+                    }
+                    else if(groupTaskVO != null)
+                    {
+                        group.LastTaskId = groupTaskVO.MainTaskId;
+                        group.LastSubTaskId = groupTaskVO.SubTaskId;
+                        for each (reference in entry.SpecialistReferences)
+                        {
+                            startVO = new dStartSpecialistTaskVO();
+                            startVO.uniqueID = reference.UniqueID;
+                            startVO.subTaskID = groupTaskVO.SubTaskId;
+                            startVO.paramString = "";
+                            action = dServerAction.create(groupTaskVO.MainTaskId,0,0,startVO);
+                            individualCommand = new dGameTickCommandVO();
+                            individualCommand.mode = COMMAND.SET_TASK;
+                            individualCommand.playerID = _arg_2.playerID;
+                            individualCommand.time = _arg_2.time;
+                            individualCommand.data = action;
+                            this.HandleSetTask(_arg_1,individualCommand);
+                        };
+                    };
+                    this.refreshSpecialistGroupPanels();
+                    return (true);
+                };
+            };
+            return (false);
+        }
+
+        private function specialistGroupContainsUniqueId(_arg_1:Object, _arg_2:dUniqueID):Boolean
+        {
+            var _local_3:dUniqueID;
+            if(_arg_1 == null || _arg_2 == null)
+            {
+                return (false);
+            };
+            for each (_local_3 in _arg_1)
+            {
+                if(_local_3 != null && _local_3.eq(_arg_2))
+                {
+                    return (true);
+                };
+            };
+            return (false);
+        }
+
+        private function specialistGroupReferencesContain(_arg_1:Array, _arg_2:dUniqueID):Boolean
+        {
+            var _local_3:dSpecialistReferenceVO;
+            for each (_local_3 in _arg_1)
+            {
+                if(_local_3 != null && _local_3.UniqueID != null && _local_3.UniqueID.eq(_arg_2))
+                {
+                    return (true);
+                };
+            };
+            return (false);
+        }
+
+        private function refreshSpecialistGroupPanels():void
+        {
+            if(globalFlash.gui.mTavernInfoPanel.IsVisible())
+            {
+                globalFlash.gui.mTavernInfoPanel.Refresh();
+            };
+            if(globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU"))
+            {
+                globalFlash.gui.mStarMenu.Refresh();
+            };
+        }
+
         public function ProcessGameTickCommands(_arg_1:dGameTickCommandVO):void
         {
             var _local_2:dMailsDismissedVO;
@@ -4056,6 +4220,9 @@ package Interface
                     return;
                 case COMMAND.SET_TASK:
                     this.HandleSetTask(this.mGameTickCommandPlayer, _arg_1);
+                    return;
+                case COMMAND.SPECIALIST_GROUP:
+                    this.HandleSpecialistGroupCommand(this.mGameTickCommandPlayer, _arg_1);
                     return;
                 case COMMAND.QUEST_APPLY_REWARD_EFFECTS:
                     if (IsCurrentPlayerQuestPlayer())

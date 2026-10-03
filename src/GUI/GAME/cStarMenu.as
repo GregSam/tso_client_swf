@@ -33,6 +33,7 @@ package GUI.GAME
     import Model.Notifiers.SpecialistNotifier;
     import Enums.SPECIALIST_TYPE;
     import Specialists.cSpecialistTask_TravelToZone;
+    import Specialists.cSpecialistGroupStarItem;
     import Enums.SPECIALIST_TASK_TYPES;
     import nLib.gMisc;
     import GO.cGOSpriteLibContainer;
@@ -48,8 +49,33 @@ package GUI.GAME
     import Enums.BUFF_TARGET_ZONE;
     import com.bluebyte.tso.adventure.logic.AdventureManager;
 
-    public class cStarMenu extends cBasicPanel implements Observer 
+    public class cStarMenu extends cBasicPanel implements Observer
     {
+
+        public static function CompareDefault(_arg_1:Object, _arg_2:Object, _arg_3:int):Number
+        {
+            return SortOptions.compareDefault(new SortOptions(_arg_1),new SortOptions(_arg_2),_arg_3);
+        }
+
+        public static function CompareName(_arg_1:Object, _arg_2:Object, _arg_3:int):Number
+        {
+            return SortOptions.compareName(new SortOptions(_arg_1),new SortOptions(_arg_2),_arg_3);
+        }
+
+        public static function CompareDate(_arg_1:Object, _arg_2:Object, _arg_3:int):Number
+        {
+            return SortOptions.compareDate(new SortOptions(_arg_1),new SortOptions(_arg_2),_arg_3);
+        }
+
+        public static function CompareType(_arg_1:Object, _arg_2:Object, _arg_3:int):Number
+        {
+            return SortOptions.compareType(new SortOptions(_arg_1),new SortOptions(_arg_2),_arg_3);
+        }
+
+        public static function GetSortName(_arg_1:Object):String
+        {
+            return new SortOptions(_arg_1).Name;
+        }
 
         public static const CLICK_ITEM:String = "CLICK_ITEM";
         public static const CLICK_DELETE_BUTTON:String = "CLICK_DELETE_BUTTON";
@@ -221,7 +247,7 @@ package GUI.GAME
         {
             if ((this.mSelectedGroup >= cStarMenu.GROUP_GEOLOGISTS) && (this.mSelectedGroup <= cStarMenu.GROUP_EXPLORERS))
             {
-                if (!this.matchesSpecialistGroup(_arg_1 as cSpecialist, this.mSelectedGroup))
+                if (!this.matchesSpecialistGroup(_arg_1, this.mSelectedGroup))
                 {
                     return (false);
                 };
@@ -237,13 +263,17 @@ package GUI.GAME
             return (true);
         }
 
-        private function matchesSpecialistGroup(_arg_1:cSpecialist, _arg_2:int):Boolean
+        private function matchesSpecialistGroup(_arg_1:Object, _arg_2:int):Boolean
         {
-            if (_arg_1 == null)
+            if (_arg_1 is cSpecialistGroupStarItem)
+            {
+                return (_arg_2 == GROUP_EXPLORERS);
+            };
+            if (!(_arg_1 is cSpecialist))
             {
                 return (false);
             };
-            var _local_3:int = _arg_1.GetBaseType();
+            var _local_3:int = (_arg_1 as cSpecialist).GetBaseType();
             switch (_arg_2)
             {
                 case GROUP_GEOLOGISTS:
@@ -311,27 +341,7 @@ package GUI.GAME
             var _local_3:int = ((this.ascending) ? 1 : -1);
             var _local_4:SortOptions = this.collectionBuffSortOptions[_arg_1];
             var _local_5:SortOptions = this.collectionBuffSortOptions[_arg_2];
-            if (_local_4.Group > _local_5.Group)
-            {
-                return (_local_3);
-            };
-            if (_local_5.Group > _local_4.Group)
-            {
-                return (-(_local_3));
-            };
-            if (_local_4.Type > _local_5.Type)
-            {
-                return (_local_3);
-            };
-            if (_local_5.Type > _local_4.Type)
-            {
-                return (-(_local_3));
-            };
-            if (!StringUtils.equalsIgnoreCase(_local_4.Name, _local_5.Name))
-            {
-                return (_local_4.Name.localeCompare(_local_5.Name) * _local_3);
-            };
-            return ((_local_4.UniqueId.greater(_local_5.UniqueId)) ? _local_3 : -(_local_3));
+            return SortOptions.compareDefault(_local_4,_local_5,_local_3);
         }
 
         private function changeTab(_arg_1:ItemClickEvent):void
@@ -356,11 +366,7 @@ package GUI.GAME
             var _local_3:int = ((this.ascending) ? 1 : -1);
             var _local_4:SortOptions = this.collectionBuffSortOptions[_arg_1];
             var _local_5:SortOptions = this.collectionBuffSortOptions[_arg_2];
-            if (!StringUtils.equalsIgnoreCase(_local_4.Name, _local_5.Name))
-            {
-                return (_local_4.Name.localeCompare(_local_5.Name) * _local_3);
-            };
-            return ((_local_4.UniqueId.greater(_local_5.UniqueId)) ? _local_3 : -(_local_3));
+            return SortOptions.compareName(_local_4,_local_5,_local_3);
         }
 
         public function update(_arg_1:Notifier, _arg_2:String, _arg_3:Object):void
@@ -514,11 +520,27 @@ package GUI.GAME
             var _local_2:cSpecialist;
             var _local_3:int;
             var _local_4:cBuff;
+            var _local_5:cSpecialistGroupStarItem;
             if ((((!(_arg_1.item)) || (this.selectedBuff)) || (this.selectedSpecialist)))
             {
                 return;
             };
-            if ((_arg_1.item is cSpecialist))
+            if ((_arg_1.item is cSpecialistGroupStarItem))
+            {
+                _local_5 = (_arg_1.item as cSpecialistGroupStarItem);
+                if (_local_5.representative == null) return;
+                if (_local_5.isActive)
+                {
+                    globalFlash.gui.mSpecialistCooldownPanel.SetGroupData(_local_5.representative,_local_5.entry,_local_5.memberCount,_local_5.groupIndex);
+                    globalFlash.gui.mSpecialistCooldownPanel.Show();
+                }
+                else
+                {
+                    globalFlash.gui.mSpecialistPanel.SetGroupData(_local_5.representative,_local_5.entry,_local_5.memberCount,_local_5.groupIndex);
+                    globalFlash.gui.mSpecialistPanel.Show();
+                };
+            }
+            else if ((_arg_1.item is cSpecialist))
             {
                 _local_2 = (_arg_1.item as cSpecialist);
                 _local_3 = _local_2.GetGarrisonGridIdx();
@@ -652,27 +674,7 @@ package GUI.GAME
             var _local_3:int = ((this.ascending) ? 1 : -1);
             var _local_4:SortOptions = this.collectionBuffSortOptions[_arg_1];
             var _local_5:SortOptions = this.collectionBuffSortOptions[_arg_2];
-            if (_local_4.Date > _local_5.Date)
-            {
-                return (_local_3);
-            };
-            if (_local_5.Date > _local_4.Date)
-            {
-                return (-(_local_3));
-            };
-            if (_local_4.Type > _local_5.Type)
-            {
-                return (_local_3);
-            };
-            if (_local_5.Type > _local_4.Type)
-            {
-                return (-(_local_3));
-            };
-            if (!StringUtils.equalsIgnoreCase(_local_4.Name, _local_5.Name))
-            {
-                return (_local_4.Name.localeCompare(_local_5.Name) * _local_3);
-            };
-            return ((_local_4.UniqueId.greater(_local_5.UniqueId)) ? _local_3 : -(_local_3));
+            return SortOptions.compareDate(_local_4,_local_5,_local_3);
         }
 
         private function changedItemListHandler(_arg_1:FlexEvent):void
@@ -694,6 +696,7 @@ package GUI.GAME
             var _local_4:cBuff;
             var _local_5:int;
             var _local_6:cGOSpriteLibContainer;
+            var _local_7:cSpecialistGroupStarItem;
             if (!this.collectionBuffSortOptions)
             {
                 this.collectionBuffSortOptions = new Dictionary(true);
@@ -714,6 +717,11 @@ package GUI.GAME
                     };
                     _local_1.push(_local_2);
                 };
+            };
+            for each (_local_7 in this.getSpecialistGroupItems())
+            {
+                this.collectionBuffSortOptions[_local_7] = new SortOptions(_local_7);
+                _local_1.push(_local_7);
             };
             _local_3 = this.mGI.mCurrentPlayer.getBuffsSortedForStarMenu();
             for each (_local_4 in _local_3)
@@ -758,6 +766,75 @@ package GUI.GAME
             this.collection.source = _local_1;
             this.collection.filterFunction = this.filterList;
             this.collection.refresh();
+        }
+
+        private function getSpecialistGroupItems():Array
+        {
+            var result:Array = [];
+            var container:Object = this.mGI.mCurrentPlayerZone.mSpecialistGroups;
+            var entries:Object = container != null ? container.SpecialistGroups : null;
+            var entry:Object;
+            var group:Object;
+            var count:int;
+            var index:int;
+            var name:String;
+            if (entries == null) return result;
+            for each (entry in entries)
+            {
+                count = this.groupMemberCount(entry);
+                if (count > 0)
+                {
+                    group = entry != null ? entry.SpecialistGroup : null;
+                    name = group != null ? String(group.Name) : "";
+                    if (name.length == 0)
+                    {
+                        name = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS,"DefaultSpecialistGroupName",[index + 1]);
+                    };
+                    result.push(new cSpecialistGroupStarItem(entry,this.groupRepresentative(entry),name,count,index));
+                };
+                index++;
+            };
+            return result;
+        }
+
+        private function groupMemberCount(_arg_1:Object):int
+        {
+            var refs:Object = _arg_1 != null ? _arg_1.SpecialistReferences : null;
+            var count:int;
+            var value:Object;
+            if (refs != null) for each (value in refs) count++;
+            return count;
+        }
+
+        private function groupRepresentative(_arg_1:Object):cSpecialist
+        {
+            var refs:Object = _arg_1 != null ? _arg_1.SpecialistReferences : null;
+            var ref:Object;
+            var specialist:cSpecialist;
+            var fallback:cSpecialist;
+            var slowest:cSpecialist;
+            var remainingTime:int;
+            var longestRemainingTime:int = -1;
+            for each (specialist in this.mGI.mCurrentPlayerZone.GetSpecialists_vector())
+            {
+                for each (ref in refs)
+                {
+                    if (ref != null && ref.UniqueID != null && specialist.GetUniqueID().uniqueID1 == ref.UniqueID.uniqueID1 && specialist.GetUniqueID().uniqueID2 == ref.UniqueID.uniqueID2)
+                    {
+                        if (fallback == null) fallback = specialist;
+                        if (specialist.GetTask() != null)
+                        {
+                            remainingTime = specialist.GetTask().GetRemainingTime();
+                            if (slowest == null || remainingTime > longestRemainingTime)
+                            {
+                                slowest = specialist;
+                                longestRemainingTime = remainingTime;
+                            };
+                        };
+                    };
+                };
+            };
+            return slowest != null ? slowest : fallback;
         }
 
         private function activateChangeColorScheme(_arg_1:CloseEvent):void
@@ -910,19 +987,7 @@ package GUI.GAME
             var _local_3:int = ((this.ascending) ? 1 : -1);
             var _local_4:SortOptions = this.collectionBuffSortOptions[_arg_1];
             var _local_5:SortOptions = this.collectionBuffSortOptions[_arg_2];
-            if (_local_4.Type > _local_5.Type)
-            {
-                return (_local_3);
-            };
-            if (_local_5.Type > _local_4.Type)
-            {
-                return (-(_local_3));
-            };
-            if (!StringUtils.equalsIgnoreCase(_local_4.Name, _local_5.Name))
-            {
-                return (_local_4.Name.localeCompare(_local_5.Name) * _local_3);
-            };
-            return ((_local_4.UniqueId.greater(_local_5.UniqueId)) ? _local_3 : -(_local_3));
+            return SortOptions.compareType(_local_4,_local_5,_local_3);
         }
 
         override public function Hide():void
@@ -966,6 +1031,7 @@ package GUI.GAME
 import GUI.GAME.cStarMenu;
 import Communication.VO.dUniqueID;
 import Specialists.cSpecialist;
+import Specialists.cSpecialistGroupStarItem;
 import BuffSystem.cBuff;
 import GUI.Loca.cLocaManager;
 import Enums.LOCA_GROUP;
@@ -975,6 +1041,7 @@ import flash.display.BitmapData;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
 import mx.core.BitmapAsset;
+import Utils.StringUtils;
 
 class StarMenuSpecialistTabIcon extends BitmapAsset
 {
@@ -1111,6 +1178,63 @@ class SortOptions
     public var Type:Number;
     public var Group:int;
 
+    public static function compareDefault(_arg_1:SortOptions, _arg_2:SortOptions, _arg_3:int):Number
+    {
+        var result:Number = compareNumber(_arg_1.Group,_arg_2.Group,_arg_3);
+        if(result == 0)
+        {
+            result = compareNumber(_arg_1.Type,_arg_2.Type,_arg_3);
+        };
+        return result != 0 ? result : compareName(_arg_1,_arg_2,_arg_3);
+    }
+
+    public static function compareName(_arg_1:SortOptions, _arg_2:SortOptions, _arg_3:int):Number
+    {
+        if(!StringUtils.equalsIgnoreCase(_arg_1.Name,_arg_2.Name))
+        {
+            return (_arg_1.Name.localeCompare(_arg_2.Name) * _arg_3);
+        };
+        return compareUniqueId(_arg_1.UniqueId,_arg_2.UniqueId,_arg_3);
+    }
+
+    public static function compareDate(_arg_1:SortOptions, _arg_2:SortOptions, _arg_3:int):Number
+    {
+        var result:Number = compareNumber(_arg_1.Date,_arg_2.Date,_arg_3);
+        if(result == 0)
+        {
+            result = compareNumber(_arg_1.Type,_arg_2.Type,_arg_3);
+        };
+        return result != 0 ? result : compareName(_arg_1,_arg_2,_arg_3);
+    }
+
+    public static function compareType(_arg_1:SortOptions, _arg_2:SortOptions, _arg_3:int):Number
+    {
+        var result:Number = compareNumber(_arg_1.Type,_arg_2.Type,_arg_3);
+        return result != 0 ? result : compareName(_arg_1,_arg_2,_arg_3);
+    }
+
+    private static function compareNumber(_arg_1:Number, _arg_2:Number, _arg_3:int):Number
+    {
+        if(_arg_1 > _arg_2)
+        {
+            return _arg_3;
+        };
+        if(_arg_2 > _arg_1)
+        {
+            return -_arg_3;
+        };
+        return 0;
+    }
+
+    private static function compareUniqueId(_arg_1:dUniqueID, _arg_2:dUniqueID, _arg_3:int):Number
+    {
+        if(_arg_1 == null || _arg_2 == null)
+        {
+            return 0;
+        };
+        return _arg_1.greater(_arg_2) ? _arg_3 : -_arg_3;
+    }
+
     public function SortOptions(_arg_1:Object)
     {
         var _local_6:dUniqueID;
@@ -1121,6 +1245,7 @@ class SortOptions
         var _local_12:cBuff;
         var _local_13:cLocaManager;
         var _local_14:String;
+        var groupItem:cSpecialistGroupStarItem;
         super();
         var _local_2:* = "";
         var _local_3:Number = 0;
@@ -1136,6 +1261,18 @@ class SortOptions
             _local_10 = (_local_11.GetSortIndex() / 10);
             _local_5 = cStarMenu.GROUP_SPECIALISTS;
             _local_6 = _local_11.GetUniqueID();
+        }
+        else if ((_arg_1 is cSpecialistGroupStarItem))
+        {
+            groupItem = (_arg_1 as cSpecialistGroupStarItem);
+            _local_2 = groupItem.name;
+            _local_3 = 0;
+            _local_4 = groupItem.memberCount;
+            _local_10 = 0.9;
+            _local_5 = cStarMenu.GROUP_SPECIALISTS;
+            _local_6 = new dUniqueID();
+            _local_6.uniqueID1 = -1;
+            _local_6.uniqueID2 = groupItem.groupIndex;
         }
         else
         {

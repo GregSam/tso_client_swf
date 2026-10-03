@@ -15,7 +15,7 @@
         public var shopItemId:int;
         public var uniqueID:dUniqueID;
         public var mailVO:dMailVO;
-
+		public var optionalParameter:int;
         public var items:ArrayCollection = new ArrayCollection();
         public var uniqueIDs:ArrayCollection = new ArrayCollection();
         public var premiumItems:ArrayCollection = new ArrayCollection();

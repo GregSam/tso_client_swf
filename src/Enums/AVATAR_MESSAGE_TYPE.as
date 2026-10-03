@@ -189,6 +189,7 @@
         public static const EVENT_START:String = "EventStart";
         public static const QUEST_ALREADY_ACTIVE:String = "QuestAlreadyActive";
         public static const TASK_FINISHED:String = "TaskFinished";
+        public static const SPECIALIST_GROUP_READY:String = "SpecialistGroupReady";
         public static const GENERAL_RETURNED_TO_STAR:String = "GeneralReturnedToStar";
         public static const ADMIRAL_RETURNED_TO_STAR:String = "AdmiralReturnedToStarMenu";
         public static const WEEKLY_TASK_GAINED:String = "WeeklyTaskGained";

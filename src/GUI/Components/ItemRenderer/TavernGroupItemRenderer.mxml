@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:gui="GUI.Components.*" xmlns:local="GUI.Components.ItemRenderer.*"
+    width="228" height="98">
+    <mx:Script><![CDATA[
+        import GUI.Assets.gAssetManager;
+        import GUI.Components.LegacyMxmlContent;
+        import flash.events.MouseEvent;
+
+        private var ready:Boolean = false;
+
+        override protected function childrenCreated():void
+        {
+            super.childrenCreated();
+            horizontalScrollPolicy = "off";
+            verticalScrollPolicy = "off";
+            LegacyMxmlContent.createChildren(groupContent);
+            LegacyMxmlContent.createChildren(buyContent);
+            groupSpecialist.allowItemClick = false;
+            groupSpecialist.addEventListener(MouseEvent.CLICK, openTasks);
+            addEventListener(MouseEvent.CLICK, selectGroup);
+            addEventListener(MouseEvent.ROLL_OVER, rollOverHandler);
+            addEventListener(MouseEvent.ROLL_OUT, rollOutHandler);
+            renameButton.addEventListener(MouseEvent.CLICK, beginRename);
+            renameInput.addEventListener(MouseEvent.MOUSE_DOWN, stop);
+            renameInput.addEventListener(MouseEvent.CLICK, stop);
+            renameOk.addEventListener(MouseEvent.CLICK, commitRename);
+            renameCancel.addEventListener(MouseEvent.CLICK, cancelRename);
+            buyCoins.addEventListener(MouseEvent.CLICK, buyWithCoins);
+            buyGems.addEventListener(MouseEvent.CLICK, buyWithGems);
+            buyCoins.setStyle("icon", gAssetManager.GetClass("ButtonIconCoin"));
+            buyGems.setStyle("icon", gAssetManager.GetClass("ButtonIconHardCurrency"));
+            editMarker.source = gAssetManager.GetClass("group_selected_690");
+            memberIcon.source = gAssetManager.GetClass("ChatTabIconCoopAdventure");
+            ready = true;
+            displayData();
+        }
+
+        override public function set data(_arg_1:Object):void
+        {
+            super.data = _arg_1;
+            displayData();
+        }
+
+        private function displayData():void
+        {
+            if (!ready || data == null) return;
+            styleName = data.selected ? "detailsContentBox" : "detailsSubHeader";
+            groupContent.visible = !data.buy;
+            buyContent.visible = data.buy;
+            editMarker.visible = !data.buy && Boolean(data.editing);
+            nameLabel.text = data.name;
+            statusLabel.text = data.status;
+            countLabel.text = data.count;
+            groupSpecialist.visible = data.specialist != null;
+            if (data.specialist != null) groupSpecialist.data = data.specialist;
+            nameLabel.visible = !data.renaming;
+            renameButton.visible = !data.renaming;
+            renameInput.visible = data.renaming;
+            renameOk.visible = data.renaming;
+            renameCancel.visible = data.renaming;
+            if (data.renaming) renameInput.text = data.name;
+            buyLabel.text = data.buyLabel;
+            buyCoins.label = data.coinLabel;
+            buyCoins.width = data.showGems ? 104 : 218;
+            buyCoins.enabled = Boolean(data.coinEnabled);
+            buyCoins.setStyle("color", buyCoins.enabled ? 0x3B2B18 : 0xCC3333);
+            buyCoins.setStyle("disabledColor", 0xCC3333);
+            buyGems.visible = data.showGems;
+            buyGems.label = data.gemLabel;
+            buyGems.enabled = Boolean(data.gemEnabled);
+            buyGems.setStyle("color", buyGems.enabled ? 0x3B2B18 : 0xCC3333);
+            buyGems.setStyle("disabledColor", 0xCC3333);
+        }
+
+        private function stop(_arg_1:MouseEvent):void { _arg_1.stopPropagation(); }
+        private function rollOverHandler(_arg_1:MouseEvent):void
+        {
+            styleName = "backgroundHighlight";
+            nameBackground.styleName = "backgroundHighlight";
+        }
+        private function rollOutHandler(_arg_1:MouseEvent):void
+        {
+            if (data != null)
+            {
+                styleName = data.selected ? "detailsContentBox" : "detailsSubHeader";
+                nameBackground.styleName = "detailsSubHeader";
+            }
+        }
+        private function emit(_arg_1:String, _arg_2:int = 0, _arg_3:String = ""):void
+        {
+            dispatchEvent(new TavernGroupRendererEvent(_arg_1, int(data.index), _arg_2, _arg_3));
+        }
+        private function selectGroup(_arg_1:MouseEvent):void { if (!data.buy) emit("select"); }
+        private function openTasks(_arg_1:MouseEvent):void { stop(_arg_1); if (!data.buy) emit("openTasks"); }
+        private function beginRename(_arg_1:MouseEvent):void { stop(_arg_1); emit("rename"); }
+        private function commitRename(_arg_1:MouseEvent):void { stop(_arg_1); emit("renameCommit", 0, renameInput.text); }
+        private function cancelRename(_arg_1:MouseEvent):void { stop(_arg_1); emit("renameCancel"); }
+        private function buyWithCoins(_arg_1:MouseEvent):void { stop(_arg_1); emit("buy", 0); }
+        private function buyWithGems(_arg_1:MouseEvent):void { stop(_arg_1); emit("buy", 1); }
+    ]]></mx:Script>
+    <mx:Canvas id="groupContent" left="0" right="0" top="0" bottom="0">
+        <mx:Canvas id="nameBackground" x="0" y="0" width="224" height="26" styleName="detailsSubHeader" mouseEnabled="false" />
+        <mx:Image id="editMarker" x="-5" y="-3" width="69" height="49" visible="false" mouseEnabled="false" />
+        <local:StarMenuItemRenderer id="groupSpecialist" x="4" y="25" />
+        <mx:Label id="nameLabel" x="64" y="2" width="129" height="22" color="0xFFFFFF" fontWeight="bold" fontSize="14" textAlign="center" />
+        <mx:Button id="renameButton" x="198" y="2" styleName="edit" />
+        <gui:CustomTextInput id="renameInput" x="59" y="1" width="112" height="24" visible="false" styleName="standardInput" />
+        <mx:Button id="renameOk" x="174" y="1" visible="false" styleName="accept" />
+        <mx:Button id="renameCancel" x="199" y="0" visible="false" styleName="abort" />
+        <mx:Label id="statusLabel" x="64" y="27" width="159" height="22" color="0xFFFFFF" fontSize="13" />
+        <mx:Image id="memberIcon" x="168" y="75" width="14" height="14" mouseEnabled="false" />
+        <mx:Label id="countLabel" x="185" y="73" width="38" height="20" color="0xFFFFFF" fontWeight="bold" fontSize="13" />
+    </mx:Canvas>
+    <mx:Canvas id="buyContent" left="0" right="0" top="0" bottom="0" visible="false">
+        <mx:Label id="buyLabel" x="5" y="2" width="218" height="23" color="0xFFFFFF" fontWeight="bold" fontSize="14" textAlign="center" />
+        <gui:StandardButton id="buyCoins" x="5" y="28" width="104" height="40" />
+        <gui:StandardButton id="buyGems" x="119" y="28" width="104" height="40" />
+    </mx:Canvas>
+</mx:Canvas>

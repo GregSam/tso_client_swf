@@ -17,6 +17,7 @@
     import BuffSystem.cBuffDefinition;
     import TimedProduction.iTimedProductionDefinition;
     import Specialists.cSpecialistTaskDefinition;
+    import Specialists.cSpecialistGroupsConfig;
     import nLib.cPosInt;
     import nLib.cStringIntDictionary;
     import Communication.VO.ExpeditionMapLevelGroupVO;
@@ -90,6 +91,7 @@
         public static var expeditionMapRules:String = defines.FILENAME_EXPEDITION_MAP_RULES;//"game_expedition_map_rules.xml"
         public static var expeditionMapFiles:String = defines.FILENAME_EXPEDITION_MAPS;//"game_expedition_maps.xml"
         public static var shopConfigFilename:String = defines.FILENAME_SHOP_CONFIG;//"shopconfig.xml"
+        public static var groupsFilename:String = defines.FILENAME_GROUPS_CONFIG;
         public static var skillSettingsFilenames_vector:Vector.<String> = new Vector.<String>();
         public static var helpDefinitionsFilename:String = defines.FILENAME_HELP_DEFINITIONS;//"help_definitions.xml"
         public static var gameEventsFilename:String = defines.FILENAME_GAME_EVENTS;//"game_events.xml"
@@ -175,6 +177,7 @@
         public static const resourceDefinitions_vector:Vector.<String> = new Vector.<String>();
         public static const timedProductions_vector:Vector.<Vector.<iTimedProductionDefinition>> = new Vector.<Vector.<iTimedProductionDefinition>>();
         public static const specialistTaskDefinitions_vector:Vector.<cSpecialistTaskDefinition> = new Vector.<cSpecialistTaskDefinition>();
+        public static var specialistGroupsConfig:cSpecialistGroupsConfig;
         public static const miscConditions:Vector.<String> = new Vector.<String>();
         public static var buildingDefaultParameterConstructionDuration:int = 1;
         public static var buildingDefaultParameterDestructionDuration:int = 1;

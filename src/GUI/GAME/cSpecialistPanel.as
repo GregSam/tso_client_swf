@@ -21,6 +21,7 @@
     import Enums.COMMAND;
     import Enums.ERROR_CODES;
     import Communication.VO.dServerActionResult;
+    import Communication.SpecialistGroupCommandFactory;
     import GUI.Loca.cLocaManager;
     import Skill.cSkill;
     import Enums.LOCA_GROUP;
@@ -84,6 +85,8 @@
     import GUI.Components.ItemRenderer.FriendsListMenuItemRenderer;
     import mx.core.UITextField;
     import Enums.TASK_PHASES_ATTACK_BUILDING;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupEntryVO;
+    import Communication.VO.SpecialistGroup.dSpecialistReferenceVO;
     import __AS3__.vec.*;
 
     public class cSpecialistPanel extends cBasicPanel implements Responding, Observer 
@@ -104,6 +107,11 @@
         private var usingElite:Boolean = false;
         private var mIsCombatRunning:Boolean = false;
         private var taskPrototypes:Dictionary;
+        private var specialistGroupMode:Boolean = false;
+        private var specialistGroupId:Object;
+        private var specialistGroupEntry:dSpecialistGroupEntryVO;
+        private var selectedGroupMainTask:int = -1;
+        private var selectedGroupSubTask:int = -1;
         private var mSpecialist:cSpecialist;
 
 
@@ -188,6 +196,13 @@
             var _local_3:uint;
             var _local_4:uint;
             var _local_5:cSkill;
+            this.specialistGroupMode = false;
+            this.specialistGroupId = null;
+            this.specialistGroupEntry = null;
+            this.selectedGroupMainTask = -1;
+            this.selectedGroupSubTask = -1;
+            this.mPanel.editcontrol.visible = true;
+            this.mPanel.skillTreeBtn.visible = true;
             this.mSpecialist = _arg_1;
             this.SetUpTasks(_arg_1);
             this.removeLandmark();
@@ -274,6 +289,59 @@
             this.mPanel.title.validateDisplayList();
             this.usingElite = false;
             this.mPanel.switchToNewUnits = (!(this.usingElite));
+        }
+
+        public function SetGroupData(_arg_1:cSpecialist, _arg_2:Object, _arg_3:int, _arg_4:int = 0):void
+        {
+            var group:Object;
+            var groupName:String;
+            if (_arg_1 == null || _arg_2 == null)
+            {
+                return;
+            };
+            this.SetData(_arg_1);
+            group = _arg_2["SpecialistGroup"] != null ? _arg_2["SpecialistGroup"] : _arg_2;
+            this.specialistGroupMode = true;
+            this.specialistGroupEntry = _arg_2 as dSpecialistGroupEntryVO;
+            this.specialistGroupId = group != null ? group["Id"] : null;
+            groupName = group != null && group["Name"] != null ? String(group["Name"]) : "";
+            this.mPanel.title.htmlText = groupName.length > 0 ? groupName : cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS,"DefaultSpecialistGroupName",[_arg_4 + 1]);
+            this.mPanel.description.text = cLocaManager.GetInstance().GetText(LOCA_GROUP.DESCRIPTIONS,"SpecialistGroup",[_arg_3]);
+            this.mPanel.iconPlaceholder.source = gAssetManager.GetBitmap("icon_specialistgroup.png");
+            this.mPanel.editcontrol.visible = false;
+            this.mPanel.nameInput.visible = false;
+            this.mPanel.skills.visible = false;
+            this.mPanel.hr2.visible = false;
+            this.mPanel.skillTreeBtn.visible = false;
+            this.refreshGroupTaskAvailability();
+        }
+
+        private function refreshGroupTaskAvailability():void
+        {
+            var definitions:Array = [
+                global.specialistTaskDefinitions_vector[SPECIALIST_TASK_TYPES.EXPLORE],
+                global.specialistTaskDefinitions_vector[SPECIALIST_TASK_TYPES.FIND_TREASURE],
+                global.specialistTaskDefinitions_vector[SPECIALIST_TASK_TYPES.FIND_ADVENTURE_ZONE],
+                global.specialistTaskDefinitions_vector[SPECIALIST_TASK_TYPES.FIND_EXPEDITION]
+            ];
+            var definition:cSpecialistTaskDefinition;
+            var subTask:cSpecialistSubTaskDefinition;
+            var requirement:dRequirementsVO;
+            var button:StandardButton;
+            var key:String;
+            for each (definition in definitions)
+            {
+                for each (subTask in definition.subtasks_vector)
+                {
+                    key = (definition.taskName_string + subTask.taskType_string);
+                    requirement = this.mGI.mRequirements.specialistTaskRequirements_vector[key];
+                    button = (this.mPanel[("btn" + key)] as StandardButton);
+                    if (button != null)
+                    {
+                        button.enabled = ((button.enabled) && (this.isTaskRequirementFulfilled(requirement)));
+                    };
+                };
+            };
         }
 
         private function ResetArmyChangesAdmiral(_arg_1:MouseEvent):void
@@ -836,7 +904,7 @@
             this.mPanel.subContentFindExpedition.visible = false;
             var _local_4:ArrayCollection = new ArrayCollection();
             _local_3 = this.mGI.mRequirements.specialistTaskRequirements_vector["ExploreSector"];
-            this.mPanel.btnExplore.enabled = _local_3.isFulfilledForSkillList(this.mSpecialist.getSkillTree());
+            this.mPanel.btnExplore.enabled = this.isTaskRequirementFulfilled(_local_3);
             if (this.mPanel.btnExplore.enabled)
             {
                 _local_2 = cLocaManager.GetInstance().GetText(LOCA_GROUP.TOOLTIP, "Explore");
@@ -847,7 +915,7 @@
             };
             GUIDecorator.setToolTip(this.mPanel.btnExplore, cToolTipUtil.SIMPLE_ERROR_string, _local_2, (!(this.mPanel.btnExplore.enabled)));
             _local_3 = this.mGI.mRequirements.specialistTaskRequirements_vector["FindTreasureShort"];
-            this.mPanel.btnFindTreasure.enabled = _local_3.isFulfilledForSkillList(this.mSpecialist.getSkillTree());
+            this.mPanel.btnFindTreasure.enabled = this.isTaskRequirementFulfilled(_local_3);
             if (this.mPanel.btnFindTreasure.enabled)
             {
                 _local_2 = cLocaManager.GetInstance().GetText(LOCA_GROUP.TOOLTIP, "FindTreasure");
@@ -858,7 +926,7 @@
             };
             GUIDecorator.setToolTip(this.mPanel.btnFindTreasure, cToolTipUtil.SIMPLE_ERROR_string, _local_2, (!(this.mPanel.btnFindTreasure.enabled)));
             _local_3 = this.mGI.mRequirements.specialistTaskRequirements_vector["FindAdventureZoneShort"];
-            this.mPanel.btnFindAdventureZone.enabled = ((_local_3.isFulfilledForSkillList(this.mSpecialist.getSkillTree())) && (this.mGI.killswitch.isAccessible(KILL_SWITCH.ADVENTURE_SEARCH)));
+            this.mPanel.btnFindAdventureZone.enabled = ((this.isTaskRequirementFulfilled(_local_3)) && (this.mGI.killswitch.isAccessible(KILL_SWITCH.ADVENTURE_SEARCH)));
             if (this.mPanel.btnFindAdventureZone.enabled)
             {
                 _local_2 = cLocaManager.GetInstance().GetText(LOCA_GROUP.TOOLTIP, "FindAdventure");
@@ -869,7 +937,7 @@
             };
             GUIDecorator.setToolTip(this.mPanel.btnFindAdventureZone, cToolTipUtil.SIMPLE_ERROR_string, _local_2, (!(this.mPanel.btnFindAdventureZone.enabled)));
             _local_3 = this.mGI.mRequirements.specialistTaskRequirements_vector["FindExpeditionGenerated"];
-            this.mPanel.btnFindExpedition.enabled = ((_local_3.isFulfilledForSkillList(this.mSpecialist.getSkillTree())) && (this.mGI.killswitch.isAccessible(KILL_SWITCH.PVP_COLONY_SEARCH)));
+            this.mPanel.btnFindExpedition.enabled = ((this.isTaskRequirementFulfilled(_local_3)) && (this.mGI.killswitch.isAccessible(KILL_SWITCH.PVP_COLONY_SEARCH)));
             if (this.mPanel.btnFindExpedition.enabled)
             {
                 _local_2 = cLocaManager.GetInstance().GetText(LOCA_GROUP.TOOLTIP, "FindExpedition");
@@ -993,7 +1061,7 @@
                 _local_9 = (this.mPanel[("btn" + _local_6)] as StandardButton);
                 if (_local_7 != null)
                 {
-                    _local_9.enabled = ((!(_arg_3)) && (_local_7.isFulfilledForSkillList(this.mSpecialist.getSkillTree())));
+                    _local_9.enabled = ((!(_arg_3)) && (this.isTaskRequirementFulfilled(_local_7)));
                 }
                 else
                 {
@@ -1075,6 +1143,33 @@
                     this.mPanel.btnFindExpeditionPvPSmall.enabled = (this.mPanel.btnFindExpeditionPvPMedium.enabled = (this.mPanel.btnFindExpeditionPvPBig.enabled = ((!(AdventureManager.getInstance().IsScoutingForPvP())) && (this.mGI.killswitch.isAccessible(KILL_SWITCH.PVP_COLONY_SEARCH)))));
                 };
             };
+        }
+
+        private function isTaskRequirementFulfilled(_arg_1:dRequirementsVO):Boolean
+        {
+            var reference:dSpecialistReferenceVO;
+            var specialist:cSpecialist;
+            if (_arg_1 == null)
+            {
+                return (true);
+            };
+            if (((!(this.specialistGroupMode)) || (this.specialistGroupEntry == null)) || (this.specialistGroupEntry.SpecialistReferences == null))
+            {
+                return (_arg_1.isFulfilledForSkillList(this.mSpecialist.getSkillTree()));
+            };
+            for each (reference in this.specialistGroupEntry.SpecialistReferences)
+            {
+                if (((reference == null) || (reference.UniqueID == null)))
+                {
+                    return (false);
+                };
+                specialist = this.mGI.mCurrentPlayerZone.getSpecialist(reference.PlayerID, reference.UniqueID);
+                if (((specialist == null) || (!(_arg_1.isFulfilledForSkillList(specialist.getSkillTree())))))
+                {
+                    return (false);
+                };
+            };
+            return (true);
         }
 
         private function CommitArmyChangesAdmiral(_arg_1:MouseEvent):void
@@ -1239,13 +1334,17 @@
         private function selectSubTask(_arg_1:int, _arg_2:String):void
         {
             var _local_3:cSpecialistSubTaskDefinition;
+            var _local_4:int = 0;
             for each (_local_3 in global.specialistTaskDefinitions_vector[_arg_1].subtasks_vector)
             {
                 if (_local_3.taskType_string == _arg_2)
                 {
                     this.mSelectedSubTaskDefinition = _local_3;
+                    this.selectedGroupMainTask = _arg_1;
+                    this.selectedGroupSubTask = _local_4;
                     break;
                 };
+                _local_4++;
             };
         }
 
@@ -1291,21 +1390,26 @@
             this.mGI.mClientMessages.SendMessagetoServer(COMMAND.CHANGE_SPECIALIST_NAME, this.mGI.mCurrentViewedZoneID, _local_2, this);
         }
 
-        private function GetCurrentTaskText():String
+        public static function GetTaskText(_arg_1:cSpecialistTask):String
         {
             var _local_3:cSpecialistSubTaskDefinition;
             var _local_1:* = "";
-            var _local_2:cSpecialistTask = this.mSpecialist.GetTask();
+            var _local_2:cSpecialistTask = _arg_1;
             if (_local_2 != null)
             {
                 _local_3 = global.specialistTaskDefinitions_vector[_local_2.GetType()].subtasks_vector[_local_2.GetSubType()];
-                _local_1 = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, ("SpecialistTask" + _local_3.mainTask.taskName_string), [_local_3.taskType_string]);
+                _local_1 = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, (("SpecialistTask" + _local_3.mainTask.taskName_string) + _local_3.taskType_string));
             }
             else
             {
                 _local_1 = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "SpecialistTaskNone");
             };
             return (_local_1);
+        }
+
+        private function GetCurrentTaskText():String
+        {
+            return GetTaskText(this.mSpecialist.GetTask());
         }
 
         private function ReturnToStar(_arg_1:CloseEvent):void
@@ -1376,6 +1480,35 @@
 
         private function StartTask(_arg_1:MouseEvent):void
         {
+            var reference:dSpecialistReferenceVO;
+            var specialist:cSpecialist;
+            if (this.specialistGroupMode)
+            {
+                if (this.specialistGroupId != null && this.selectedGroupMainTask >= 0 && this.selectedGroupSubTask >= 0)
+                {
+                    if (this.specialistGroupEntry != null && this.specialistGroupEntry.SpecialistReferences != null)
+                    {
+                        for each (reference in this.specialistGroupEntry.SpecialistReferences)
+                        {
+                            if (reference != null && reference.UniqueID != null)
+                            {
+                                specialist = this.mGI.mCurrentPlayerZone.getSpecialist(reference.PlayerID,reference.UniqueID);
+                                if (specialist != null && specialist.GetTask() == null)
+                                {
+                                    specialist.SetTask(new cSpecialistTask_WaitForConfirmation(this.mGI,specialist,0,this.selectedGroupMainTask));
+                                };
+                            };
+                        };
+                        if (globalFlash.gui.mTavernInfoPanel.IsVisible())
+                        {
+                            globalFlash.gui.mTavernInfoPanel.Refresh();
+                        };
+                    };
+                    this.mGI.mClientMessages.SendMessagetoServer(COMMAND.SPECIALIST_GROUP,this.mGI.mCurrentPlayer.GetHomeZoneId(),SpecialistGroupCommandFactory.makeStartTask(int(this.specialistGroupId["Type"]),int(this.specialistGroupId["Id"]),this.selectedGroupMainTask,this.selectedGroupSubTask));
+                };
+                this.Hide();
+                return;
+            };
             ServiceManager.getInstance().specialist.startTask(this.mSpecialist, this.mSelectedSubTaskDefinition);
             this.Hide();
         }

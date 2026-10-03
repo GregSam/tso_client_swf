@@ -2,6 +2,7 @@
 {
     import Specialists.cSpecialistTask;
     import Specialists.cSpecialist;
+    import Specialists.cSpecialistGroupStarItem;
     import Interface.cGameInterface;
     import GUI.Components.SpecialistCooldownPanel;
     import flash.events.Event;
@@ -28,6 +29,10 @@
         protected var mSpecialist:cSpecialist;
         private var mGI:cGameInterface;
         protected var mPanel:SpecialistCooldownPanel;
+        private var specialistGroupMode:Boolean = false;
+        private var specialistGroupEntry:Object;
+        private var specialistGroupMemberCount:int;
+        private var specialistGroupIndex:int;
 
 
         private function ClosePanel(_arg_1:Event):void
@@ -44,6 +49,8 @@
         public function SetData(_arg_1:cSpecialist):void
         {
             var _local_2:cLocaManager = cLocaManager.GetInstance();
+            this.specialistGroupMode = false;
+            this.specialistGroupEntry = null;
             this.mSpecialist = _arg_1;
             this.mPanel.specialistRenderer.data = _arg_1;
             this.mPanel.headline.htmlText = _arg_1.getName(false);
@@ -55,6 +62,22 @@
             };
             this.mPanel.timeRemain.text = ((_local_2.GetText(LOCA_GROUP.LABELS, "TimeRemaining") + " ") + _local_2.FormatDuration(this.mSpecialist.GetTask().GetRemainingTime()));
             this.mPanel.btnPay.enabled = true;
+        }
+
+        public function SetGroupData(_arg_1:cSpecialist, _arg_2:Object, _arg_3:int, _arg_4:int = 0):void
+        {
+            var group:Object;
+            var groupName:String;
+            this.SetData(_arg_1);
+            group = _arg_2 != null && _arg_2["SpecialistGroup"] != null ? _arg_2["SpecialistGroup"] : _arg_2;
+            this.specialistGroupMode = true;
+            this.specialistGroupEntry = _arg_2;
+            this.specialistGroupMemberCount = _arg_3;
+            this.specialistGroupIndex = _arg_4;
+            groupName = group != null && group["Name"] != null ? String(group["Name"]) : "";
+            this.mPanel.specialistRenderer.data = new cSpecialistGroupStarItem(_arg_2,_arg_1,groupName,_arg_3,_arg_4);
+            this.mPanel.headline.htmlText = groupName.length > 0 ? groupName : cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS,"DefaultSpecialistGroupName",[_arg_4 + 1]);
+            this.mPanel.description.text = cLocaManager.GetInstance().GetText(LOCA_GROUP.DESCRIPTIONS,"SpecialistGroup",[_arg_3]);
         }
 
         public function Init(_arg_1:SpecialistCooldownPanel):void
@@ -105,7 +128,17 @@
         {
             if (this.mSpecialist)
             {
-                this.SetData(this.mSpecialist);
+                if (this.specialistGroupMode)
+                {
+                    var entry:Object = this.specialistGroupEntry;
+                    var count:int = this.specialistGroupMemberCount;
+                    var index:int = this.specialistGroupIndex;
+                    this.SetGroupData(this.mSpecialist,entry,count,index);
+                }
+                else
+                {
+                    this.SetData(this.mSpecialist);
+                };
             };
         }
 

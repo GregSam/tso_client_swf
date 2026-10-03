@@ -28,6 +28,7 @@
     import com.bluebyte.tso.util.ClientLogger;
     import GOSets.cGOSetManager;
     import Specialists.cSpecialist;
+    import Specialists.cSpecialistGroupsConfig;
     import Enums.SPECIALIST_TASK_TYPES;
     import Enums.PICKUP_PROVIDER_TYPE;
     import Model.ChannelMap;
@@ -94,6 +95,7 @@
         private static var mDispatcherItemLimits:cCustomDispatcher = new cCustomDispatcher();
         private static var mDispatcherVote:cCustomDispatcher = new cCustomDispatcher();
         private static var mDispatcherVoteShopGroup:cCustomDispatcher = new cCustomDispatcher();
+        private static var mDispatcherSpecGroup:cCustomDispatcher = new cCustomDispatcher();
 
 
         public static function DispatcherEpicWorkyards(rootXml:cXML):void
@@ -154,7 +156,20 @@
             };
             mDispatcherTasks.doAction();
         }
-
+		
+		public static function DispatcherSpecGroups(rootXml:cXML):void
+        {
+            try
+            {
+                global.specialistGroupsConfig = cSpecialistGroupsConfig.CreateFromXML(rootXml);
+            }
+            catch(error:Error)
+            {
+                gMisc.MessageBox(("Error parsing specialist_groups.xml: " + error));
+            };
+            mDispatcherSpecGroup.doAction();
+        }
+		
         private static function PostProcess():void
         {
         }

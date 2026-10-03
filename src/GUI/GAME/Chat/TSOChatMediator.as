@@ -593,6 +593,14 @@
             sendNotification(BlueFireFacade.SEND_MESSAGE, _local_2);
         }
 
+        public function ReplyToPlayer(_arg_1:String):void
+        {
+            this.panel.messageInput.text = (_arg_1 + ", ");
+            this.panel.messageInput.setFocus();
+            (global.ui as cGameInterface).ActivateChatWindow(true);
+            this.panel.chatInput.setSelection(this.panel.chatInput.text.length, this.panel.chatInput.text.length);
+        }
+
         private function InputFocusInHandler(_arg_1:FocusEvent):void
         {
             (global.ui as cGameInterface).ActivateChatWindow(true);

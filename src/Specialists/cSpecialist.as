@@ -27,6 +27,9 @@
     import nLib.gMisc;
     import MilitarySystem.cSquad;
     import Communication.VO.dSpecialistTaskVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupEntryVO;
+    import Communication.VO.SpecialistGroup.dSpecialistReferenceVO;
+    import Enums.AVATAR_MESSAGE_TYPE;
     import Skill.cSkill;
     import Modifier.ModifierVO;
     import GUI.Loca.cLocaManager;
@@ -840,6 +843,7 @@
 
         public function SetTask(_arg_1:cSpecialistTask):void
         {
+            var _local_2:cSpecialistTask = this.mTask;
             this.mTask = _arg_1;
             if (this.mTask != null)
             {
@@ -848,6 +852,70 @@
             else
             {
                 globalFlash.gui.mSpecialistCooldownPanel.Hide();
+                if (_local_2 != null)
+                {
+                    this.NotifySpecialistGroupFinished(_local_2);
+                };
+            };
+        }
+
+        private function NotifySpecialistGroupFinished(_arg_1:cSpecialistTask):void
+        {
+            var entries:Object;
+            var entry:dSpecialistGroupEntryVO;
+            var reference:dSpecialistReferenceVO;
+            var member:cSpecialist;
+            var containsOwner:Boolean;
+            var allFinished:Boolean;
+            var groupIndex:int;
+            var groupName:String;
+            if (((this.gi == null) || (this.gi.mCurrentPlayerZone == null)) || (this.gi.mCurrentPlayerZone.mSpecialistGroups == null))
+            {
+                return;
+            };
+            entries = this.gi.mCurrentPlayerZone.mSpecialistGroups.SpecialistGroups;
+            if (entries == null)
+            {
+                return;
+            };
+            for each (entry in entries)
+            {
+                containsOwner = false;
+                allFinished = true;
+                for each (reference in entry.SpecialistReferences)
+                {
+                    if (((reference != null) && (reference.UniqueID != null)))
+                    {
+                        if (reference.UniqueID.eq(this.GetUniqueID()))
+                        {
+                            containsOwner = true;
+                        };
+                        member = this.gi.mCurrentPlayerZone.getSpecialist(reference.PlayerID, reference.UniqueID);
+                        if (((member != null) && (!(member.GetTask() == null))))
+                        {
+                            allFinished = false;
+                        };
+                    };
+                };
+                if (((((containsOwner) && (allFinished)) && (!(entry.SpecialistGroup == null))) && (int(entry.SpecialistGroup.LastTaskId) == _arg_1.GetType())) && (int(entry.SpecialistGroup.LastSubTaskId) == _arg_1.GetSubType()))
+                {
+                    groupName = entry.SpecialistGroup.Name;
+                    if (((groupName == null) || (groupName.length == 0)))
+                    {
+                        groupName = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "DefaultSpecialistGroupName", [(groupIndex + 1)]);
+                    };
+                    globalFlash.gui.mAvatarMessageList.AddMessage(AVATAR_MESSAGE_TYPE.SPECIALIST_GROUP_READY, groupName);
+                    if (globalFlash.gui.mTavernInfoPanel != null)
+                    {
+                        globalFlash.gui.mTavernInfoPanel.Refresh();
+                    };
+                    if (globalFlash.gui.mStarMenu != null)
+                    {
+                        globalFlash.gui.mStarMenu.Refresh();
+                    };
+                    return;
+                };
+                groupIndex++;
             };
         }
 

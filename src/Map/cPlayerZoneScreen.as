@@ -36,6 +36,7 @@ package Map
     import com.bluebyte.tso.adventure.logic.AdventureManager;
     import Communication.VO.UpdateVO.dAdventureClientInfoVO;
     import Communication.VO.dZoneVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupsVO;
     import GO.cGO;
     import Enums.OBJECTTYPE;
     import Enums.TIMED_PRODUCTION_TYPE;
@@ -83,6 +84,7 @@ package Map
         public static const HOME_ZONE_string:String = "Home";
 
         public var mTrackedMissionList:dTrackedMissionListVO = null;
+        public var mSpecialistGroups:dSpecialistGroupsVO = null;
         private var mAdventure:cAdventure = null;
         private var mRunningColony:cColony = null;
         public var mShowDeposit:Boolean;
@@ -387,6 +389,7 @@ package Map
             {
                 this.mStreetDataMap.dispose();
             };
+            this.mSpecialistGroups = _arg_1.specialistGroups;
             this.mMapWidth = _arg_1.mapWidth;
             this.mMapHeight = _arg_1.mapHeight;
             this.mBackgoundMapWidth = _arg_1.backgoundMapWidth;

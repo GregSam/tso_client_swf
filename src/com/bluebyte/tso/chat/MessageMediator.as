@@ -136,7 +136,14 @@
                     _local_6 = new SWMMOChatMessage();
                     _local_6.mPlayerID = this._connectionProxy.player.id;
                     _local_6.mPlayerName = this._connectionProxy.player.name;
-                    _local_6.mPlayerTag = this._tsoDataProxy.playerTag;
+                    if (((_local_3.room.indexOf("gc_") == 0) || (_local_3.room.indexOf("gco_") == 0)))
+                    {
+                        _local_6.mPlayerTag = "";
+                    }
+                    else
+                    {
+                        _local_6.mPlayerTag = this._tsoDataProxy.playerTag;
+                    };
                     _local_3.addExtension(_local_6);
                     return;
             };

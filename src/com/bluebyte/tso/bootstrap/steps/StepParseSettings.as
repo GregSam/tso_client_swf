@@ -33,6 +33,7 @@
             add(new StepParseXML(global.genericValuesFilename, gParse.DispatcherGenericValues));
             add(new StepParseXML(global.itemLimitsFilename, gParse.DispatcherItemLimits));
             add(new StepParseXML(global.reactionsFilename, gParse.DispatcherReactions));
+            add(new StepParseXML(global.groupsFilename, gParse.DispatcherSpecGroups));
             super.execute();
         }
 

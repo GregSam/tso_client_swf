@@ -1,6 +1,7 @@
 ﻿package Communication.VO
 {
     import Enums.SPECIALIST_TASK_TYPES;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupIdVO;
 
     public class dSpecialistTaskVO 
     {
@@ -10,6 +11,7 @@
         public var bonusTime:int;
         public var type:int;
         public var collectedTime:int;
+        public var group:dSpecialistGroupIdVO;
 
 
         public function toString():String

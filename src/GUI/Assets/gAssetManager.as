@@ -2270,6 +2270,9 @@
         [Embed(source="../../../assets/gAssetManager/ChatTabIconCoopAdventure.png")]
         private static const ChatTabIconCoopAdventure:Class;
 
+        [Embed(source="../../../assets/gAssetManager/group_selected_690.png")]
+        private static const group_selected_690:Class;
+
         [Embed(source="../../../assets/gAssetManager/ChatTabIconGlobal.png")]
         private static const ChatTabIconGlobal:Class;
 

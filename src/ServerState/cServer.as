@@ -726,6 +726,7 @@ package ServerState
             _arg_1.setGuildID(_arg_2.guildId);
             _arg_1.setGuildMaxSize(_arg_2.guildMaxSize);
             _arg_1.mLandingZoneID = _arg_2.landingZoneID;
+            _arg_1.mSpecialistGroupSizeIncrease = _arg_2.specialistGroupSizeIncrease;
         }
 
         private function subtractFromWaitingForServerCount(_arg_1:int, _arg_2:dUniqueID, _arg_3:int):void

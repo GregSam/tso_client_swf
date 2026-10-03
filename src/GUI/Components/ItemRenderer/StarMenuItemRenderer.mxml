@@ -40,6 +40,7 @@
         import mx.events.PropertyChangeEvent;
         import mx.events.ToolTipEvent;
         import Specialists.cSpecialist;
+        import Specialists.cSpecialistGroupStarItem;
         import Specialists.cSpecialistTask_TravelToZone;
         import Utils.RequirementsHelper;
         import Utils.StringUtils;
@@ -48,6 +49,7 @@
         private var selected:Boolean = false;
         private var buffEnabled:Boolean = true;
         private var contentReady:Boolean = false;
+        public var allowItemClick:Boolean = true;
         private var amountVisible:Boolean = true;
         [Bindable]
         public var index:int;
@@ -188,11 +190,26 @@
             this.progress.visible = false;
             this.starIcon.visible = false;
             this.showAmount = true;
-            if (((!(data == null)) && (((data is cSpecialist) || (data is cBuff)) || (data is dBuffVO))))
+            if (((!(data == null)) && ((((data is cSpecialist) || (data is cSpecialistGroupStarItem)) || (data is cBuff)) || (data is dBuffVO))))
             {
                 this.addIcon.visible = false;
                 this.buffEnabled = true;
-                if ((data is cSpecialist))
+                if ((data is cSpecialistGroupStarItem))
+                {
+                    var groupItem:cSpecialistGroupStarItem = (data as cSpecialistGroupStarItem);
+                    this.frame.type = Frame.SPECIALIST;
+                    this.id = "SpecialistGroup";
+                    this.toolTip = groupItem.name;
+                    this.backgroundIcon.source = gAssetManager.GetBitmap(groupItem.groupIndex >= 0 && groupItem.groupIndex < 15 ? ("icon_specialistgroup_" + (groupItem.groupIndex + 1) + ".png") : "icon_specialistgroup.png");
+                    this.amountLabel.text = "";
+                    this.progress.visible = groupItem.isActive;
+                    if (groupItem.isActive && groupItem.representative != null)
+                    {
+                        this.progress.value = groupItem.representative.GetTaskProgress();
+                    };
+                    this.resetFilters();
+                }
+                else if ((data is cSpecialist))
                 {
                     specialist = (data as cSpecialist);
                     specialistType = SPECIALIST_TYPE.toString(specialist.GetType());
@@ -435,7 +452,11 @@
             var resourceName:String;
             if (((!(data == null)) && (!(data is int))))
             {
-                if ((data is cSpecialist))
+                if ((data is cSpecialistGroupStarItem))
+                {
+                    cToolTipUtil.createToolTip(cToolTipUtil.SIMPLE_string,event);
+                }
+                else if ((data is cSpecialist))
                 {
                     if (((((data as cSpecialist).GetSpecialistDescription().isGeneral()) || ((data as cSpecialist).GetSpecialistDescription().isAdmiral())) || ((data as cSpecialist).GetType() == SPECIALIST_TYPE.TMP_ARMY_TRANSPORTER)))
                     {
@@ -497,6 +518,12 @@
             };
         }
 
+        private function roman(value:int):String
+        {
+            var values:Array = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV"];
+            return value > 0 && value <= values.length ? values[value - 1] : String(value);
+        }
+
         private function resetFilters():void
         {
             filters = [];
@@ -512,6 +539,10 @@
 
         private function useItemClickHandler(mouseEvent:MouseEvent):void
         {
+            if (!allowItemClick)
+            {
+                return;
+            }
             var event:ItemClickEvent = new ItemClickEvent(cStarMenu.CLICK_ITEM, true);
             if ((this.parentDocument is EventMonster))
             {
@@ -535,4 +566,3 @@
     <gui:SpriteLibAnimation id="busyAnim" animationName="guianim_hourglass" visible="false" loop="true" width="48" height="48"  horizontalCenter="0" verticalCenter="0" />
     <gui:CustomLabel id="amountLabel" width="50"  horizontalCenter="0" textAlign="center" fontWeight="bold" color="0xFFFFFF" bottom="7" />
 </mx:Canvas>
-

@@ -84,6 +84,7 @@
         public static const FILENAME_VOTES_DEFINITIONS:String = "votes_config_default.xml";
         public static const FILENAME_VOTES_SHOP_GROUP:String = "votes_shop_group.xml";
         public static const FILENAME_EVENTS_CONFIG:String = "events_config.xml";
+        public static const FILENAME_GROUPS_CONFIG:String = "specialist_groups.xml";
         public static const GENERIC_VALUES_CONFIG:String = "generic_values.xml";
         public static const REACTIONS_CONFIG:String = "reactions.xml";
         public static const MAX_FREE_LANDSCAPES:int = 500;

@@ -1,4 +1,4 @@
-﻿package ServerState
+package ServerState
 {
     import Model.Observer;
     import nLib.cCustomDispatcher;
@@ -64,6 +64,8 @@
     import __AS3__.vec.Vector;
     import Enums.RESOURCE_GROUP;
     import flash.utils.Dictionary;
+    import flash.utils.describeType;
+    import flash.utils.getQualifiedClassName;
     import Achievements.UserAchievement;
     import GUI.Controller.dconsole.TsoConsole;
     import Communication.VO.UpdateVO.dAdventureExpiredVO;
@@ -135,6 +137,10 @@
     import Communication.VO.dCombatPreviewResult;
     import Communication.VO.dServerAction;
     import Communication.VO.dStartSpecialistTaskVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupIdVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupsVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupVO;
+    import Communication.VO.SpecialistGroup.dSpecialistGroupEntryVO;
     import GUI.share.ShareManager;
     import Communication.VO.UpdateVO.dAdventureResetVO;
     import flash.utils.Dictionary;
@@ -1195,6 +1201,14 @@
                                                                                                                                                                                                                         {
                                                                                                                                                                                                                             getBuffByUniqueID.SetAmount((getBuffByUniqueID.GetAmount() + buffAmountDiff.amountDiff));
                                                                                                                                                                                                                         };
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                    else if ((updateVO is dSpecialistGroupsVO))
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                        this.applySpecialistGroupsUpdate(updateVO as dSpecialistGroupsVO);
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                    else
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                        this.dumpUnknownUpdateVO(updateVO);
                                                                                                                                                                                                                     };
                                                                                                                                                                                                                 };
                                                                                                                                                                                                             };
@@ -1327,6 +1341,148 @@
                 globalFlash.gui.mAvatar.SetPremiumAccountDuration(this.mGameInterface.mCurrentPlayer);
             };
             this.mGameInterface.channels.QUEST.notifyPropertyObserver(TriggerUtils.ZONE_UPDATED, null);
+        }
+
+        private function dumpUnknownUpdateVO(_arg_1:Object):void
+        {
+            cLog.info("[GET_UPDATES][UNKNOWN] " + getQualifiedClassName(_arg_1));
+            this.dumpUpdateValue(_arg_1,"  ",0,new Dictionary(true));
+        }
+
+        private function dumpUpdateValue(_arg_1:Object, _arg_2:String, _arg_3:int, _arg_4:Dictionary):void
+        {
+            var key:*;
+            var description:XML;
+            var variable:XML;
+            var name:String;
+            var value:Object;
+            if(_arg_1 == null || _arg_3 >= 4)
+            {
+                return;
+            };
+            if(_arg_4[_arg_1])
+            {
+                cLog.info(_arg_2 + "<already dumped>");
+                return;
+            };
+            _arg_4[_arg_1] = true;
+            try
+            {
+                description = describeType(_arg_1);
+                for each(variable in description..variable)
+                {
+                    name = String(variable.@name);
+                    value = _arg_1[name];
+                    cLog.info(_arg_2 + name + " = " + this.updateValueText(value));
+                    if(this.shouldDumpUpdateValue(value))
+                    {
+                        this.dumpUpdateValue(value,_arg_2 + "  ",_arg_3 + 1,_arg_4);
+                    };
+                };
+                for(key in _arg_1)
+                {
+                    name = String(key);
+                    if(description..variable.(@name == name).length() != 0)
+                    {
+                        continue;
+                    };
+                    value = _arg_1[key];
+                    cLog.info(_arg_2 + name + " = " + this.updateValueText(value));
+                    if(this.shouldDumpUpdateValue(value))
+                    {
+                        this.dumpUpdateValue(value,_arg_2 + "  ",_arg_3 + 1,_arg_4);
+                    };
+                };
+            }
+            catch(error:Error)
+            {
+                cLog.info(_arg_2 + "<dump failed: " + error.message + ">");
+            };
+        }
+
+        private function shouldDumpUpdateValue(_arg_1:Object):Boolean
+        {
+            return _arg_1 != null && !(_arg_1 is String) && !(_arg_1 is Number) && !(_arg_1 is int) && !(_arg_1 is uint) && !(_arg_1 is Boolean);
+        }
+
+        private function updateValueText(_arg_1:Object):String
+        {
+            if(_arg_1 == null)
+            {
+                return "null";
+            };
+            return String(_arg_1) + " [" + getQualifiedClassName(_arg_1) + "]";
+        }
+
+        private function addBoughtSpecialistGroup(_arg_1:dSpecialistGroupIdVO):void
+        {
+            var container:dSpecialistGroupsVO;
+            var entries:Object;
+            var existing:dSpecialistGroupEntryVO;
+            var group:dSpecialistGroupVO;
+            var entry:dSpecialistGroupEntryVO;
+            if(_arg_1 == null || this.mGameInterface.mCurrentPlayerZone == null)
+            {
+                return;
+            };
+            container = this.mGameInterface.mCurrentPlayerZone.mSpecialistGroups;
+            if(container == null)
+            {
+                container = new dSpecialistGroupsVO();
+                this.mGameInterface.mCurrentPlayerZone.mSpecialistGroups = container;
+            };
+            entries = container.SpecialistGroups;
+            for each(existing in entries)
+            {
+                if(existing != null && existing.SpecialistGroup != null && existing.SpecialistGroup.Id != null && existing.SpecialistGroup.Id.Type == _arg_1.Type && existing.SpecialistGroup.Id.Id == _arg_1.Id)
+                {
+                    return;
+                };
+            };
+            group = new dSpecialistGroupVO();
+            group.Id = _arg_1;
+            group.InsertedAtSecondsSinceEpoch = new Date().time / 1000;
+            group.InsertedAtNanos = 0;
+            entry = new dSpecialistGroupEntryVO();
+            entry.SpecialistGroup = group;
+            entry.SpecialistReferences = new ArrayCollection();
+            if(entries is ArrayCollection)
+            {
+                ArrayCollection(entries).addItem(entry);
+            }
+            else if(entries is Array)
+            {
+                Array(entries).push(entry);
+            }
+            else
+            {
+                container.SpecialistGroups = [entry];
+            };
+            if(globalFlash.gui.mTavernInfoPanel.IsVisible())
+            {
+                globalFlash.gui.mTavernInfoPanel.Refresh();
+            };
+            if(globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU"))
+            {
+                globalFlash.gui.mStarMenu.Refresh();
+            };
+        }
+
+        private function applySpecialistGroupsUpdate(_arg_1:dSpecialistGroupsVO):void
+        {
+            if(_arg_1 == null || this.mGameInterface.mCurrentPlayerZone == null)
+            {
+                return;
+            };
+            this.mGameInterface.mCurrentPlayerZone.mSpecialistGroups = _arg_1;
+            if(globalFlash.gui.mTavernInfoPanel.IsVisible())
+            {
+                globalFlash.gui.mTavernInfoPanel.Refresh();
+            };
+            if(globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_STAR_MENU"))
+            {
+                globalFlash.gui.mStarMenu.Refresh();
+            };
         }
 
         private function ConfigureListeners(_arg_1:IEventDispatcher):void
@@ -2366,6 +2522,16 @@
                 case COMMAND.TEST_LOOTTABLE:
                     if (_local_2.data != null)
                     {
+                    };
+                    return;
+                case COMMAND.SPECIALIST_GROUP:
+                    if (_local_2.data is dGameTickCommandVO)
+                    {
+                        this.mGameInterface.AddGameTickCommand((_local_2.data as dGameTickCommandVO));
+                    }
+                    else if (_local_2.data is dSpecialistGroupIdVO)
+                    {
+                        this.addBoughtSpecialistGroup(_local_2.data as dSpecialistGroupIdVO);
                     };
                     return;
                 case COMMAND.SET_TASK:

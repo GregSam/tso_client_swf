@@ -854,6 +854,11 @@
                         globalFlash.gui.ShowBuilding(global.ui.mCurrentPlayerZone.mStreetDataMap.getTaskBuildings_vector()[0]);
                     });
                     break;
+                case AVATAR_MESSAGE_TYPE.SPECIALIST_GROUP_READY:
+                    message.image.source = gAssetManager.GetBitmap("icon_specialistgroup.png");
+                    message.headlineLabel.text = cLocaManager.GetInstance().GetText(LOCA_GROUP.MESSAGE_LABELS, "SpecialistGroupReady");
+                    message.messageBody.text = cLocaManager.GetInstance().GetText(LOCA_GROUP.MESSAGES, "SpecialistGroupReady", [(data as String)]);
+                    break;
                 case AVATAR_MESSAGE_TYPE.ADDED_RECIPE:
                     message.image.source = gAssetManager.GetBuffIcon((data as String));
                     message.messageBody.text = cLocaManager.GetInstance().GetText(LOCA_GROUP.MESSAGES, _messageType);

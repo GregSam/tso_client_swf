@@ -3373,7 +3373,7 @@
 
         public function IsUpgradeAllowed(_arg_1:Boolean):Boolean
         {
-            if ((((((((((((!(mGeneralInterface.mCurrentPlayerZone.GetResources(this.mPlayerData) == null)) && (_arg_1)) && (!(mGeneralInterface.mCurrentPlayerZone.GetResources(this.mPlayerData).HasPlayerResourcesInListOne(this.GetUpgradeCosts_vector())))) || ((!(_arg_1)) && (this.GetUpgradeCosts_vector() == null))) || (this.mBuildingMode == BUILDING_MODE_DESTRUCTION)) || (this.mBuildingMode == BUILDING_MODE_DESTRUCTED)) || (this.IsUpgradeInProgress())) || (!(this.IsInUpgradableBuildingMode()))) || (this.IsUpgradeInitiatedWithGem())) || (this.IsUpgradeInitiated())) || ((this.isSpecialUpgradeBuilding()) && (!(this.isSpecialUpgradeConditionsMet())))))
+            if ((((((((((((!(mGeneralInterface.mCurrentPlayerZone.GetResources(this.mPlayerData) == null)) && (_arg_1)) && (!(mGeneralInterface.mCurrentPlayerZone.GetResources(this.mPlayerData).HasPlayerResourcesInListOne(this.GetUpgradeCosts_vector())))) || ((!(_arg_1)) && (this.GetUpgradeCosts_vector() == null))) || (this.mBuildingMode == BUILDING_MODE_DESTRUCTION)) || (this.mBuildingMode == BUILDING_MODE_DESTRUCTED)) || (this.IsUpgradeInProgress())) || (!(this.IsInUpgradableBuildingMode()))) || (this.IsUpgradeInitiatedWithGem())) || (this.IsUpgradeInitiated())) || (!(this.isSpecialUpgradeConditionsMet()))))
             {
                 return (false);
             };

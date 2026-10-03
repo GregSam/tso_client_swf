@@ -167,6 +167,10 @@
             }
             else
             {
+                if (((_arg_2 == "ChatWindow") && (!(this.mPlayer.id == this.mGI.mCurrentPlayer.GetPlayerId()))))
+                {
+                    this.AddMenuItem("Reply", true, this.Reply);
+                };
                 if (this.mPlayer.id == this.mGI.mCurrentPlayer.GetPlayerId())
                 {
                     this.mPlayerStatus = this.OWN_PLAYER;
@@ -520,6 +524,11 @@
         private function Whisper(_arg_1:MouseEvent):void
         {
             globalFlash.gui.mChatPanel.ActivatePrivateChat(this.mPlayer.username);
+        }
+
+        private function Reply(_arg_1:MouseEvent):void
+        {
+            globalFlash.gui.mChatPanel.ReplyToPlayer(this.mPlayer.username);
         }
 
         public function Move(_arg_1:int, _arg_2:int):void
