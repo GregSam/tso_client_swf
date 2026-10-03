@@ -154,6 +154,7 @@
             };
             this.mPanel.availableOrdersList.dataProvider = this.mRecipes;
             this.mPanel.availableOrdersList.columnCount = this.mRecipes.length;
+            this.mPanel.updateAvailableOrdersLayout(this.mRecipes.length);
             this.mPanel.availableOrdersList.selectedIndex = 0;
             _local_4 = this.mBuilding.getRemainingCooldown();
             this.mPanel.btnOK.visible = (_local_4 < 1);

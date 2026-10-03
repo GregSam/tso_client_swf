@@ -4,7 +4,21 @@
     <mx:Script><![CDATA[
         import mx.effects.Fade;
         import mx.events.EffectEvent;
+        import mx.events.FlexEvent;
         import GUI.Assets.gAssetManager;
+        import flash.events.Event;
+        import flash.events.MouseEvent;
+        import flash.geom.Point;
+        import flash.geom.Rectangle;
+
+        private static const MIN_MYSTERY_BOX_WIDTH:Number = 428;
+        private static const MIN_MYSTERY_BOX_HEIGHT:Number = 345;
+        private var resizeStartMouseX:Number;
+        private var resizeStartMouseY:Number;
+        private var resizeStartWidth:Number;
+        private var resizeStartHeight:Number;
+        private var resizeActive:Boolean = false;
+        private var dragActive:Boolean = false;
 
         public var fadeIn:Fade;
         public var fadeOut:Fade;
@@ -34,6 +48,92 @@
             setStyle("hideEffect", fadeOut);
             ornament.source = gAssetManager.GetBitmap("DailyLoginHeaderOrnamental");
             innerBox.setStyle("backgroundImage", ornamentalEmbed);
+            addEventListener(MouseEvent.MOUSE_DOWN, startDragPanel, false, 0, true);
+            addEventListener(FlexEvent.CREATION_COMPLETE, activateResizeHandle, false, 0, true);
+        }
+
+        private function startDragPanel(event:MouseEvent):void
+        {
+            if (((stage == null) || (resizeActive))) return;
+            var localPoint:Point = globalToLocal(new Point(event.stageX, event.stageY));
+            if (((localPoint.y < 0) || (localPoint.y > 30))) return;
+            var currentX:Number = x;
+            var currentY:Number = y;
+            clearStyle("horizontalCenter");
+            clearStyle("verticalCenter");
+            x = currentX;
+            y = currentY;
+            dragActive = true;
+            startDrag(false, new Rectangle(0, 0, Math.max(0, stage.stageWidth - width), Math.max(0, stage.stageHeight - height)));
+            stage.addEventListener(MouseEvent.MOUSE_UP, stopDragPanel, false, 0, true);
+            stage.addEventListener(Event.MOUSE_LEAVE, stopDragPanel, false, 0, true);
+        }
+
+        private function stopDragPanel(event:Event = null):void
+        {
+            stopDrag();
+            dragActive = false;
+            if (stage == null) return;
+            stage.removeEventListener(MouseEvent.MOUSE_UP, stopDragPanel);
+            stage.removeEventListener(Event.MOUSE_LEAVE, stopDragPanel);
+        }
+
+        private function activateResizeHandle(event:FlexEvent):void
+        {
+            removeEventListener(FlexEvent.CREATION_COMPLETE, activateResizeHandle);
+            drawResizeHandle();
+            resizeHandle.addEventListener(MouseEvent.MOUSE_DOWN, startResize, false, 0, true);
+        }
+
+        private function drawResizeHandle():void
+        {
+            resizeHandle.graphics.clear();
+            resizeHandle.graphics.beginFill(0, 0);
+            resizeHandle.graphics.drawRect(0, 0, 16, 16);
+            resizeHandle.graphics.endFill();
+            resizeHandle.graphics.lineStyle(4, 0x302719, 1);
+            resizeHandle.graphics.moveTo(4, 15);
+            resizeHandle.graphics.lineTo(15, 4);
+            resizeHandle.graphics.moveTo(9, 15);
+            resizeHandle.graphics.lineTo(15, 9);
+            resizeHandle.graphics.lineStyle(2, 0xD6A94C, 1);
+            resizeHandle.graphics.moveTo(4, 15);
+            resizeHandle.graphics.lineTo(15, 4);
+            resizeHandle.graphics.moveTo(9, 15);
+            resizeHandle.graphics.lineTo(15, 9);
+        }
+
+        private function startResize(event:MouseEvent):void
+        {
+            event.stopImmediatePropagation();
+            if (stage == null) return;
+            resizeActive = true;
+            resizeStartMouseX = event.stageX;
+            resizeStartMouseY = event.stageY;
+            resizeStartWidth = width;
+            resizeStartHeight = height;
+            stage.addEventListener(MouseEvent.MOUSE_MOVE, resizePanel, false, 0, true);
+            stage.addEventListener(MouseEvent.MOUSE_UP, stopResize, false, 0, true);
+            stage.addEventListener(Event.MOUSE_LEAVE, stopResize, false, 0, true);
+        }
+
+        private function resizePanel(event:MouseEvent):void
+        {
+            if (!resizeActive || stage == null) return;
+            var maximumWidth:Number = Math.max(MIN_MYSTERY_BOX_WIDTH, stage.stageWidth - x);
+            var maximumHeight:Number = Math.max(MIN_MYSTERY_BOX_HEIGHT, stage.stageHeight - y);
+            width = Math.min(maximumWidth, Math.max(MIN_MYSTERY_BOX_WIDTH, resizeStartWidth + event.stageX - resizeStartMouseX));
+            height = Math.min(maximumHeight, Math.max(MIN_MYSTERY_BOX_HEIGHT, resizeStartHeight + event.stageY - resizeStartMouseY));
+            event.updateAfterEvent();
+        }
+
+        private function stopResize(event:Event = null):void
+        {
+            resizeActive = false;
+            if (stage == null) return;
+            stage.removeEventListener(MouseEvent.MOUSE_MOVE, resizePanel);
+            stage.removeEventListener(MouseEvent.MOUSE_UP, stopResize);
+            stage.removeEventListener(Event.MOUSE_LEAVE, stopResize);
         }
 
         [Embed(source="../../../assets/vector/embedded/mysterybox/mysterybox_ornamental_490.swf", symbol="GUI.Components.MysteryBoxPanel__embed_mxml_____data_src_gfx_embedded_mysterybox_ornamental_png_610377562")]
@@ -44,23 +144,24 @@
     <mx:Image id="ornament" top="-37" horizontalCenter="0" />
     <mx:Canvas id="footer" styleName="questPanelFooter" height="60" left="10" right="10" bottom="0" />
     <mx:Canvas id="content" clipContent="false" top="35" bottom="1" left="17" right="19">
-        <mx:Canvas id="box" styleName="detailsContentBox" height="105" left="8" right="8" top="92">
-            <mx:Canvas id="innerBox" height="95" left="12" right="12" verticalCenter="2" backgroundSize="100%"
-                horizontalScrollPolicy="auto" verticalScrollPolicy="off">
-                <mx:HBox id="itemsList" horizontalCenter="0" verticalCenter="0" />
+        <mx:Canvas id="box" styleName="detailsContentBox" left="8" right="8" top="92" bottom="112">
+            <mx:Canvas id="innerBox" left="12" right="12" top="5" bottom="5" backgroundSize="100%"
+                horizontalScrollPolicy="off" verticalScrollPolicy="auto">
+                <mx:Tile id="itemsList" left="0" right="18" top="5" horizontalGap="5" verticalGap="5" horizontalAlign="center" direction="horizontal" />
             </mx:Canvas>
             <gui:SpriteLibAnimation id="busyAnim" animationName="guianim_hourglass"
                 loop="true" visible="false" width="48" height="48" horizontalCenter="4" verticalCenter="4" />
         </mx:Canvas>
         <mx:Canvas id="ornTop" styleName="questOrnamental" percentWidth="100" height="10" top="88" />
-        <mx:Canvas id="subBox" styleName="detailsSubHeader" height="50" left="8" right="8" top="202">
+        <mx:Canvas id="subBox" styleName="detailsSubHeader" height="50" left="8" right="8" bottom="57">
             <gui:CustomText id="rewardText" selectable="false" left="10" right="10" top="10" bottom="3" textAlign="center" color="0xFFFFFF" />
         </mx:Canvas>
-        <mx:Canvas id="orn" styleName="questOrnamental" percentWidth="100" height="10" top="200" />
-        <mx:Image id="ornImage" horizontalCenter="0" top="194"
+        <mx:Canvas id="orn" styleName="questOrnamental" percentWidth="100" height="10" bottom="99" />
+        <mx:Image id="ornImage" horizontalCenter="0" bottom="94"
             source="@Embed(source='../../../assets/embedded/quest/quest_quest_ornamental3.png')" />
         <mx:Image id="boxImage" horizontalCenter="0" top="-32"
             source="@Embed(source='../../../assets/embedded/mysterybox/mysterybox_mystery_box.png')" />
         <gui:StandardButton id="btnOK" playSound="false" width="70" height="26" horizontalCenter="0" bottom="10" icon="{gAssetManager.GetClass('ButtonIconOK')}" />
     </mx:Canvas>
+    <mx:Canvas id="resizeHandle" width="16" height="16" right="10" bottom="0" buttonMode="true" useHandCursor="true" />
 </mx:Canvas>
