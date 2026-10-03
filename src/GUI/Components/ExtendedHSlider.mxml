@@ -3,6 +3,7 @@
     width="40" height="12">
     <mx:Script><![CDATA[
         import flash.events.Event;
+        import flash.events.IEventDispatcher;
         import flash.events.MouseEvent;
         import flash.events.TimerEvent;
         import flash.utils.Timer;
@@ -25,6 +26,7 @@
         private var _maximum:Number = 10;
         private var _value:Number = 0;
         private var _autoTickTimer:Timer = new Timer(START_RATE, 0);
+        private var _dragDispatcher:IEventDispatcher;
 
         [Embed(source="../../../assets/vector/ExtendedHSlider/_embed_mxml__397845276.swf", symbol="GUI.Components.ExtendedHSlider__embed_mxml__397845276")]
         private var handleSymbol:Class;
@@ -165,14 +167,19 @@
 
         private function startSliderDrag(event:MouseEvent):void
         {
-            global.getApplication().addEventListener(MouseEvent.MOUSE_UP, stopSliderDrag);
-            global.getApplication().addEventListener(MouseEvent.MOUSE_MOVE, moveSliderOnDrag);
+            _dragDispatcher = ((stage != null) ? stage : global.getApplication());
+            _dragDispatcher.addEventListener(MouseEvent.MOUSE_UP, stopSliderDrag);
+            _dragDispatcher.addEventListener(MouseEvent.MOUSE_MOVE, moveSliderOnDrag);
         }
 
         private function stopSliderDrag(event:MouseEvent):void
         {
-            global.getApplication().removeEventListener(MouseEvent.MOUSE_MOVE, moveSliderOnDrag);
-            global.getApplication().removeEventListener(MouseEvent.MOUSE_UP, stopSliderDrag);
+            if (_dragDispatcher != null)
+            {
+                _dragDispatcher.removeEventListener(MouseEvent.MOUSE_MOVE, moveSliderOnDrag);
+                _dragDispatcher.removeEventListener(MouseEvent.MOUSE_UP, stopSliderDrag);
+                _dragDispatcher = null;
+            };
         }
 
         private function moveSliderOnDrag(event:MouseEvent):void

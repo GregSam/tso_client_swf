@@ -24,6 +24,11 @@
     import Communication.VO.dSpecialistVO;
     import Specialists.cSpecialist;
     import Communication.VO.UpdateVO.dLootItemsVO;
+    import GUI.Components.CustomLabel;
+    import GUI.Components.ExtendedHSlider;
+    import GUI.Assets.gAssetManager;
+    import mx.controls.Image;
+    import mx.events.SliderEvent;
 
     public class cMysteryBoxPanel extends cBasicPanel 
     {
@@ -32,6 +37,8 @@
         private var mLM:cLocaManager = cLocaManager.GetInstance();
         private var mGI:cGameInterface;
         protected var mPanel:MysteryBoxPanel;
+        private var mAmountSlider:ExtendedHSlider;
+        private var mAmountLabel:CustomLabel;
 
 
         public function SetData(_arg_1:cBuff):void
@@ -58,7 +65,59 @@
 
         public function ShowConfirmation():void
         {
-            CustomAlert.show("ConfirmOpenMysteryBox", "ConfirmOpenMysteryBox", (Alert.CANCEL | Alert.OK), null, this.OpenMysteryBox);
+            var _local_2:String = this.mLM.GetText(LOCA_GROUP.LABELS, "SelectMysteryBoxAmount");
+            var _local_3:String = this.mLM.GetText(LOCA_GROUP.LABELS, "Select");
+            var _local_1:CustomAlert = CustomAlert.show(_local_2, _local_3, (Alert.CANCEL | Alert.OK), null, this.OpenMysteryBox, null, Alert.OK, false);
+            _local_1.addEventListener(FlexEvent.CREATION_COMPLETE, this.AddAmountSelector);
+        }
+
+        private function AddAmountSelector(_arg_1:FlexEvent):void
+        {
+            var _local_2:CustomAlert = (_arg_1.currentTarget as CustomAlert);
+            _local_2.removeEventListener(FlexEvent.CREATION_COMPLETE, this.AddAmountSelector);
+            _local_2.width = 435;
+            _local_2.minHeight = 300;
+            _local_2.message.width = 395;
+
+            var _local_4:Image = new Image();
+            _local_4.width = 54;
+            _local_4.height = 54;
+            _local_4.scaleContent = true;
+            _local_4.source = gAssetManager.GetBuffIcon(this.mBuff.GetBuffDefinition().GetName_string());
+
+            var _local_5:CustomLabel = new CustomLabel();
+            _local_5.width = 395;
+            _local_5.setStyle("textAlign", "center");
+            _local_5.setStyle("color", 0xFFFFFF);
+            _local_5.setStyle("fontWeight", "bold");
+            _local_5.text = this.mLM.GetText(LOCA_GROUP.LABELS, this.mBuff.GetBuffDefinition().GetName_string().toLowerCase());
+
+            this.mAmountLabel = new CustomLabel();
+            this.mAmountLabel.width = 270;
+            this.mAmountLabel.setStyle("textAlign", "center");
+            this.mAmountLabel.setStyle("color", 0xFFFFFF);
+
+            this.mAmountSlider = new ExtendedHSlider();
+            this.mAmountSlider.width = 270;
+            this.mAmountSlider.minimum = 1;
+            this.mAmountSlider.maximum = Math.min(100, this.mBuff.GetAmount());
+            this.mAmountSlider.value = 1;
+            this.mAmountSlider.addEventListener(SliderEvent.CHANGE, this.UpdateAmountLabel);
+
+            var _local_3:int = _local_2.content.getChildIndex(_local_2.buttonsList);
+            _local_2.content.addChildAt(_local_4, _local_3);
+            _local_2.content.addChildAt(_local_5, (_local_3 + 1));
+            _local_2.content.addChildAt(this.mAmountLabel, (_local_3 + 2));
+            _local_2.content.addChildAt(this.mAmountSlider, (_local_3 + 3));
+            this.UpdateAmountLabel();
+        }
+
+        private function UpdateAmountLabel(_arg_1:SliderEvent=null):void
+        {
+            if (((this.mAmountLabel != null) && (this.mAmountSlider != null)))
+            {
+                this.mAmountLabel.text = ((int(this.mAmountSlider.value).toString() + " / ") + int(this.mAmountSlider.maximum).toString());
+            };
         }
 
         private function ClosePanel(_arg_1:Event):void
@@ -85,7 +144,8 @@
                 return;
             };
             var _local_2:cBuff = this.mGI.mCurrentCursor.mCurrentBuff;
-            this.mGI.SendServerAction(COMMAND.APPLY_BUFF, 0, this.mGI.mCurrentPlayerZone.mStreetDataMap.GetMayorHouse().GetGrid(), 1, _local_2.GetUniqueId());
+            var _local_3:int = ((this.mAmountSlider != null) ? int(this.mAmountSlider.value) : 1);
+            this.mGI.SendServerAction(COMMAND.APPLY_BUFF, 0, this.mGI.mCurrentPlayerZone.mStreetDataMap.GetMayorHouse().GetGrid(), _local_3, _local_2.GetUniqueId());
             _local_2.IncWaitingForServerCount(this.mGI);
             this.mGI.mCurrentCursor.mCurrentBuff = null;
             this.mGI.mCurrentCursor.SetCursorEditMode(COMMAND.SELECT_BUILDING);

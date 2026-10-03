@@ -45,7 +45,8 @@
     <mx:Canvas id="footer" styleName="questPanelFooter" height="60" left="10" right="10" bottom="0" />
     <mx:Canvas id="content" clipContent="false" top="35" bottom="1" left="17" right="19">
         <mx:Canvas id="box" styleName="detailsContentBox" height="105" left="8" right="8" top="92">
-            <mx:Canvas id="innerBox" height="80" left="12" right="12" verticalCenter="2" backgroundSize="100%">
+            <mx:Canvas id="innerBox" height="95" left="12" right="12" verticalCenter="2" backgroundSize="100%"
+                horizontalScrollPolicy="auto" verticalScrollPolicy="off">
                 <mx:HBox id="itemsList" horizontalCenter="0" verticalCenter="0" />
             </mx:Canvas>
             <gui:SpriteLibAnimation id="busyAnim" animationName="guianim_hourglass"
