@@ -94,8 +94,8 @@
                             <mx:Canvas styleName="detailsSubHeader" percentWidth="100" height="18">
                                 <gui:CustomLabel id="_CultureBuildingPanel_CustomLabel1" top="1" horizontalCenter="0" color="0xFFFFFF" fontWeight="bold" />
                             </mx:Canvas>
-                            <mx:Canvas styleName="detailsContentBox" percentWidth="100" height="62" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-                                <gui:CustomTileList id="availableOrdersList" columnWidth="53" maxRows="1" borderThickness="0" backgroundAlpha="0" useRollOver="false" horizontalCenter="0" top="7" bottom="10" />
+                            <mx:Canvas styleName="detailsContentBox" percentWidth="100" height="75" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                                <gui:CustomTileList id="availableOrdersList" left="5" right="5" top="5" height="65" direction="vertical" columnWidth="53" rowHeight="48" rowCount="1" maxRows="1" borderThickness="0" backgroundAlpha="0" useRollOver="false" horizontalScrollPolicy="auto" verticalScrollPolicy="off" />
                             </mx:Canvas>
                         </mx:VBox>
                     </mx:VBox>

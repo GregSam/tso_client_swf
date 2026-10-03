@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="GUI.Components.ItemRenderer.*" width="45" height="43">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="GUI.Components.ItemRenderer.*" width="45" height="48">
     <mx:Script><![CDATA[
         import mx.containers.Canvas;
         import mx.controls.Image;
@@ -254,9 +254,11 @@
             super.childrenCreated();
             this.setStyle("backgroundAlpha", 1);
             this.setStyle("backgroundSize", "100%");
+            this.horizontalScrollPolicy = "off";
+            this.verticalScrollPolicy = "off";
             StarIcon.source = gAssetManager.GetBitmap("SmallIconStar");
             this.width = 45;
-            this.height = 43;
+            this.height = 48;
             this.addEventListener("rollOver", this.canvas1_rollOverHandler);
             this.addEventListener("rollOut", this.canvas1_rollOutHandler);
             this.addEventListener("toolTipCreate", this.CreateTooltip);

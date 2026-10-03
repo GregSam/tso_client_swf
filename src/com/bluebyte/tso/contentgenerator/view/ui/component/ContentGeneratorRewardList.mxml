@@ -14,7 +14,10 @@
                 return;
             };
             this._dataProvider = value;
-            this.displayItems();
+            if (this.list != null)
+            {
+                this.displayItems();
+            };
         }
 
         public function get dataProvider():ArrayCollection
@@ -54,6 +57,7 @@
         override protected function childrenCreated():void
         {
             super.childrenCreated();
+            this.displayItems();
         }
     ]]></mx:Script>
 

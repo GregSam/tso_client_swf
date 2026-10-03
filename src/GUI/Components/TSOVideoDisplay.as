@@ -15,7 +15,6 @@
     import flash.net.NetStream;
     import flash.net.NetStreamAppendBytesAction;
     import flash.utils.ByteArray;
-    import flash.utils.setTimeout;
     import mx.events.VideoEvent;
     import __AS3__.vec.*;
 
@@ -31,6 +30,9 @@
         private var embeddedVideo:Video;
         private var embeddedVolume:Number = 1;
         private var preparingEmbeddedFrame:Boolean = false;
+        private var embeddedPlaybackActive:Boolean = false;
+        private var embeddedBufferWasFull:Boolean = false;
+        private var embeddedPreviewSeekPending:Boolean = false;
 
         public function TSOVideoDisplay()
         {
@@ -112,13 +114,20 @@
 
         private function startEmbeddedStream(_arg_1:Boolean):void
         {
+            var owner:TSOVideoDisplay = this;
             this.rewindEmbedded();
             this.preparingEmbeddedFrame = _arg_1;
+            this.embeddedPlaybackActive = !(_arg_1);
+            this.embeddedBufferWasFull = false;
+            this.embeddedPreviewSeekPending = false;
             this.embeddedConnection = new NetConnection();
             this.embeddedConnection.connect(null);
             this.embeddedStream = new NetStream(this.embeddedConnection);
             this.embeddedStream.client = {onMetaData:function(_arg_1:Object):void
                 {
+                }, onPlayStatus:function(_arg_1:Object):void
+                {
+                    owner.embeddedPlayStatusHandler(_arg_1);
                 }};
             this.embeddedStream.soundTransform = new SoundTransform((_arg_1) ? 0 : this.embeddedVolume);
             this.embeddedStream.addEventListener(NetStatusEvent.NET_STATUS, this.embeddedNetStatusHandler);
@@ -132,26 +141,72 @@
 
         private function pauseOnFirstEmbeddedFrame():void
         {
-            if (((this.preparingEmbeddedFrame) && (!(this.embeddedStream == null))))
+            if (((this.preparingEmbeddedFrame) && (!(this.embeddedPreviewSeekPending)) && (!(this.embeddedStream == null))))
             {
-                this.embeddedStream.pause();
+                this.embeddedPreviewSeekPending = true;
                 this.embeddedStream.seek((1 / 30));
-                this.embeddedStream.soundTransform = new SoundTransform(this.embeddedVolume);
-                this.preparingEmbeddedFrame = false;
             };
+        }
+
+        private function finishEmbeddedPreview():void
+        {
+            if (((!(this.preparingEmbeddedFrame)) || (this.embeddedStream == null)))
+            {
+                return;
+            };
+            this.embeddedStream.pause();
+            this.embeddedStream.soundTransform = new SoundTransform(this.embeddedVolume);
+            this.embeddedPreviewSeekPending = false;
+            this.preparingEmbeddedFrame = false;
         }
 
         private function embeddedNetStatusHandler(_arg_1:NetStatusEvent):void
         {
             if (((_arg_1.info.code == "NetStream.Play.Start") && (this.preparingEmbeddedFrame)))
             {
-                setTimeout(this.pauseOnFirstEmbeddedFrame, 40);
+                return;
+            };
+            if (_arg_1.info.code == "NetStream.Buffer.Full")
+            {
+                this.embeddedBufferWasFull = true;
+                if (this.preparingEmbeddedFrame)
+                {
+                    this.pauseOnFirstEmbeddedFrame();
+                };
+                return;
+            };
+            if (((_arg_1.info.code == "NetStream.Seek.Notify") && (this.embeddedPreviewSeekPending)))
+            {
+                this.finishEmbeddedPreview();
+                return;
+            };
+            if (((_arg_1.info.code == "NetStream.Buffer.Empty") && (this.embeddedPlaybackActive) && (this.embeddedBufferWasFull)))
+            {
+                this.completeEmbeddedPlayback();
                 return;
             };
             if (_arg_1.info.code == "NetStream.Play.Stop")
             {
-                dispatchEvent(new VideoEvent(VideoEvent.COMPLETE));
+                this.completeEmbeddedPlayback();
             };
+        }
+
+        private function embeddedPlayStatusHandler(_arg_1:Object):void
+        {
+            if (((_arg_1 != null) && (_arg_1.code == "NetStream.Play.Complete")))
+            {
+                this.completeEmbeddedPlayback();
+            };
+        }
+
+        private function completeEmbeddedPlayback():void
+        {
+            if (!this.embeddedPlaybackActive)
+            {
+                return;
+            };
+            this.embeddedPlaybackActive = false;
+            dispatchEvent(new VideoEvent(VideoEvent.COMPLETE));
         }
 
 
