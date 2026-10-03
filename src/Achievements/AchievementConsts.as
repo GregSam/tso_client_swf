@@ -30,6 +30,7 @@
         public static const ACHIEVEMENT_REWARD_ID:String = "Reward";
         public static const TRIGGER_TYPE_PROGRESS:String = "progress";
         public static const TRIGGER_TYPE_CHECKBOX:String = "checkbox";
+        public static const TRIGGER_TYPE_DYNAMIC:String = "dynamic";
         public static const CURRENT_USER_ACHIEVEMENT_BACKGROUND:String = "AchievementCurrentUserBackground";
         public static const COMPARED_USER_ACHIEVEMENT_BACKGROUND:String = "AchievementComparedUserBackground";
         public static const ACHIEVEMENT_ICON_BACKGROUND_NORMAL:String = "AchievementIconNormalBackground";

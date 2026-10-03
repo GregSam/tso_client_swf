@@ -11,6 +11,8 @@
             this.setStyle("backgroundSize", "100%");
             height = AchievementDetailView.TRIGGER_PROGRESS_VIEW_COMPONENT_HEIGHT;
             setStyle("backgroundImage", gAssetManager.GetClass("AchievementTriggerProgressBackground"));
+            progressBarCanvas.setStyle("backgroundSize", "100%");
+            progressBar.setStyle("backgroundSize", "100%");
             progressBar.mask = progressBarMask;
         }
     ]]></mx:Script>
