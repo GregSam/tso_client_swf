@@ -1336,6 +1336,10 @@ package BuffSystem
                 _arg_4 = Math.min(_arg_4, this.amount);
                 return (_arg_4);
             };
+            if (StringUtils.startsWith(_local_6, defines.LOOTTABLE_BUFF))
+            {
+                return (Math.min(Math.max(_arg_4, 1), this.amount));
+            };
             return (1);
         }
 

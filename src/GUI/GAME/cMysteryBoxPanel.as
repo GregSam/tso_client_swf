@@ -146,7 +146,7 @@
             var _local_2:cBuff = this.mGI.mCurrentCursor.mCurrentBuff;
             var _local_3:int = ((this.mAmountSlider != null) ? int(this.mAmountSlider.value) : 1);
             this.mGI.SendServerAction(COMMAND.APPLY_BUFF, 0, this.mGI.mCurrentPlayerZone.mStreetDataMap.GetMayorHouse().GetGrid(), _local_3, _local_2.GetUniqueId());
-            _local_2.IncWaitingForServerCount(this.mGI);
+            _local_2.SetWaitingForServerCount((_local_2.GetWaitingForServerCount() + _local_3), this.mGI);
             this.mGI.mCurrentCursor.mCurrentBuff = null;
             this.mGI.mCurrentCursor.SetCursorEditMode(COMMAND.SELECT_BUILDING);
             Show();
