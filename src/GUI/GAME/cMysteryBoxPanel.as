@@ -83,14 +83,14 @@
             _local_4.width = 54;
             _local_4.height = 54;
             _local_4.scaleContent = true;
-            _local_4.source = gAssetManager.GetBuffIcon(this.mBuff.GetBuffDefinition().GetName_string());
+            _local_4.source = gAssetManager.GetBuffIcon(this.mBuff.GetType());
 
             var _local_5:CustomLabel = new CustomLabel();
             _local_5.width = 395;
             _local_5.setStyle("textAlign", "center");
             _local_5.setStyle("color", 0xFFFFFF);
             _local_5.setStyle("fontWeight", "bold");
-            _local_5.text = this.mLM.GetText(LOCA_GROUP.LABELS, this.mBuff.GetBuffDefinition().GetName_string().toLowerCase());
+            _local_5.text = this.mLM.getLabel(this.mBuff.GetType(), [this.mBuff.GetAmount().toString(), this.mBuff.GetResourceName_string()]);
 
             this.mAmountLabel = new CustomLabel();
             this.mAmountLabel.width = 270;
