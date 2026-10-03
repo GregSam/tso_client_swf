@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -41,3 +44,17 @@ jobs:
           path: ${{ matrix.output }}
           if-no-files-found: error
           archive: false
+
+      - name: Publish latest client release
+        if: matrix.output == 'client.swf' && github.ref_name == github.event.repository.default_branch && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Build $(date -u +'%Y-%m-%d %H:%M UTC')"
+          if gh release view latest >/dev/null 2>&1; then
+            gh api --method PATCH "repos/$GITHUB_REPOSITORY/git/refs/tags/latest" -f sha="$GITHUB_SHA" -F force=true >/dev/null
+            gh release edit latest --title "$title" --notes "Built from commit $GITHUB_SHA" --latest
+          else
+            gh release create latest --target "$GITHUB_SHA" --title "$title" --notes "Built from commit $GITHUB_SHA" --latest
+          fi
+          gh release upload latest client.swf --clobber
