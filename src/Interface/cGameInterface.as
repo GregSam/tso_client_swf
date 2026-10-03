@@ -4011,10 +4011,6 @@ package Interface
             };
             if(payload is dBuyVO)
             {
-                // The buy command does not contain the id assigned by the server.
-                // Reloading here keeps that exceptional synchronization inside the
-                // common tick-command path instead of the Tavern UI callback.
-                this.mClientMessages.SendGetZoneMessageToServer(COMMAND.GET_ZONE,_arg_1.GetPlayerId(),false);
                 return (true);
             };
             if(payload is dRenameVO)

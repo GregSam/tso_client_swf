@@ -13,6 +13,7 @@
 
         private var _windowID:String;
         public var mouseWheelStep:Number = 1;
+        private var mouseWheelRemainder:Number = 0;
 
 
         override protected function mouseWheelHandler(_arg_1:MouseEvent):void
@@ -20,13 +21,24 @@
             var _local_2:Number;
             var _local_3:Number;
             var _local_4:ScrollEvent;
-            if (((verticalScrollBar) && (verticalScrollBar.visible)))
+            var _local_5:Number;
+            if (((verticalScrollBar) && (verticalScrollBar.visible) && (_arg_1.delta != 0)))
             {
                 _arg_1.stopPropagation();
                 _local_2 = verticalScrollPosition;
-                _local_3 = verticalScrollPosition;
-                _local_3 = (_local_3 - ((_arg_1.delta / Math.abs(_arg_1.delta)) * this.mouseWheelStep));
+                this.mouseWheelRemainder -= (_arg_1.delta / Math.abs(_arg_1.delta)) * this.mouseWheelStep;
+                _local_5 = this.mouseWheelRemainder > 0 ? Math.floor(this.mouseWheelRemainder) : Math.ceil(this.mouseWheelRemainder);
+                if(_local_5 == 0)
+                {
+                    return;
+                };
+                this.mouseWheelRemainder -= _local_5;
+                _local_3 = verticalScrollPosition + _local_5;
                 _local_3 = Math.max(0, Math.min(_local_3, verticalScrollBar.maxScrollPosition));
+                if(_local_3 == verticalScrollPosition)
+                {
+                    this.mouseWheelRemainder = 0;
+                };
                 verticalScrollPosition = _local_3;
                 if (_local_2 != verticalScrollPosition)
                 {
