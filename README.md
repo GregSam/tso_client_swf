@@ -22,9 +22,14 @@
 ./build.sh -DebugBuild        # debug-сборка (по умолчанию, если флаг не указан — только -MinimalBuild изменяет его)
 ./build.sh -MinimalBuild      # release: optimize + compress, без debug
 ./build.sh -DebugBuild -KeepGeneratedCode   # сохранить generated Actionscript
+./build.sh -DebugBuild -Stage=test           # собрать с mapping/version тестового сервера
 ```
 
-`build.cmd` принимает те же флаги.
+`build.cmd` принимает те же флаги. Без `-Stage` используются данные из
+`stage/live`. Параметр `-Stage=test` выбирает `stage/test`. Перед компиляцией
+`mapping.data` выбранного сервера копируется в
+`assets/gAssetManager/FileHashing_Mapping.bin`, а значение из `version.txt`
+записывается в `defines.VERSION_NR`.
 
 Скрипт делает два шага:
 
@@ -119,9 +124,14 @@ The result is `client.swf` in the repository root.
 ./build.sh -DebugBuild        # debug build; if no flag is given only -MinimalBuild changes it
 ./build.sh -MinimalBuild      # release: optimize + compress, no debug
 ./build.sh -DebugBuild -KeepGeneratedCode   # keep the generated ActionScript
+./build.sh -DebugBuild -Stage=test           # use test server mapping/version data
 ```
 
-`build.cmd` accepts the same flags.
+`build.cmd` accepts the same flags. Without `-Stage`, the build uses
+`stage/live`. Pass `-Stage=test` to use `stage/test`. Before compilation, the
+selected `mapping.data` is copied to
+`assets/gAssetManager/FileHashing_Mapping.bin`, and `version.txt` is written to
+`defines.VERSION_NR`.
 
 The script does two steps:
 

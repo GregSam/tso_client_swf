@@ -5,12 +5,42 @@ set "ROOT=!ROOT:~0,-1!"
 if not defined JAVA set "JAVA=java"
 set "MODE="
 set "KEEP="
+set "STAGE=live"
+:parseArgs
+if "%~1"=="" goto argsDone
+if defined EXPECT_STAGE (
+    set "STAGE=%~1"
+    set "EXPECT_STAGE="
+    shift
+    goto parseArgs
+)
 if /I "%~1"=="-DebugBuild" set "MODE=-compiler.debug=true"
 if /I "%~1"=="-MinimalBuild" set "MODE=-compiler.debug=false -compiler.optimize=true -compiler.compress=true"
 if /I "%~1"=="-KeepGeneratedCode" set "KEEP=-compiler.keep-generated-actionscript=true"
-if /I "%~2"=="-KeepGeneratedCode" set "KEEP=-compiler.keep-generated-actionscript=true"
+if /I "%~1"=="-Stage" (
+    set "EXPECT_STAGE=1"
+    shift
+    goto parseArgs
+)
+set "ARG=%~1"
+if /I "!ARG:~0,7!"=="-Stage=" set "STAGE=!ARG:~7!"
+shift
+goto parseArgs
+:argsDone
+if defined EXPECT_STAGE ( echo Missing value after -Stage. Expected live or test. & exit /b 1 )
 where java >nul 2>&1
 if errorlevel 1 ( echo Java not found in PATH. & exit /b 1 )
+
+rem ---- server stage data ----
+if /I not "!STAGE!"=="live" if /I not "!STAGE!"=="test" ( echo Unknown stage "!STAGE!". Expected live or test. & exit /b 1 )
+set "STAGE_DIR=%ROOT%\stage\!STAGE!"
+if not exist "!STAGE_DIR!\mapping.data" ( echo Missing !STAGE_DIR!\mapping.data & exit /b 1 )
+if not exist "!STAGE_DIR!\version.txt" ( echo Missing !STAGE_DIR!\version.txt & exit /b 1 )
+copy /Y "!STAGE_DIR!\mapping.data" "%ROOT%\assets\gAssetManager\FileHashing_Mapping.bin" >nul
+if errorlevel 1 exit /b 1
+powershell -NoProfile -Command "$p='%ROOT%\src\defines.as'; $v=[IO.File]::ReadAllText('!STAGE_DIR!\version.txt').Trim(); if($v -notmatch '^[0-9a-fA-F]{40}$'){throw 'Invalid VERSION_NR'}; $s=[IO.File]::ReadAllText($p); $q=[char]34; $pattern='public static var VERSION_NR:String = .*?;'; $replacement='public static var VERSION_NR:String = '+$q+$v+$q+';'; $s=[regex]::Replace($s,$pattern,$replacement,1); [IO.File]::WriteAllText($p,$s,(New-Object Text.UTF8Encoding($true)))"
+if errorlevel 1 exit /b 1
+echo Using stage: !STAGE!
 
 rem ---- theme (mxmlc 3.6 needs localFonts.ser in CWD) ----
 pushd "%ROOT%\sdk\3.6.0\frameworks"

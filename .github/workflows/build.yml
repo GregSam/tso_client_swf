@@ -14,9 +14,14 @@ jobs:
       matrix:
         include:
           - mode: -DebugBuild
+            stage: live
             output: client-debug.swf
           - mode: -MinimalBuild
+            stage: live
             output: client.swf
+          - mode: -MinimalBuild
+            stage: test
+            output: client-testing.swf
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -33,7 +38,7 @@ jobs:
       - name: Build ${{ matrix.output }}
         run: |
           chmod +x build.sh
-          ./build.sh ${{ matrix.mode }}
+          ./build.sh ${{ matrix.mode }} -Stage=${{ matrix.stage }}
           if [ "${{ matrix.output }}" != "client.swf" ]; then
             mv client.swf "${{ matrix.output }}"
           fi
@@ -41,12 +46,24 @@ jobs:
       - name: Upload ${{ matrix.output }}
         uses: actions/upload-artifact@v7
         with:
+          name: ${{ matrix.output }}
           path: ${{ matrix.output }}
           if-no-files-found: error
           archive: false
 
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    if: github.ref_name == github.event.repository.default_branch && github.event_name != 'pull_request'
+    steps:
+      - name: Download release clients
+        uses: actions/download-artifact@v8
+        with:
+          pattern: client*.swf
+          path: release-assets
+          merge-multiple: true
+
       - name: Publish latest client release
-        if: matrix.output == 'client.swf' && github.ref_name == github.event.repository.default_branch && github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -57,4 +74,4 @@ jobs:
           else
             gh release create latest --target "$GITHUB_SHA" --title "$title" --notes "Built from commit $GITHUB_SHA" --latest
           fi
-          gh release upload latest client.swf --clobber
+          gh release upload latest release-assets/client.swf release-assets/client-testing.swf --clobber
