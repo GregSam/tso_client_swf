@@ -6,6 +6,7 @@
     <library-path>
       <path-element>sdk/3.6.0/frameworks/libs/framework.swc</path-element>
       <path-element>sdk/3.6.0/frameworks/libs/rpc.swc</path-element>
+      <path-element>libs/actionscript-notification-engine.swc</path-element>
       <path-element>sdk/4.16.1/frameworks/locale/en_US/framework_rb.swc</path-element>
       <path-element>sdk/4.16.1/frameworks/locale/en_US/rpc_rb.swc</path-element>
       <path-element>sdk/4.16.1/frameworks/locale/en_US/mx_rb.swc</path-element>
