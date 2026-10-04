@@ -933,7 +933,11 @@
                     }
                     else
                     {
-                        this.RefreshLastQuestList(_local_2);
+                        this.mClientQuestPool.AddOrUpdateQuest(_local_2);
+                        if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_QUEST_BOOK"))
+                        {
+                            globalFlash.gui.mQuestBook.RefreshQuestTrigger(_local_2);
+                        };
                     };
                     return;
                 case QuestManagerStatic.QUEST_UPDATE_HIDE_QUEST_WINDOW:

@@ -96,6 +96,17 @@
             globalFlash.gui.mCancelActionPanel.Hide();
             globalFlash.gui.windowController.setTop(this.panel, true);
             HotkeyManager.getInstance().setConfirmActions(this.applyResource, this.Hide);
+            this.panel.callLater(this.focusSelectedAmount);
+        }
+
+        private function focusSelectedAmount():void
+        {
+            if (!this.panel.visible)
+            {
+                return;
+            };
+            this.panel.selectedAmount.setFocus();
+            this.panel.selectedAmount.setSelection(0, this.panel.selectedAmount.length);
         }
 
         private function closePanel(_arg_1:Event):void
@@ -188,8 +199,6 @@
             this.panel.maximumCount.text = ("/ " + this.panel.amountSlider.maximum);
             this.panel.resourceRenderer.resourceName = _local_4;
             this.panel.resourceName.text = cLocaManager.GetInstance().GetText(LOCA_GROUP.RESOURCES, _local_4);
-            this.panel.selectedAmount.setFocus();
-            this.panel.selectedAmount.setSelection(0, this.panel.selectedAmount.length);
         }
 
 

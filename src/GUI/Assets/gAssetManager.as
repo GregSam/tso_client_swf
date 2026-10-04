@@ -2362,6 +2362,7 @@
         private static var iconspack:BitmapFileMap = new BitmapFileMap();
         private static var loadedGfxVector:Vector.<BitmapFileMap> = new Vector.<BitmapFileMap>();
         private static var getGfxBitmapData:Dictionary = new Dictionary(true);
+        private static var dummyIconBuffNames:Dictionary = new Dictionary();
 
         public static function CalculateGetGfxBitmapStats():Object
         {
@@ -2777,6 +2778,10 @@
             {
                 _local_7 = _local_6.GetAttributeString_string("name");
                 _local_8 = _local_6.GetAttributeString_string("iconfilename");
+                if (_local_8 != "")
+                {
+                    dummyIconBuffNames[_local_8] = _local_7;
+                };
                 _local_9 = _local_6.GetAttributeString_string("cursorType");
                 if (_local_9 != "")
                 {
@@ -2876,7 +2881,22 @@
 
         public static function GetDummyIcon(_arg_1:String, _arg_2:Boolean=true):*
         {
-            return (getIconFromLookupName(_arg_1, _arg_2));
+            var icon:Bitmap = (getIconFromLookupName(_arg_1, _arg_2) as Bitmap);
+            var buffName:String;
+            if (((icon != null) && (icon != dummy)))
+            {
+                return (icon);
+            };
+            buffName = dummyIconBuffNames[_arg_1];
+            if (buffName != null)
+            {
+                icon = GetBuffIcon(buffName, _arg_2);
+                if (icon != dummy)
+                {
+                    return (icon);
+                };
+            };
+            return (GetGfx(_arg_1, _arg_2));
         }
 
         public static function GetNewQuestTriggerIcon(_arg_1:TriggerVO, _arg_2:Boolean=true):*

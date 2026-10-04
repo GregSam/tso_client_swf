@@ -432,6 +432,8 @@ package ServerState
         {
             var specialist:cSpecialist;
             var guildVO:dGuildVO;
+            var previousGuildVO:dGuildVO;
+            var guildMembershipChanged:Boolean;
             var userAchievementManager:UserAchievementManager;
             var updateVO:Object;
             var dConsoleTextVO:DConsoleTextVO;
@@ -902,13 +904,25 @@ package ServerState
                                                                                             {
                                                                                                 motdChanged = false;
                                                                                                 guildVO = (updateVO as dGuildUpdateVO).guild;
+                                                                                                previousGuildVO = this.mGameInterface.GetCurrentPlayerGuild();
+                                                                                                guildMembershipChanged = ((previousGuildVO == null) != (guildVO == null)) || (((previousGuildVO != null) && (guildVO != null)) && (previousGuildVO.id != guildVO.id));
                                                                                                 if ((((guildVO) && (this.mGameInterface.GetCurrentPlayerGuild())) && (!(guildVO.motd == this.mGameInterface.GetCurrentPlayerGuild().motd))))
                                                                                                 {
                                                                                                     motdChanged = true;
                                                                                                 };
                                                                                                 this.mGameInterface.SetCurrentPlayerGuild(guildVO);
                                                                                                 globalFlash.gui.mGuildWindow.RefreshOwnGuild();
-                                                                                                this.mGameInterface.mQuestClientCallbacks.RefreshLastQuestList(null);
+                                                                                                if (globalFlash.gui.IsLazyControllerCreated("GAMESTATE_ID_QUEST_BOOK"))
+                                                                                                {
+                                                                                                    if (guildMembershipChanged)
+                                                                                                    {
+                                                                                                        this.mGameInterface.mQuestClientCallbacks.RefreshLastQuestList(null);
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                       globalFlash.gui.mQuestBook.RefreshGuildQuestProgress();
+                                                                                                    };
+                                                                                                };
                                                                                                 if (guildVO != null)
                                                                                                 {
                                                                                                     this.mGameInterface.joinGuildChannels();

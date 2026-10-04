@@ -234,6 +234,26 @@
             this.mNotificationQuest = _arg_1;
         }
 
+        public function RefreshGuildQuestProgress():void
+        {
+            var selectedQuest:dQuestElementVO = (this.mPanel.list.selectedItem as dQuestElementVO);
+            if (((!this.IsVisible()) || (selectedQuest == null)) || ((selectedQuest.mQuestDefinition == null) || (selectedQuest.mQuestDefinition.type_string != "Guild")))
+            {
+                return;
+            };
+            this.DisplayQuest(selectedQuest);
+        }
+
+        public function RefreshQuestTrigger(quest:dQuestElementVO):void
+        {
+            var selectedQuest:dQuestElementVO = (this.mPanel.list.selectedItem as dQuestElementVO);
+            if (((!this.IsVisible()) || (selectedQuest == null)) || ((quest == null) || (!(selectedQuest.mUniqueID.eq(quest.mUniqueID)))))
+            {
+                return;
+            };
+            this.DisplayQuest(quest);
+        }
+
         private function CancelAdventure(_arg_1:CloseEvent):void
         {
             var _local_2:dAdventureClientInfoVO;
