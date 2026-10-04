@@ -34,6 +34,8 @@
     import mx.events.ResizeEvent;
     import flash.desktop.NativeApplication;
     import flash.geom.Point;
+    import Communication.VO.UpdateVO.dAdventureClientInfoVO;
+    import Communication.VO.dAdventurePlayerListItemVO;
     import __AS3__.vec.*;
 
     public class cFriendsListMenu extends cGuiBaseElement 
@@ -50,6 +52,7 @@
         private var mRendererPool:Vector.<FriendsListMenuItemRenderer>;
         private var mPlayer:dPlayerListItemVO;
         private var mPlayerStatus:int;
+        private var mInviteAdventure:dAdventureClientInfoVO;
         protected var mMenu:FriendsListMenu;
 
 
@@ -146,6 +149,7 @@
             var _local_10:Boolean;
             var _local_11:String;
             this.mPlayer = _arg_1;
+            this.mInviteAdventure = null;
             this.mMenu.removeAllChildren();
             var _local_5:Boolean = this.mGI.isOnHomzone();
             var _local_6:cLocaManager = cLocaManager.GetInstance();
@@ -283,6 +287,14 @@
                                     this.AddMenuItem("CompareAchievements", _local_5, this.CompareAchievements, ((_local_5) ? "" : _local_6.GetText(LOCA_GROUP.LABELS, "CantCompareAchi")));
                                 };
                                 this.AddMenuItem("RemoveFriend", true, this.ConfirmRemoveFriend);
+                                if (_arg_2 == "ChatWindow")
+                                {
+                                    this.mInviteAdventure = this.GetInvitableAdventure(this.mPlayer.id);
+                                    if (this.mInviteAdventure != null)
+                                    {
+                                        this.AddMenuItem((_local_6.GetText(LOCA_GROUP.LABELS, "GuildInvite") + ": " + _local_6.GetText(LOCA_GROUP.ADVENTURE_NAME, this.mInviteAdventure.adventureName)), true, this.InviteToAdventure, "", null, null, null, "");
+                                    };
+                                };
                             }
                             else
                             {
@@ -299,6 +311,14 @@
                                     if (!defines.ACHIEVEMENT_THROTTLE_MODE_ACTIVE)
                                     {
                                         this.AddMenuItem("CompareAchievements", _local_5, this.CompareAchievements, ((_local_5) ? "" : _local_6.GetText(LOCA_GROUP.LABELS, "CantCompareAchi")));
+                                    };
+                                    if (_arg_2 == "ChatWindow")
+                                    {
+                                        this.mInviteAdventure = this.GetInvitableAdventure(this.mPlayer.id);
+                                        if (this.mInviteAdventure != null)
+                                        {
+                                            this.AddMenuItem((_local_6.GetText(LOCA_GROUP.LABELS, "GuildInvite") + ": " + _local_6.GetText(LOCA_GROUP.ADVENTURE_NAME, this.mInviteAdventure.adventureName)), true, this.InviteToAdventure, "", null, null, null, "");
+                                        };
                                     };
                                 }
                                 else
@@ -524,6 +544,46 @@
         private function Whisper(_arg_1:MouseEvent):void
         {
             globalFlash.gui.mChatPanel.ActivatePrivateChat(this.mPlayer.username);
+        }
+
+        private function GetInvitableAdventure(_arg_1:int):dAdventureClientInfoVO
+        {
+            var _local_2:dAdventureClientInfoVO;
+            var _local_3:cAdventureDefinition;
+            var _local_4:dAdventurePlayerListItemVO;
+            var _local_5:Boolean;
+            for each (_local_2 in AdventureManager.getInstance().getAdventures())
+            {
+                if (((_local_2.ownerPlayerID == this.mGI.mCurrentPlayer.GetPlayerId()) && (_local_2.status == cAdventure.STATUS_STARTED)))
+                {
+                    _local_3 = cAdventureDefinition.FindAdventureDefinition(_local_2.adventureName);
+                    if (((((_local_3 != null) && (!(_local_3.IsColony()))) && (!(_local_3.IsExpedition()))) && (_local_3.mMaxPlayers > 1)) && (_local_2.players.length < _local_3.mMaxPlayers))
+                    {
+                        _local_5 = false;
+                        for each (_local_4 in _local_2.players)
+                        {
+                            if (_local_4.id == _arg_1)
+                            {
+                                _local_5 = true;
+                                break;
+                            };
+                        };
+                        if (!_local_5)
+                        {
+                            return (_local_2);
+                        };
+                    };
+                };
+            };
+            return (null);
+        }
+
+        private function InviteToAdventure(_arg_1:MouseEvent):void
+        {
+            if (this.mInviteAdventure != null)
+            {
+                globalFlash.gui.mAdventurePanel.AddInvitedPlayer(this.mPlayer, this.mInviteAdventure);
+            };
         }
 
         private function Reply(_arg_1:MouseEvent):void

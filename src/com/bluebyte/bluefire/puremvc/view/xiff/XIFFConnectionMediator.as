@@ -41,6 +41,7 @@
         private var _messageQueueLastTime:Number = 0;
         private var _keepAlive:Timer;
         private var _connectionProxy:ConnectionProxy;
+        private var _lastDirectMessageRecipient:String;
 
         private var _messageQueueTime:Vector.<Number> = new Vector.<Number>();
         private var _messageQueueEvent:Vector.<MessageEvent> = new Vector.<MessageEvent>();
@@ -101,7 +102,21 @@
 
         private function connection_XiffErrorHandler(_arg_1:XIFFErrorEvent):void
         {
+            var _local_2:MessageVO;
             this._connectionProxy.errorCondition = _arg_1.errorCondition;
+            if (((_arg_1.errorCondition == "item-not-found") && (this._lastDirectMessageRecipient)))
+            {
+                _local_2 = new MessageVO();
+                _local_2.sender = new OccupantVO();
+                _local_2.sender.name = "SERVER";
+                _local_2.important = true;
+                _local_2.room = this._lastDirectMessageRecipient;
+                _local_2.text = TextController.instance.getText("UserOffline");
+                _local_2.time = new Date();
+                this._lastDirectMessageRecipient = null;
+                sendNotification(BlueFireFacade.ADD_MESSAGE, _local_2);
+                return;
+            };
             if (_arg_1.errorCondition == "Authentication Error")
             {
                 this._connectionProxy.status = ConnectionStatus.LOGIN_FAILED;
@@ -163,7 +178,8 @@
                     _local_3.addExtension(_local_4);
                 };
             };
-            if (_arg_1.data.errorCondition == "item-not-found")
+			
+            if ((((_arg_1.data.errorCondition == "item-not-found") || (_arg_1.data.errorCondition == "service-unavailable")) || (_arg_1.data.errorCondition == "recipient-unavailable")) || (_arg_1.data.errorCondition == "remote-server-not-found"))
             {
                 _local_3.sender.name = "SERVER";
                 _local_3.important = true;
@@ -309,7 +325,12 @@
                     this.connection.connect(XMPPConnection.STREAM_TYPE_FLASH);
                     return;
                 case XIFFConnectionMediator.XIFF_SEND_MESSAGE:
-                    this.connection.send((_arg_1.getBody() as Message));
+                    var _local_2:Message = (_arg_1.getBody() as Message);
+                    if (((_local_2.type != Message.TYPE_GROUPCHAT) && (_local_2.to != null)))
+                    {
+                        this._lastDirectMessageRecipient = _local_2.to.localpart;
+                    };
+                    this.connection.send(_local_2);
                     return;
                 case XIFFConnectionMediator.XIFF_CREATE_NEW_CONNECTION:
                     this.createNewConnection();

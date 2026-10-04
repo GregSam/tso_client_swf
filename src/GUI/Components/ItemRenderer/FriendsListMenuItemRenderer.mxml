@@ -98,7 +98,7 @@
             if (this.dataChanged)
             {
                 localValue1 = (data as dContextItemVO);
-                this.itemLabel.text = cLocaManager.GetInstance().GetText(localValue1.locaGroup, localValue1.key_string, localValue1.labelParams);
+                this.itemLabel.text = ((localValue1.locaGroup == "") ? localValue1.key_string : cLocaManager.GetInstance().GetText(localValue1.locaGroup, localValue1.key_string, localValue1.labelParams));
                 this.enabled = localValue1.enabled;
                 ToolTipManager.enabled = false;
                 this.toolTip = localValue1.tooltip_string;

@@ -35,6 +35,7 @@
         private var mTargetZoneId:int;
         private var isSkilled:Boolean = false;
         private var mMaxGeneralsLimit:int;
+        private var mPositionInitialized:Boolean = false;
 
 
         private function ClearHighlights():void
@@ -153,6 +154,14 @@
 
         override public function Show():void
         {
+            if (!this.mPositionInitialized)
+            {
+                this.mPanel.clearStyle("horizontalCenter");
+                this.mPanel.clearStyle("verticalCenter");
+                this.mPanel.x = Math.max(0, ((global.getApplication().stage.stageWidth - this.mPanel.width) / 2));
+                this.mPanel.y = Math.max(0, ((global.getApplication().stage.stageHeight - this.mPanel.height) / 2));
+                this.mPositionInitialized = true;
+            };
             this.mPanel.label = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, (((this.mGI.mCurrentPlayer.mIsAdventureZone) && (this.mTargetZoneId == this.mGI.mCurrentViewedZoneID)) ? "SendArmyBack" : "SendArmy"));
             this.mPanel.taskDuration.text = "";
             super.Show();
@@ -244,6 +253,7 @@
             this.mGI = (global.ui as cGameInterface);
             globalFlash.gui.windowController.addWindow(_arg_1);
             AddBaseElement(_arg_1);
+            EnableDragging();
             this.mPanel = _arg_1;
             this.mPanel.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
         }

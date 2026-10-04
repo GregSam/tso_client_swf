@@ -400,7 +400,7 @@
             super.Show();
             globalFlash.gui.windowController.setTop(this.mPanel, false);
             this.showTradeTabGlassAnimation();
-            if ((((this.lastHistoryUpdate + 15000) < getTimer()) && (this.allowHistoryUpdate)))
+            if (((this.lastHistoryUpdate == 0) || ((this.lastHistoryUpdate + 15000) < getTimer())))
             {
                 this.allowHistoryUpdate = false;
                 this.reloadHistory();

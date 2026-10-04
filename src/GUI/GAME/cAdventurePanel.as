@@ -470,10 +470,18 @@
             this.Hide();
         }
 
-        public function AddInvitedPlayer(_arg_1:dPlayerListItemVO):void
+        public function AddInvitedPlayer(_arg_1:dPlayerListItemVO, _arg_2:dAdventureClientInfoVO=null):void
         {
             var _local_2:dAdventurePlayerListItemVO;
             var _local_3:dAdventurePlayerListItemVO;
+            if (_arg_2 != null)
+            {
+                this.mCurrentAdventure = _arg_2;
+            };
+            if (this.mCurrentAdventure == null)
+            {
+                return;
+            };
             for each (_local_2 in this.mCurrentAdventure.players)
             {
                 if (_local_2.id == _arg_1.id)
