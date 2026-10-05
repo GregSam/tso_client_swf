@@ -2,6 +2,9 @@ name: Build clients
 
 on:
   push:
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - '.github/workflows/build.yml'
   workflow_dispatch:
 
 permissions:

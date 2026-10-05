@@ -5,6 +5,7 @@
 ### ✨ FEATURE
 
 - Added an adventure invitation action to the chat player context menu for friends and guild members.
+- Added clickable links in chat window.
 
 ### 🎨 UI / UX
 
