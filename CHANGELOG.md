@@ -1,5 +1,30 @@
 # Changelog
 
+## 2026-10-05
+
+### ✨ FEATURE
+
+- Added an adventure invitation action to the chat player context menu for friends and guild members.
+
+### 🎨 UI / UX
+
+- Made the send army window movable.
+- Restored trade history loading when the Market window history tab is opened for the first time.
+
+### 🐛 FIX
+
+- Restored the “player is offline” response for private chat messages rejected by the XMPP server.
+- Prevented game hotkeys and map scrolling from reacting to keyboard input in HTML-based client dialogs.
+
+## 2026-10-04
+
+### ✨ FEATURE
+
+- Embedded the desktop notification engine into `client.swf`.
+- Added an SWF-side buff application event bridge.
+
+## Earlier changes
+
 ### ✨ FEATURE
 
 - **Explorer groups**
