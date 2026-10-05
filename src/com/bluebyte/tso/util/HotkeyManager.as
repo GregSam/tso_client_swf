@@ -32,6 +32,7 @@
         private var _cancelAction:Function;
         private var _blueFireComponent:BlueFireComponent;
         private var _confirmAction:Function;
+        private var _enabled:Boolean = true;
 
 
         public static function getInstance():HotkeyManager
@@ -207,8 +208,21 @@
 
         private function onKeyDown(_arg_1:KeyboardEvent):void
         {
+            if (!this._enabled)
+            {
+                return;
+            };
             this.keyDownAlways(_arg_1);
             this.keyDown(_arg_1);
+        }
+
+        public function SetEnabled(_arg_1:Boolean):void
+        {
+            this._enabled = _arg_1;
+            if ((!_arg_1) && (this.gi is cGameInterface))
+            {
+                (this.gi as cGameInterface).ResetScrolling();
+            };
         }
 
         public function clearConfirmActions():void
@@ -229,6 +243,10 @@
         {
             var _local_4:ICustomAlert;
             var _local_2:CustomInput = this._blueFireComponent.chatInput;
+            if (!this._enabled)
+            {
+                return;
+            };
             if (_arg_1.target.parent == _local_2)
             {
                 return;
