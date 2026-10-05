@@ -142,7 +142,7 @@
             toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.RESOURCES, resource.name_string);
             if (amount >= 0)
             {
-                if (limit > 0) toolTip += ": " + amount + "/" + limit;
+                if (limit > 0) toolTip += ": " + cLocaManager.GetInstance().FormatNumber(amount) + "/" + cLocaManager.GetInstance().FormatNumber(limit);
                 amountText = formatAsNumber ? cLocaManager.GetInstance().FormatNumber(amount)
                     : cLocaManager.GetInstance().FormatAmount(amount);
             }

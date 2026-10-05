@@ -54,7 +54,7 @@
                 toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.RESOURCES, localValue1);
                 if (data.inStorage != null)
                 {
-                    toolTip = (toolTip + ("\n" + cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "InStorage", [data.inStorage])));
+                    toolTip = (toolTip + ("\n" + cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "InStorage", [cLocaManager.GetInstance().FormatNumber(data.inStorage)])));
                 };
             };
         }

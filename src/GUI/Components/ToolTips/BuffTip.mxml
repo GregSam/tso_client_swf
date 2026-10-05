@@ -23,7 +23,7 @@
             if ((_arg_1 is cBuff))
             {
                 _local_2 = (_arg_1 as cBuff);
-                this._amount = _local_2.GetAmount().toString();
+                this._amount = cLocaManager.GetInstance().FormatNumber(_local_2.GetAmount());
                 this._resourceName = _local_2.GetResourceName_string();
             }
             else
@@ -31,7 +31,7 @@
                 if ((_arg_1 is cBuffDefinition))
                 {
                     _local_3 = (_arg_1 as cBuffDefinition);
-                    this._amount = _local_3.GetAmount().toString();
+                    this._amount = cLocaManager.GetInstance().FormatNumber(_local_3.GetAmount());
                     this._resourceName = _local_3.GetResourceName_string();
                 }
                 else
@@ -39,21 +39,21 @@
                     if ((_arg_1 is dBuffVO))
                     {
                         _local_4 = (_arg_1 as dBuffVO);
-                        this._amount = _local_4.amount.toString();
+                        this._amount = cLocaManager.GetInstance().FormatNumber(_local_4.amount);
                         this._resourceName = _local_4.resourceName_string;
                     }
                     else
                     {
                         if ((_arg_1 is RenderableItem))
                         {
-                            this._amount = RenderableItem(_arg_1).getRenderAmount().toString();
+                            this._amount = cLocaManager.GetInstance().FormatNumber(RenderableItem(_arg_1).getRenderAmount());
                             this._resourceName = RenderableItem(_arg_1).getResourceGFXName();
                         }
                         else
                         {
                             if ((_arg_1 is EffectVO))
                             {
-                                this._amount = (_arg_1 as EffectVO).amount.toString();
+                                this._amount = cLocaManager.GetInstance().FormatNumber((_arg_1 as EffectVO).amount);
                                 this._resourceName = (_arg_1 as EffectVO).name_string;
                             };
                         };

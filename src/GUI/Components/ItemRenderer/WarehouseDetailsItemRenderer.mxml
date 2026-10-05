@@ -101,7 +101,7 @@
                 if (((!(this.nameString.indexOf("EpicMonsterHeart") == -1)) && (data.amount > -1)))
                 {
                     toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.RESOURCES, this.nameString);
-                    toolTip = (toolTip + ((": " + Math.floor(data.amount)) + ((((isNaN(data.maxLimit)) || (data.maxLimit == 0)) || (data.maxLimit == gMisc.GetMaxIntValue())) ? "" : ("/" + Math.floor(data.maxLimit)))));
+                    toolTip = (toolTip + ((": " + cLocaManager.GetInstance().FormatNumber(Math.floor(data.amount))) + ((((isNaN(data.maxLimit)) || (data.maxLimit == 0)) || (data.maxLimit == gMisc.GetMaxIntValue())) ? "" : ("/" + cLocaManager.GetInstance().FormatNumber(Math.floor(data.maxLimit))))));
                 };
             }
             else
@@ -113,7 +113,7 @@
                 toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.RESOURCES, this.nameString);
                 if (data.amount > -1)
                 {
-                    toolTip = (toolTip + ((": " + Math.floor(data.amount)) + ((((isNaN(data.maxLimit)) || (data.maxLimit == 0)) || (data.maxLimit == gMisc.GetMaxIntValue())) ? "" : ("/" + Math.floor(data.maxLimit)))));
+                    toolTip = (toolTip + ((": " + cLocaManager.GetInstance().FormatNumber(Math.floor(data.amount))) + ((((isNaN(data.maxLimit)) || (data.maxLimit == 0)) || (data.maxLimit == gMisc.GetMaxIntValue())) ? "" : ("/" + cLocaManager.GetInstance().FormatNumber(Math.floor(data.maxLimit))))));
                 };
             };
             this.capacityBar.maximum = data.maxLimit;

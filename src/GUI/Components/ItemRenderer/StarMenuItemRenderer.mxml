@@ -185,6 +185,7 @@
             this.foregroundIcon.source = null;
             this.foregroundIcon.visible = false;
             this.amountLabel.text = "";
+            this.amountLabel.toolTip = "";
             this.removeIcon.visible = false;
             this.busyAnim.visible = false;
             this.progress.visible = false;
@@ -443,6 +444,10 @@
                         this.amountLabel.text = "";
                     };
                 };
+            };
+            if (this.amountLabel.text != "")
+            {
+                this.amountLabel.toolTip = cLocaManager.GetInstance().FormatNumber(quantity);
             };
             dispatchEvent(new FlexEvent(FlexEvent.DATA_CHANGE));
         }

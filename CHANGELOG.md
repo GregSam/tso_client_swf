@@ -7,6 +7,7 @@
 - Added an adventure invitation action to the chat player context menu for friends and guild members.
 - Added clickable links in chat window.
 - Added new mail type filter with findAdventure loot
+- Format tooltip number with system separator
 
 ### 🎨 UI / UX
 

@@ -109,7 +109,7 @@
                 {
                     return (cLocaManager.GetInstance().GetText(LOCA_GROUP.DESCRIPTIONS, "EconomyMaxIndicator"));
                 };
-                return (Math.floor(argument1) + (((isNaN(this.currentResource.maxLimit)) || (this.currentResource.maxLimit == 0)) ? "" : ("/" + Math.floor(this.currentResource.maxLimit))));
+                return (cLocaManager.GetInstance().FormatNumber(Math.floor(argument1)) + (((isNaN(this.currentResource.maxLimit)) || (this.currentResource.maxLimit == 0)) ? "" : ("/" + cLocaManager.GetInstance().FormatNumber(Math.floor(this.currentResource.maxLimit)))));
             };
             return ("");
         }

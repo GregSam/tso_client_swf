@@ -66,7 +66,7 @@
             {
                 color = 0xFF00;
                 toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.RESOURCES, resource.name_string);
-                toolTip = (toolTip + (((" \n" + resource.producedAmount.toString()) + " + ") + (resource.amount - resource.producedAmount).toString()));
+                toolTip = (toolTip + (((" \n" + cLocaManager.GetInstance().FormatNumber(resource.producedAmount)) + " + ") + cLocaManager.GetInstance().FormatNumber(resource.amount - resource.producedAmount)));
             };
             refreshRendererPresentation();
         }
