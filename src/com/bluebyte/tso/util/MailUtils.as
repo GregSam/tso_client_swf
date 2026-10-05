@@ -57,6 +57,9 @@
                 case MAIL_TYPE_GROUP.ADVENTURE:
                     _local_2 = "mailGroupAdventure";
                     break;
+                case MAIL_TYPE_GROUP.EXPLORER_ADVENTURE:
+                    _local_2 = "FindAdventure";
+                    break;
                 case MAIL_TYPE_GROUP.MAIL_READ:
                     _local_2 = "mailGroupRead";
                     break;
@@ -100,6 +103,9 @@
             switch (_arg_1)
             {
                 case MAIL_TYPE_GROUP.ADVENTURE:
+                    _local_2 = "IconMailTypeAdventureLoot";
+                    break;
+                case MAIL_TYPE_GROUP.EXPLORER_ADVENTURE:
                     _local_2 = "IconMailTypeAdventureLoot";
                     break;
                 case MAIL_TYPE_GROUP.MAIL_READ:

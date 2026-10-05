@@ -15,6 +15,7 @@
         public static const BUFF:int = 9;
         public static const BATTLE_REPORT:int = 10;
         public static const HARD_CURRENCY:int = 11;
+        public static const EXPLORER_ADVENTURE:int = 12;
 
 
         public static function getMailGroup(_arg_1:int, _arg_2:Boolean):int
@@ -83,16 +84,17 @@
                 case MAIL_TYPE.HARD_CURRENCY_REMOVED:
                 case MAIL_TYPE.INVITED_FRIEND_PURCHASED:
                     return (HARD_CURRENCY);
-                case MAIL_TYPE.ADVENTURE_WON_LOOT:
-                case MAIL_TYPE.EXPEDITION_WON_LOOT:
-                case MAIL_TYPE.EXPEDITION_LOST_LOOT:
-                case MAIL_TYPE.ADVENTURE_LOST_LOOT:
-                case MAIL_TYPE.INVITE_TO_ADVENTURE:
                 case MAIL_TYPE.FIND_ADVENTURE_LOOT_POSITIVE:
                 case MAIL_TYPE.FIND_ADVENTURE_LOOT_POSITIVE_SKILLED:
                 case MAIL_TYPE.FIND_ADVENTURE_LOOT_NEGATIVE:
                 case MAIL_TYPE.FIND_ADVENTURE_LOOT_MAP_FRAGMENT:
                 case MAIL_TYPE.FIND_ADVENTURE_LOOT_MAP_FRAGMENT_SKILLED:
+                    return (EXPLORER_ADVENTURE);
+                case MAIL_TYPE.ADVENTURE_WON_LOOT:
+                case MAIL_TYPE.EXPEDITION_WON_LOOT:
+                case MAIL_TYPE.EXPEDITION_LOST_LOOT:
+                case MAIL_TYPE.ADVENTURE_LOST_LOOT:
+                case MAIL_TYPE.INVITE_TO_ADVENTURE:
                 case MAIL_TYPE.FIND_EXPEDITION_LOOT_POSITIVE:
                 case MAIL_TYPE.FIND_EXPEDITION_LOOT_NEGATIVE:
                 case MAIL_TYPE.ADVENTURE_LOCKED_COMPENSATION:
