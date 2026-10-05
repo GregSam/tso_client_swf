@@ -61,6 +61,12 @@
             var styleName:String;
             var usrTF:TextFormat;
             var msgTF:TextFormat;
+            var linkTF:TextFormat;
+            var linkPattern:RegExp;
+            var linkMatch:Object;
+            var linkText:String;
+            var linkUrl:String;
+            var linkStart:int;
             if (this.data == _value)
             {
                 return;
@@ -156,6 +162,23 @@
                     msgTF = this.getTextStyle(".communityleadmsg");
                 };
                 this.textField.setTextFormat(msgTF, msgStart, this.textField.text.length);
+                linkPattern = /(https?:\/\/[^\s]+|www\.[^\s]+)/gi;
+                linkMatch = linkPattern.exec(msg.text);
+                while (linkMatch != null)
+                {
+                    linkText = String(linkMatch[0]).replace(/[.,!?;:)\]}]+$/, "");
+                    if (linkText.length > 0)
+                    {
+                        linkUrl = ((linkText.toLowerCase().indexOf("www.") == 0) ? ("https://" + linkText) : linkText);
+                        linkStart = (msgStart + 1 + int(linkMatch.index));
+                        linkTF = new TextFormat();
+                        linkTF.color = 0x66CCFF;
+                        linkTF.underline = true;
+                        linkTF.url = ("event:action=openurl?url=" + encodeURIComponent(linkUrl));
+                        this.textField.setTextFormat(linkTF, linkStart, (linkStart + linkText.length));
+                    };
+                    linkMatch = linkPattern.exec(msg.text);
+                };
             }
             catch(e:Error)
             {

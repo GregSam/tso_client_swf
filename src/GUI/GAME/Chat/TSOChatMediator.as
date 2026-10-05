@@ -54,6 +54,8 @@
     import mx.events.CloseEvent;
     import Communication.VO.dPlayerListItemVO;
     import mx.events.ListEvent;
+    import flash.net.URLRequest;
+    import flash.net.navigateToURL;
 
     public class TSOChatMediator extends ChatPanelMediator 
     {
@@ -789,6 +791,10 @@
                 globalFlash.gui.mFriendsListMenu.SetData(_local_6, "ChatWindow");
                 globalFlash.gui.mFriendsListMenu.Show();
                 this.panel.messageHistory.addEventListener(MouseEvent.CLICK, this.HandleMessageHistoryStopClick);
+            }
+            else if (_local_3["action"] == "openurl")
+            {
+                navigateToURL(new URLRequest(decodeURIComponent(_local_3["url"])), "_blank");
             }
             else
             {
