@@ -8,6 +8,7 @@
         import flash.desktop.NativeApplication;
         import flash.events.InvokeEvent;
         import com.bluebyte.tso.util.ClientLogger;
+        import com.bluebyte.tso.util.ClientBuildInfo;
         import Interface.gInitStaticForAllZones;
         import nLib.cFilenameUtil;
         import GUI.Loca.TSOStyleManager;
@@ -15,24 +16,12 @@
         import mx.events.StyleEvent;
         import mx.events.FlexEvent;
         import flash.events.Event;
-        import flash.utils.ByteArray;
-
-        [Embed(source="../../../assets/version.txt", mimeType="application/octet-stream")]
-        private static var SwfCommit:Class;
-
         private var realmLang:String;
         private var realmBeta:Boolean;
         private var maxSteps:int;
         private var progressbarOriginalWidth:Number;
         private var currentStep:int;
         private var targetProgressWidth:Number;
-
-        private function getSwfCommit():String
-        {
-            var bytes:ByteArray = new SwfCommit() as ByteArray;
-            bytes.position = 0;
-            return bytes.readUTFBytes(bytes.length).replace(/^\s+|\s+$/g, "");
-        }
 
         private function setTargetProgressWidth(_arg_1:Number):void
         {
@@ -191,7 +180,7 @@
             loadingScreenBetaBackground.setStyle("fillColors", [0xFFFFFF, 0xCCCCCC, 0xFFFFFF, 0xEEEEEE]);
             loadingScreenBetaBackground.setStyle("fillAlphas", [0.6, 0.4, 0.75, 0.65]);
             loadingScreenBetaBackground.setStyle("highlightAlphas", [0.3, 0]);
-			swfCommitLabel.text = "swf commit: " + getSwfCommit();
+			swfCommitLabel.text = "swf commit: " + ClientBuildInfo.getSwfCommit();
 			gameVersionLabel.text = "game version: " + defines.VERSION_NR;
 			setStyle("fontAntiAliasType", "advanced");
             setStyle("fontGridFitType", "pixel");
