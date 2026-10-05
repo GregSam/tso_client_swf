@@ -12,6 +12,7 @@
     import com.bluebyte.bluefire.puremvc.view.xiff.XIFFConnectionMediator;
     import org.igniterealtime.xiff.events.MessageEvent;
     import org.puremvc.as3.multicore.interfaces.INotification;
+    import com.bluebyte.tso.chat.ChatLinkCodec;
 
     public class SendMessageCommand extends SimpleCommand 
     {
@@ -23,6 +24,7 @@
             var _local_6:IMessageExtension;
             var _local_2:ConnectionProxy = (facade.retrieveProxy(ConnectionProxy.NAME) as ConnectionProxy);
             var _local_4:String;
+            var _local_7:String = _arg_1.text;
             if (_arg_1.groupMessage)
             {
                 _local_3 = new EscapedJID(((_arg_1.receiver.name + "@conference.") + _local_2.server.ip));
@@ -32,7 +34,11 @@
             {
                 _local_3 = new EscapedJID(((_arg_1.receiver.name + "@") + _local_2.server.ip));
             };
-            var _local_5:Message = new Message(_local_3, null, _arg_1.text, null, _local_4);
+            if (((!(_arg_1.groupMessage)) || (_arg_1.room.indexOf("gc_") == 0)) || (_arg_1.room.indexOf("gco_") == 0))
+            {
+                _local_7 = ChatLinkCodec.encodeLinks(_local_7);
+            };
+            var _local_5:Message = new Message(_local_3, null, _local_7, null, _local_4);
             _local_5.from = new EscapedJID(((_arg_1.sender.name + "@") + _local_2.server.ip));
             for each (_local_6 in _arg_1.getAllExtensions())
             {

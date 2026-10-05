@@ -56,6 +56,7 @@
                     _local_2 = (_arg_1.getBody() as MessageVOContainer);
                     _local_2.message = new CustomMessageVO(_local_2.message);
                     _local_3 = (_local_2.message as CustomMessageVO);
+                    _local_3.text = ChatLinkCodec.decodeLinks(_local_3.text);
                     _local_4 = new CustomOccupantVO(_local_3.sender);
                     if (_local_3.getExtension("bbmsg"))
                     {

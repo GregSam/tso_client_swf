@@ -1252,6 +1252,17 @@ package Interface
             {
                 _local_2 = this.mCurrentPlayerGuild;
             };
+            if ((((_arg_1 != null) && (_local_2 != null)) && (_arg_1.id == _local_2.id)) && (_local_2.members != null))
+            {
+                if (((_arg_1.members == null) || (_arg_1.members.length == 0)))
+                {
+                    _arg_1.members = _local_2.members;
+                };
+                if ((((_arg_1.ranks == null) || (_arg_1.ranks.length == 0)) && (_local_2.ranks != null)))
+                {
+                    _arg_1.ranks = _local_2.ranks;
+                };
+            };
             if (_arg_1)
             {
                 if (_arg_1.guildBank)
@@ -1267,6 +1278,20 @@ package Interface
                 };
             };
             this.mCurrentPlayerGuild = _arg_1;
+            if ((((_local_2 != null) && (this.mCurrentPlayerGuild != null)) && (_local_2.members != null)) && (this.mCurrentPlayerGuild.members != null))
+            {
+                for each (_local_6 in _local_2.members)
+                {
+                    for each (_local_7 in this.mCurrentPlayerGuild.members)
+                    {
+                        if (_local_6.username == _local_7.username)
+                        {
+                            _local_7.onlineStatus = _local_6.onlineStatus;
+                            break;
+                        };
+                    };
+                };
+            };
             this.channels.SPECIALIST.notify(SpecialistNotifier.IN_GUILD, this.mCurrentPlayerGuild);
             if ((((this.isOnHomzone()) && (!(this.mVotesManager.GetPlayerVote().seen))) && (this.mVotesManager.IsVoteEnabled())))
             {
@@ -1283,20 +1308,6 @@ package Interface
             };
             globalFlash.gui.mFriendsList.Refresh();
             globalFlash.gui.mGuildWindow.SetGuild(_arg_1);
-            if (((!(_local_2 == null)) && (!(this.mCurrentPlayerGuild == null))))
-            {
-                for each (_local_6 in _local_2.members)
-                {
-                    for each (_local_7 in this.mCurrentPlayerGuild.members)
-                    {
-                        if (_local_6.username == _local_7.username)
-                        {
-                            _local_7.onlineStatus = _local_6.onlineStatus;
-                            break;
-                        };
-                    };
-                };
-            };
             if (globalFlash.gui.mChatPanel != null)
             {
                 if (this.mCurrentPlayerGuild)
