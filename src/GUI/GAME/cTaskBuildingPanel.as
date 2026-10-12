@@ -90,6 +90,7 @@
             this.mPanel.btnClosePanel.addEventListener(MouseEvent.CLICK, this.ClosePanel);
             this.mGI.channels.TASK_MANAGER.addPropertyObserver(TaskManagerChannel.UPDATED, this);
             this.mGI.channels.TASK_MANAGER.addPropertyObserver(TaskManagerChannel.TASK_FINISHED, this);
+            this.setPvpTaskBuildingTasks(cSettingsManager.getInstance().showPvpTaskBuildingTasks);
         }
 
         override public function SetData(_arg_1:cBuilding):void

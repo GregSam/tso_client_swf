@@ -875,10 +875,31 @@
             {
                 message.headlineLabel.text = _messageType;
             };
+            var aggregationKey:String = (((_messageType + "\u001F") + message.headlineLabel.text) + "\u001F") + message.messageBody.text;
+            var activeMessage:AvatarMessageItemRenderer = this.FindActiveMessage(aggregationKey, message);
+            message.aggregationKey = aggregationKey;
+            if (activeMessage != null)
+            {
+                activeMessage.addDuplicate();
+                message.forceHide();
+            };
             if (((globalFlash.gui.mChatPanel) && (globalFlash.gui.mChatPanel.IsConnectionEstablished())))
             {
                 globalFlash.gui.mChatPanel.PutMessageToChannelWithoutServer("news", new Date(), "System", message.messageBody.text, false, false);
             };
+        }
+
+        private function FindActiveMessage(_arg_1:String, _arg_2:AvatarMessageItemRenderer):AvatarMessageItemRenderer
+        {
+            var _local_3:AvatarMessageItemRenderer;
+            for each (_local_3 in this.mMessageList.getChildren())
+            {
+                if (((!(_local_3 == _arg_2)) && (_local_3.canAggregate(_arg_1))))
+                {
+                    return (_local_3);
+                };
+            };
+            return (null);
         }
 
         public function IsMessageInList(_arg_1:String):Boolean

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-12
+
+### 🎨 UI / UX
+
+- Repeated avatar notifications are now grouped into the active card with a counter; each repeat restarts its display timeout.
+
+### 🐛 FIX
+
+- Restored the saved Pathfinder task assignment toggle state after signing in and reopening the building window.
+
 ## 2026-10-09
 
 ### ✨ FEATURE
