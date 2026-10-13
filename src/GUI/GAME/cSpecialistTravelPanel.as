@@ -152,7 +152,7 @@
                 this.mPanel.syncColonyLayout();
                 this.lockedByKillSwitch = this.mGI.killswitch.isLocked(KILL_SWITCH.ADVENTURE_TRAVEL);
             };
-            for each (_local_6 in this.mGI.mCurrentPlayerZone.GetSpecialists_vector().concat().sort(CompareSpecialistsLikeStarMenu))
+            for each (_local_6 in this.mGI.mCurrentPlayerZone.GetSpecialists_vector().sort(CompareSpecialistsLikeStarMenu))
             {
                 if ((((_local_6.getPlayerID() == this.mGI.mCurrentPlayer.GetPlayerId()) && (_local_6.GetTask() == null)) && ((((_local_6.GetBaseType() == SPECIALIST_TYPE.GENERAL) || (_local_6.GetBaseType() == SPECIALIST_TYPE.TRANSPORTER_GENERAL)) && (!(_local_2))) || ((_local_6.GetBaseType() == SPECIALIST_TYPE.ADMIRAL) && (_local_2)))))
                 {
