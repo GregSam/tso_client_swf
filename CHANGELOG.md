@@ -5,7 +5,7 @@
 ### 🎨 UI / UX
 
 - Updated the Send Army window to use the Star Menu's default specialist ordering by type, localized name, and unique ID.
-- Reduced the Send Army window header and added a localized, case-insensitive general name filter.
+- Reduced the Send Army window header, added a localized case-insensitive general name filter, and added a checkbox to select or deselect all available generals shown by the current filter.
 
 ## 2026-10-12
 

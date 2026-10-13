@@ -207,6 +207,7 @@
                 if (data != null)
                 {
                     specialistType.setStyle("color", (data.selected === true) ? 0xFFEF00 : 0xFFFFFF);
+                    cbCheckMark.visible = (data.selected === true);
                 }
             }
             finally

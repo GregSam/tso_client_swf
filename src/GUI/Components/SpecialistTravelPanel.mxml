@@ -37,8 +37,8 @@
         public function syncColonyLayout(event:Event = null):void
         {
             colonyLimitsPanel.includeInLayout = colonyLimitsPanel.visible;
-            headerPanel.height = colonyLimitsPanel.visible ? 97 : 30;
-            var listTop:Number = colonyLimitsPanel.visible ? 100 : 33;
+            headerPanel.height = colonyLimitsPanel.visible ? 97 : 36;
+            var listTop:Number = colonyLimitsPanel.visible ? 100 : 39;
             listBackground.setStyle("top", listTop);
             availableSpecialists.setStyle("top", (listTop + 2));
             fetchingData.setStyle("top", listTop);
@@ -55,6 +55,8 @@
             _SpecialistTravelPanel_CustomLabel3.text = ((duration == undefined) ? null : String(duration));
             var search:* = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "AvatarNameErrorEmpty");
             searchLabel.text = ((search == undefined) ? null : String(search));
+            var select:* = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Select");
+            selectDisplayedCheckBox.toolTip = ((select == undefined) ? null : String(select));
         }
 
         public function __btnOK_toolTipCreate(event:ToolTipEvent):void
@@ -63,8 +65,8 @@
         }
     ]]></mx:Script>
     <gui:subComponents><mx:Array>
-        <mx:Canvas id="headerPanel" styleName="detailsHeader" height="97" left="2" right="2">
-            <mx:Canvas left="15" right="15" top="0" bottom="0">
+        <mx:Canvas id="headerPanel" styleName="detailsHeader" height="97" left="2" right="2" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+            <mx:Canvas left="15" right="15" top="0" bottom="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
                 <mx:HBox id="colonyLimitsPanel" height="30" top="2" left="0" right="0" horizontalAlign="center" verticalAlign="middle">
                     <mx:HBox horizontalAlign="center" verticalAlign="middle" horizontalGap="0">
                         <mx:Image id="_SpecialistTravelPanel_Image1" width="26" height="25" />
@@ -79,6 +81,7 @@
                 <mx:HBox horizontalCenter="0" bottom="4" verticalAlign="middle" horizontalGap="5">
                     <gui:CustomLabel id="searchLabel" width="110" textAlign="right" color="0xFFFFFF" />
                     <gui:CustomTextInput id="searchInput" width="230" height="20" styleName="standardInput" />
+                    <gui:StandardCheckBox id="selectDisplayedCheckBox" width="25" height="25" />
                 </mx:HBox>
             </mx:Canvas>
         </mx:Canvas>

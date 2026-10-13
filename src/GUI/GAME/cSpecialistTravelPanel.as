@@ -94,6 +94,7 @@
             this.mPanel.btnOK.addEventListener(MouseEvent.CLICK, this.SendSpecialist);
             this.mPanel.availableSpecialists.addEventListener(ListEvent.ITEM_CLICK, this.SelectSpecialist);
             this.mPanel.searchInput.addEventListener(Event.CHANGE, this.FilterSpecialists);
+            this.mPanel.selectDisplayedCheckBox.addEventListener(Event.CHANGE, this.SelectDisplayedSpecialists);
         }
 
         public function SetBusyOff():void
@@ -178,6 +179,46 @@
                 };
             };
             this.mPanel.availableSpecialists.dataProvider = _local_2;
+            this.UpdateSelectDisplayedCheckBox(false);
+        }
+
+        private function CanSelectSpecialist(_arg_1:SpecialistTravelItemData):Boolean
+        {
+            return ((_arg_1.useElite) || (!(_arg_1.specialist.GetArmy().HasEliteUnits())));
+        }
+
+        private function SelectDisplayedSpecialists(_arg_1:Event):void
+        {
+            var _local_2:Boolean = this.mPanel.selectDisplayedCheckBox.selected;
+            var _local_3:SpecialistTravelItemData;
+            for each (_local_3 in this.mPanel.availableSpecialists.dataProvider)
+            {
+                if (this.CanSelectSpecialist(_local_3))
+                {
+                    _local_3.selected = _local_2;
+                };
+            };
+            this.UpdateSelectionState();
+        }
+
+        private function UpdateSelectDisplayedCheckBox(_arg_1:Boolean=true):void
+        {
+            var _local_1:SpecialistTravelItemData;
+            var _local_2:Boolean;
+            var _local_3:Boolean = true;
+            for each (_local_1 in this.mPanel.availableSpecialists.dataProvider)
+            {
+                if (this.CanSelectSpecialist(_local_1))
+                {
+                    _local_2 = true;
+                    if (!_local_1.selected)
+                    {
+                        _local_3 = false;
+                    };
+                };
+            };
+            this.mPanel.selectDisplayedCheckBox.enabled = _local_2;
+            this.mPanel.selectDisplayedCheckBox.selected = (((_arg_1) && (_local_2)) && (_local_3));
         }
 
         override public function Show():void
@@ -197,16 +238,21 @@
 
         private function SelectSpecialist(_arg_1:ListEvent):void
         {
-            var _local_9:SpecialistTravelItemData;
-            var _local_10:cSpecialist;
-            var _local_11:Number;
-            var _local_12:Boolean;
             var _local_2:SpecialistTravelItemData = (_arg_1.itemRenderer.data as SpecialistTravelItemData);
             if (((!(_local_2)) || (!((_arg_1.itemRenderer as SpecialistTravelItemRenderer).canUse))))
             {
                 return;
             };
             _local_2.selected = (!(_local_2.selected));
+            this.UpdateSelectionState();
+        }
+
+        private function UpdateSelectionState():void
+        {
+            var _local_9:SpecialistTravelItemData;
+            var _local_10:cSpecialist;
+            var _local_11:Number;
+            var _local_12:Boolean;
             var _local_3:cAdventureDefinition = cAdventureDefinition.FindAdventureDefinition(this.mTargetAdventure.adventureName);
             var _local_4:Boolean = _local_3.UsesCombatThree();
             var _local_5:Number = 0;
@@ -274,6 +320,7 @@
             this.mPanel.troopsLabel.toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "TroopLimitCompleteData", [_local_6, this.mMaxTroopLimit, this.mMaxTroopLimit]);
             this.mPanel.admiralsLabel.text = (((this.mTargetAdventure.admiralCount + _local_7).toString() + " / ") + this.mMaxGeneralsLimit.toString());
             this.mPanel.admiralsLabel.toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "GeneralLimitCompleteData", [(this.mTargetAdventure.admiralCount + _local_7), this.mMaxGeneralsLimit, this.mMaxGeneralsLimit]);
+            this.UpdateSelectDisplayedCheckBox();
         }
 
         public function Init(_arg_1:SpecialistTravelPanel):void
