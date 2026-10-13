@@ -1,5 +1,43 @@
 # Changelog
 
+## 2026-10-13
+
+### 🎨 UI / UX
+
+- Updated the Send Army window to use the Star Menu's default specialist ordering by type, localized name, and unique ID.
+- Reduced the Send Army window header, added a localized case-insensitive general name filter, and added a checkbox to select or deselect all available generals shown by the current filter.
+
+## 2026-10-12
+
+### 🎨 UI / UX
+
+- Repeated avatar notifications are now grouped into the active card with a counter; each repeat restarts its display timeout.
+
+### 🐛 FIX
+
+- Restored the saved Pathfinder task assignment toggle state after signing in and reopening the building window.
+
+## 2026-10-09
+
+### ✨ FEATURE
+
+- Added an adventure invitation action to the bottom-bar player context menu for friends and guild members.
+
+### 🐛 FIX
+
+- Fixed a crash when opening the population overview tooltip before its child controls were initialized.
+
+## 2026-10-06
+
+### 🐛 FIX
+
+- Fixed XP icon in rewards
+
+### 🎨 UI / UX
+
+- Grouped MysterBox rewards
+- Format amount label in MysteryBox
+
 ## 2026-10-05
 
 ### ✨ FEATURE

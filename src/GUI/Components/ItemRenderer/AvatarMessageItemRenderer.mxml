@@ -60,6 +60,10 @@
 
         private var mData:Object;
 
+        private var duplicateCount:int = 0;
+
+        public var aggregationKey:String;
+
         public var iconView:AchievementIconView;
 
         public var AvatarMessageBackgroundHighlight:String = "AvatarMessageRedHighlight";
@@ -84,6 +88,25 @@
         public function setDisplayDurationTicks(argument1:Number=10000):void
         {
             this.displayDurationTicks = argument1;
+        }
+
+        public function canAggregate(key:String):Boolean
+        {
+            return (((key != null) && (this.aggregationKey == key)) && (!(this.hidden))) && (this.visible);
+        }
+
+        public function addDuplicate():void
+        {
+            this.duplicateCount++;
+            this.duplicateLabel.text = ("+" + this.duplicateCount);
+            this.duplicateLabel.visible = true;
+            if (this.fadeOut != null)
+            {
+                this.fadeOut.stop();
+            };
+            this.alpha = 1;
+            this.hidden = false;
+            this.SetHideTime();
         }
 
         public function onAvatarMessageItemRenderer_Canvas1_addedToStage(argument1:Event):void
@@ -219,4 +242,5 @@
     <mx:Image id="image" scaleContent="false"  left="0" right="185" top="5" bottom="5" horizontalAlign="center" verticalAlign="middle" />
     <ns3:AchievementIconViewComponent id="iconBox" visible="false"  left="5" top="5" />
     <ui:CustomText id="messageBody" selectable="false"  left="63" right="14" top="26" bottom="5" color="0xFFFFFF" />
+    <ui:CustomLabel id="duplicateLabel" visible="false" right="12" bottom="5" color="0xFFFFFF" fontWeight="bold" />
 </mx:Canvas>

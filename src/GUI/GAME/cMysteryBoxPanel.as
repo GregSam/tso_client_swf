@@ -17,7 +17,7 @@
     import GUI.Components.ItemRenderer.StarMenuItemRenderer;
     import Communication.VO.dUniqueID;
     import Enums.LOCA_GROUP;
-    import Communication.VO.dResourcesVO;
+    import Communication.VO.dResourceVO;
     import mx.events.ToolTipEvent;
     import GUI.Components.ToolTips.cToolTipUtil;
     import Communication.VO.dBuffVO;
@@ -152,6 +152,64 @@
             Show();
         }
 
+        private function GetGroupedDisplayItems(_arg_1:Object):Array
+        {
+            var _local_2:Array = [];
+            var _local_3:Object = {};
+            var _local_4:Object;
+            var _local_5:dBuffVO;
+            var _local_6:dBuffVO;
+            var _local_7:String;
+            for each (_local_4 in _arg_1)
+            {
+                if ((_local_4 is dBuffVO))
+                {
+                    _local_5 = (_local_4 as dBuffVO);
+                    _local_7 = (((_local_5.buffName_string.length + ":") + _local_5.buffName_string) + (("|" + _local_5.resourceName_string.length) + ":")) + _local_5.resourceName_string;
+                    _local_6 = (_local_3[_local_7] as dBuffVO);
+                    if (_local_6 != null)
+                    {
+                        _local_6.amount = (_local_6.amount + _local_5.amount);
+                    }
+                    else
+                    {
+                        _local_6 = dBuffVO.cloneDBuffVO(_local_5);
+                        _local_3[_local_7] = _local_6;
+                        _local_2.push(_local_6);
+                    };
+                }
+                else
+                {
+                    _local_2.push(_local_4);
+                };
+            };
+            return (_local_2);
+        }
+
+        private function FormatFrameAmount(_arg_1:FlexEvent):void
+        {
+            var _local_2:Frame = (_arg_1.currentTarget as Frame);
+            if ((((_local_2 != null) && (_local_2.amountLabel != null)) && (_local_2.amountLabel.text != "")))
+            {
+                _local_2.amountLabel.text = this.mLM.FormatNumber(_local_2.amount);
+            };
+        }
+
+        private function FormatRendererAmount(_arg_1:FlexEvent):void
+        {
+            var _local_2:StarMenuItemRenderer = (_arg_1.currentTarget as StarMenuItemRenderer);
+            var _local_3:cBuff;
+            if ((((_local_2 == null) || (_local_2.amountLabel == null)) || (_local_2.amountLabel.text == "")))
+            {
+                return;
+            };
+            _local_3 = (_local_2.data as cBuff);
+            if (_local_3 != null)
+            {
+                _local_2.amountLabel.text = this.mLM.FormatNumber(_local_3.GetAmount());
+            };
+        }
+
         public function SetResult(_items:dLootItemsVO):void
         {
             var vo:* = undefined;
@@ -165,13 +223,15 @@
             };
             this.mPanel.rewardText.text = this.mLM.GetText(LOCA_GROUP.DESCRIPTIONS, "ContentMysteryBox");
             this.mPanel.busyAnim.visible = false;
-            for each (vo in _items.items)
+            for each (vo in this.GetGroupedDisplayItems(_items.items))
             {
-                if (((vo is dResourcesVO) && (vo.name_string == "XP")))
+                if (((vo is dResourceVO) && ((vo.name_string == "XP") || (vo.name_string == defines.PVP_XP_string))))
                 {
                     item = vo;
                     frame = new Frame();
+                    frame.addEventListener(FlexEvent.DATA_CHANGE, this.FormatFrameAmount, false, 0, true);
                     frame.contentType = Frame.CONTENT_TYPE_RESOURCE;
+                    frame.type = Frame.BUFF_INSTANT;
                     frame.amount = vo.amount;
                     frame.content = vo.name_string;
                     frame.toolTip = this.mLM.GetText(LOCA_GROUP.RESOURCES, vo.name_string);
@@ -189,6 +249,7 @@
                         {
                             item = cBuff.CreateBuffFromVO(vo);
                             gemFrame = new Frame();
+                            gemFrame.addEventListener(FlexEvent.DATA_CHANGE, this.FormatFrameAmount, false, 0, true);
                             gemFrame.contentType = Frame.CONTENT_TYPE_RESOURCE;
                             gemFrame.type = Frame.BUFF_INSTANT;
                             gemFrame.amount = vo.amount;
@@ -207,6 +268,7 @@
                         };
                     };
                     renderer = new StarMenuItemRenderer();
+                    renderer.addEventListener(FlexEvent.DATA_CHANGE, this.FormatRendererAmount, false, 0, true);
                     renderer.data = item;
                     this.mPanel.itemsList.addChild(renderer);
                 };

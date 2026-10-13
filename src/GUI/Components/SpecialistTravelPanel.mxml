@@ -95,9 +95,14 @@
             resizeStage = null;
         }
 
-        private function syncColonyLayout(event:Event = null):void
+        public function syncColonyLayout(event:Event = null):void
         {
             colonyLimitsPanel.includeInLayout = colonyLimitsPanel.visible;
+            headerPanel.height = colonyLimitsPanel.visible ? 97 : 36;
+            var listTop:Number = colonyLimitsPanel.visible ? 100 : 39;
+            listBackground.setStyle("top", listTop);
+            availableSpecialists.setStyle("top", (listTop + 2));
+            fetchingData.setStyle("top", listTop);
         }
 
         private function syncBusyIndicator(event:Event = null):void
@@ -109,6 +114,10 @@
         {
             var duration:* = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Duration");
             _SpecialistTravelPanel_CustomLabel3.text = ((duration == undefined) ? null : String(duration));
+            var search:* = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "AvatarNameErrorEmpty");
+            searchLabel.text = ((search == undefined) ? null : String(search));
+            var select:* = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "Select");
+            selectDisplayedCheckBox.toolTip = ((select == undefined) ? null : String(select));
         }
 
         public function __btnOK_toolTipCreate(event:ToolTipEvent):void
@@ -117,8 +126,8 @@
         }
     ]]></mx:Script>
     <gui:subComponents><mx:Array>
-        <mx:Canvas id="headerPanel" styleName="detailsHeader" height="97" left="2" right="2">
-            <mx:Canvas left="15" right="15" top="5" bottom="4">
+        <mx:Canvas id="headerPanel" styleName="detailsHeader" height="97" left="2" right="2" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+            <mx:Canvas left="15" right="15" top="0" bottom="0" horizontalScrollPolicy="off" verticalScrollPolicy="off">
                 <mx:HBox id="colonyLimitsPanel" height="30" top="2" left="0" right="0" horizontalAlign="center" verticalAlign="middle">
                     <mx:HBox horizontalAlign="center" verticalAlign="middle" horizontalGap="0">
                         <mx:Image id="_SpecialistTravelPanel_Image1" width="26" height="25" />
@@ -129,10 +138,15 @@
                         <gui:CustomLabel id="admiralsLabel" text="0/0" color="0xFFFFFF" />
                     </mx:HBox>
                 </mx:HBox>
-                <gui:CustomText id="lblSendArmyDescription" top="20" left="10" right="10" color="0xFFFFFF" fontWeight="normal" />
+                <gui:CustomText id="lblSendArmyDescription" top="20" bottom="30" left="10" right="10" color="0xFFFFFF" fontWeight="normal" />
+                <mx:HBox horizontalCenter="0" bottom="4" verticalAlign="middle" horizontalGap="5">
+                    <gui:CustomLabel id="searchLabel" width="110" textAlign="right" color="0xFFFFFF" />
+                    <gui:CustomTextInput id="searchInput" width="230" height="20" styleName="standardInput" />
+                    <gui:StandardCheckBox id="selectDisplayedCheckBox" width="25" height="25" />
+                </mx:HBox>
             </mx:Canvas>
         </mx:Canvas>
-        <mx:Canvas styleName="listBackgroundShadow" left="8" right="26" top="100" bottom="113" />
+        <mx:Canvas id="listBackground" styleName="listBackgroundShadow" left="8" right="26" top="100" bottom="113" />
         <gui:CustomTileList id="availableSpecialists" columnWidth="255" rowHeight="84" verticalScrollPolicy="auto" horizontalScrollPolicy="off" left="11" right="9" top="102" bottom="116" paddingTop="0" paddingBottom="0" paddingLeft="0" paddingRight="0" useRollOver="false" borderThickness="0" backgroundAlpha="0" />
         <mx:Canvas id="confirmFooter" left="7" right="8" bottom="13">
             <mx:Canvas styleName="detailsSubHeader" height="18" percentWidth="100">
