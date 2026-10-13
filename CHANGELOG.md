@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-13
+
+### 🎨 UI / UX
+
+- Updated the Send Army window to use the Star Menu's default specialist ordering by type, localized name, and unique ID.
+- Reduced the Send Army window header and added a localized, case-insensitive general name filter.
+
 ## 2026-10-12
 
 ### 🎨 UI / UX

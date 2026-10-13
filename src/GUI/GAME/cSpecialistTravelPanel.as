@@ -14,7 +14,6 @@
     import GUI.Loca.cLocaManager;
     import Enums.LOCA_GROUP;
     import Enums.KILL_SWITCH;
-    import Specialists.cSpecialistDescription;
     import Enums.SPECIALIST_TYPE;
     import GUI.Components.ItemRenderer.SpecialistTravelItemRenderer;
     import Skill.cSkill;
@@ -22,6 +21,7 @@
     import Modifier.Modifiers.Common.ZoneTravelSpeed;
     import Enums.SPECIALIST_TASK_TYPES;
     import Modifier.Modifiers.Combat.CombatModifier;
+    import flash.events.Event;
 
     public class cSpecialistTravelPanel extends cBasicPanel 
     {
@@ -36,14 +36,21 @@
         private var isSkilled:Boolean = false;
         private var mMaxGeneralsLimit:int;
         private var mPositionInitialized:Boolean = false;
+        private var mAvailableSpecialists:ArrayCollection = new ArrayCollection();
+
+
+        private static function CompareSpecialistsLikeStarMenu(_arg_1:cSpecialist, _arg_2:cSpecialist):Number
+        {
+            return (cStarMenu.CompareDefault(_arg_1, _arg_2, 1));
+        }
 
 
         private function ClearHighlights():void
         {
             var _local_1:SpecialistTravelItemData;
-            if (this.mPanel.availableSpecialists.dataProvider != null)
+            if (this.mAvailableSpecialists != null)
             {
-                for each (_local_1 in this.mPanel.availableSpecialists.dataProvider)
+                for each (_local_1 in this.mAvailableSpecialists)
                 {
                     _local_1.selected = false;
                 };
@@ -54,7 +61,7 @@
         {
             var _local_2:SpecialistTravelItemData;
             var _local_3:cSpecialist;
-            for each (_local_2 in this.mPanel.availableSpecialists.dataProvider)
+            for each (_local_2 in this.mAvailableSpecialists)
             {
                 if (_local_2.selected)
                 {
@@ -86,6 +93,7 @@
             this.mPanel.btnCancel.addEventListener(MouseEvent.CLICK, this.ClosePanel);
             this.mPanel.btnOK.addEventListener(MouseEvent.CLICK, this.SendSpecialist);
             this.mPanel.availableSpecialists.addEventListener(ListEvent.ITEM_CLICK, this.SelectSpecialist);
+            this.mPanel.searchInput.addEventListener(Event.CHANGE, this.FilterSpecialists);
         }
 
         public function SetBusyOff():void
@@ -94,7 +102,7 @@
             this.SetData(this.mTargetZoneId);
             this.mPanel.fetchingData.visible = false;
             this.mPanel.btnOK.enabled = false;
-            for each (_local_1 in this.mPanel.availableSpecialists.dataProvider)
+            for each (_local_1 in this.mAvailableSpecialists)
             {
                 if (_local_1.selected)
                 {
@@ -131,6 +139,7 @@
                 this.mPanel.admiralsLabel.text = ((this.mTargetAdventure.admiralCount.toString() + " / ") + this.mMaxGeneralsLimit.toString());
                 this.mPanel.lblSendArmyDescription.text = ("\n" + cLocaManager.GetInstance().GetText(LOCA_GROUP.DESCRIPTIONS, "TroopLimitCompleteData"));
                 this.mPanel.colonyLimitsPanel.visible = true;
+                this.mPanel.syncColonyLayout();
                 this.mPanel.troopsLabel.toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "TroopLimitCompleteData", [0, this.mMaxTroopLimit, this.mMaxTroopLimit]);
                 this.mPanel.admiralsLabel.toolTip = cLocaManager.GetInstance().GetText(LOCA_GROUP.LABELS, "GeneralLimitCompleteData", [this.mTargetAdventure.admiralCount, this.mMaxGeneralsLimit, this.mMaxGeneralsLimit]);
                 this.lockedByKillSwitch = this.mGI.killswitch.isLocked(KILL_SWITCH.PVP_COLONY_TRAVEL);
@@ -139,17 +148,36 @@
             {
                 this.mPanel.lblSendArmyDescription.text = "";
                 this.mPanel.colonyLimitsPanel.visible = false;
+                this.mPanel.syncColonyLayout();
                 this.lockedByKillSwitch = this.mGI.killswitch.isLocked(KILL_SWITCH.ADVENTURE_TRAVEL);
             };
-            for each (_local_6 in this.mGI.mCurrentPlayerZone.GetSpecialists_vector().sort(cSpecialistDescription.CompareBySortIndex))
+            for each (_local_6 in this.mGI.mCurrentPlayerZone.GetSpecialists_vector().sort(CompareSpecialistsLikeStarMenu))
             {
                 if ((((_local_6.getPlayerID() == this.mGI.mCurrentPlayer.GetPlayerId()) && (_local_6.GetTask() == null)) && ((((_local_6.GetBaseType() == SPECIALIST_TYPE.GENERAL) || (_local_6.GetBaseType() == SPECIALIST_TYPE.TRANSPORTER_GENERAL)) && (!(_local_2))) || ((_local_6.GetBaseType() == SPECIALIST_TYPE.ADMIRAL) && (_local_2)))))
                 {
                     _local_4.addItem(new SpecialistTravelItemData(_local_6, _local_2, _local_3));
                 };
             };
-            this.mPanel.availableSpecialists.dataProvider = _local_4;
+            this.mAvailableSpecialists = _local_4;
+            this.FilterSpecialists();
             this.mPanel.btnOK.enabled = false;
+        }
+
+        private function FilterSpecialists(_arg_1:Event=null):void
+        {
+            var _local_2:ArrayCollection = new ArrayCollection();
+            var _local_3:String = this.mPanel.searchInput.text.toLocaleLowerCase();
+            var _local_4:SpecialistTravelItemData;
+            var _local_5:String;
+            for each (_local_4 in this.mAvailableSpecialists)
+            {
+                _local_5 = _local_4.specialist.getName(false).replace(/<[^>]+>/g, "").toLocaleLowerCase();
+                if (((_local_3.length == 0) || (_local_5.indexOf(_local_3) != -1)))
+                {
+                    _local_2.addItem(_local_4);
+                };
+            };
+            this.mPanel.availableSpecialists.dataProvider = _local_2;
         }
 
         override public function Show():void
@@ -189,7 +217,7 @@
             this.mPanel.taskDuration.text = "";
             this.isSkilled = false;
             var _local_8:Boolean;
-            for each (_local_9 in this.mPanel.availableSpecialists.dataProvider)
+            for each (_local_9 in this.mAvailableSpecialists)
             {
                 if (_local_9.selected)
                 {
@@ -271,7 +299,7 @@
             {
                 return (false);
             };
-            for each (_local_2 in this.mPanel.availableSpecialists.dataProvider)
+            for each (_local_2 in this.mAvailableSpecialists)
             {
                 if (_local_2.selected)
                 {
