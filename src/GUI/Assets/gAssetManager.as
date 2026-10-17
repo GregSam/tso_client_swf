@@ -1595,6 +1595,18 @@
         [Embed(source="../../../assets/gAssetManager/OnlineStatusGreen.png")]
         private static const OnlineStatusGreen:Class;
 
+        [Embed(source="../../../assets/gAssetManager/OnlineStatusChat.png")]
+        private static const OnlineStatusChat:Class;
+
+        [Embed(source="../../../assets/gAssetManager/OnlineStatusAway.png")]
+        private static const OnlineStatusAway:Class;
+
+        [Embed(source="../../../assets/gAssetManager/OnlineStatusXa.png")]
+        private static const OnlineStatusXa:Class;
+
+        [Embed(source="../../../assets/gAssetManager/OnlineStatusDnd.png")]
+        private static const OnlineStatusDnd:Class;
+
         [Embed(source="../../../assets/gAssetManager/FrameArrow.png")]
         private static const FrameArrow:Class;
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-10-18
+
+### ✨ FEATURE
+
+- Added `/status online|chat|away|xa|dnd` to set chat presence manually for friends and guild members.
+- Automatically switch from online to away after five minutes without mouse or keyboard activity in the game, and restore online when the player returns. Manually selected statuses are preserved.
+
+### 🎨 UI / UX
+
+- Added distinct status indicators for chat, away, extended away, and do not disturb while retaining the original online indicator.
+
 ## 2026-10-13
 
 ### 🎨 UI / UX

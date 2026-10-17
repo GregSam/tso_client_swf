@@ -20,6 +20,7 @@
 
         private var _connectionProxy:ConnectionProxy;
         private var _joinRoomInProgress:Boolean = false;
+        private var _presenceShow:String;
         private var _facade:BlueFireFacade;
         private var _connection:XMPPConnection;
 
@@ -59,6 +60,15 @@
                 _local_4 = int(_local_2[1]);
             };
             _local_3.joinGroupChatInstance(_local_4);
+        }
+
+        public function updatePresence(show:String):void
+        {
+            this._presenceShow = show;
+            for each (var roomGroup:RoomGroup in this._roomGroups)
+            {
+                roomGroup.updatePresence(show);
+            }
         }
 
         public function setChannelAutoJoin(_arg_1:String, _arg_2:Boolean):void
@@ -125,6 +135,10 @@
 
         private function handleRoomJoin(_arg_1:RoomManagerEvent):void
         {
+            if (this._presenceShow != null)
+            {
+                RoomGroup(_arg_1.target).updatePresence(this._presenceShow);
+            }
             if (this._pendingRoomsToJoin.getItemIndex(_arg_1.target) != -1)
             {
                 this._pendingRoomsToJoin.removeItemAt(this._pendingRoomsToJoin.getItemIndex(_arg_1.target));

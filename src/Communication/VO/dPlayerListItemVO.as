@@ -12,6 +12,8 @@
     {
 
         private var _1159866405onlineStatus:Boolean;
+        private var _presenceShow:String;
+        private var _presenceStatus:String;
         public var adventureVO:dAdventureClientInfoVO = null;
         public var username:String;
         public var avatarId:int;
@@ -62,6 +64,38 @@
                 this._1159866405onlineStatus = _arg_1;
                 this.dispatchEvent(PropertyChangeEvent.createUpdateEvent(this, "onlineStatus", _local_2, _arg_1));
             };
+        }
+
+        public function set presenceShow(value:String):void
+        {
+            var previous:String = this._presenceShow;
+            if (previous !== value)
+            {
+                this._presenceShow = value;
+                this.dispatchEvent(PropertyChangeEvent.createUpdateEvent(this, "presenceShow", previous, value));
+            }
+        }
+
+        [Bindable(event="propertyChange")]
+        public function get presenceShow():String
+        {
+            return (this._presenceShow);
+        }
+
+        public function set presenceStatus(value:String):void
+        {
+            var previous:String = this._presenceStatus;
+            if (previous !== value)
+            {
+                this._presenceStatus = value;
+                this.dispatchEvent(PropertyChangeEvent.createUpdateEvent(this, "presenceStatus", previous, value));
+            }
+        }
+
+        [Bindable(event="propertyChange")]
+        public function get presenceStatus():String
+        {
+            return (this._presenceStatus);
         }
 
         public function willTrigger(_arg_1:String):Boolean

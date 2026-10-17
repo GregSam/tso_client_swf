@@ -31,6 +31,9 @@
         private var mFriendListPlayer:dPlayerListItemVO;
         private var mList:Array;
         private var mOnlineStatusGuildQueue:Object;
+        private var mPresenceFriendQueue:Object = {};
+        private var mPresenceGuildQueue:Object = {};
+        private var mOwnPresenceShow:String;
         private var mOnlineFilterRefreshPending:Boolean = false;
 
 
@@ -91,6 +94,42 @@
                 };
             };
             this.ScheduleOnlineFilterRefresh();
+        }
+
+        public function SetPresenceStatus(name:String, online:Boolean, show:String, status:String, guild:Boolean=false):void
+        {
+            this.SetOnlineStatus(name, online, guild);
+            var player:dPlayerListItemVO = guild ? this.GetGuildMemberByName_string(name) : this.GetFriendByName_string(name);
+            if (player != null)
+            {
+                player.presenceShow = online ? show : null;
+                player.presenceStatus = online ? status : null;
+            }
+            else
+            {
+                var queue:Object = guild ? this.mPresenceGuildQueue : this.mPresenceFriendQueue;
+                queue[name] = {
+                    show: online ? show : null,
+                    status: online ? status : null
+                };
+            }
+        }
+
+        public function SetOwnPresenceStatus(show:String):void
+        {
+            this.mOwnPresenceShow = show;
+            if (this.mFriendListPlayer != null)
+            {
+                this.mFriendListPlayer.presenceShow = show;
+                if (this.mFriendListPlayer.username != null)
+                {
+                    var friend:dPlayerListItemVO = this.GetFriendByName_string(this.mFriendListPlayer.username.toLowerCase());
+                    if (friend != null)
+                    {
+                        friend.presenceShow = show;
+                    }
+                }
+            }
         }
 
         private function ScheduleOnlineFilterRefresh():void
@@ -188,6 +227,13 @@
                     this.mOnlineStatusFriendQueue[_local_5.username.toLowerCase()] = null;
                     delete this.mOnlineStatusFriendQueue[_local_5.username.toLowerCase()];
                 };
+                var pendingPresence:Object = this.mPresenceFriendQueue[_local_5.username.toLowerCase()];
+                if (pendingPresence != null)
+                {
+                    _local_5.presenceShow = pendingPresence.show;
+                    _local_5.presenceStatus = pendingPresence.status;
+                    delete this.mPresenceFriendQueue[_local_5.username.toLowerCase()];
+                }
                 _local_3.push(_local_5);
             };
             for each (_local_6 in this.mOnlineStatusFriendQueue)
@@ -215,6 +261,13 @@
                         this.mOnlineStatusGuildQueue[_local_11.username.toLowerCase()] = null;
                         delete this.mOnlineStatusGuildQueue[_local_11.username.toLowerCase()];
                     };
+                    var pendingGuildPresence:Object = this.mPresenceGuildQueue[_local_11.username.toLowerCase()];
+                    if (pendingGuildPresence != null)
+                    {
+                        _local_11.presenceShow = pendingGuildPresence.show;
+                        _local_11.presenceStatus = pendingGuildPresence.status;
+                        delete this.mPresenceGuildQueue[_local_11.username.toLowerCase()];
+                    }
                 };
                 for each (_local_6 in this.mOnlineStatusGuildQueue)
                 {
@@ -461,6 +514,8 @@
             this.mFriendsList = _arg_1;
             this.mOnlineStatusFriendQueue = {};
             this.mOnlineStatusGuildQueue = {};
+            this.mPresenceFriendQueue = {};
+            this.mPresenceGuildQueue = {};
             this.mFriendsList.addEventListener(FlexEvent.CREATION_COMPLETE, this.completeHandler);
         }
 
@@ -468,6 +523,10 @@
         {
             var _local_1:dPlayerListItemVO = globalFlash.gui.mAvatar.GetDisplayedPlayerVO();
             this.mFriendListPlayer = _local_1;
+            if (this.mFriendListPlayer != null)
+            {
+                this.mFriendListPlayer.presenceShow = this.mOwnPresenceShow;
+            }
             this.SetData(this.mList);
         }
 

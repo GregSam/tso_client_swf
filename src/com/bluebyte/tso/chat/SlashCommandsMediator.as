@@ -19,6 +19,8 @@
     import com.bluebyte.tso.chat.Commands.cUnban;
     import com.bluebyte.tso.chat.Commands.cReportingShow;
     import com.bluebyte.tso.chat.Commands.cUnblock;
+    import com.bluebyte.tso.chat.Commands.cPresenceStatus;
+    import com.bluebyte.bluefire.puremvc.view.xiff.XIFFRosterMediator;
     import com.bluebyte.bluefire.puremvc.BlueFireFacade;
     import com.bluebyte.bluefire.api.controller.slashCommands.SlashCommand;
     import com.bluebyte.bluefire.puremvc.model.ConnectionProxy;
@@ -39,7 +41,7 @@
 
         override public function listNotificationInterests():Array
         {
-            return ([cAll.COMMAND_ALL, cBan.COMMAND_BAN, cChatInfoCommand.COMMAND_CHAT_INFO, cFindBan.COMMAND_FIND_BAN, cFindFriend.COMMAND_FIND_FRIEND, cFindUser.COMMAND_FIND_USER, cHelp.COMMAND_HELP, cIgnoreAdd.COMMAND_IGNORE_ADD, cIgnoreRemove.COMMAND_IGNORE_REMOVE, cIgnoreShow.COMMAND_IGNORE_SHOW, cJoinChat.COMMAND_JOIN_CHAT, cLeaveChat.COMMAND_LEAVE_CHAT, cReport.COMMAND_REPORT, cShowModLog.COMMAND_SHOW_MOD_LOG, cUnban.COMMAND_UNBAN, cReportingShow.COMMAND_REPORTING_SHOW, cUnblock.COMMAND_UNBLOCK]);
+            return ([cAll.COMMAND_ALL, cBan.COMMAND_BAN, cChatInfoCommand.COMMAND_CHAT_INFO, cFindBan.COMMAND_FIND_BAN, cFindFriend.COMMAND_FIND_FRIEND, cFindUser.COMMAND_FIND_USER, cHelp.COMMAND_HELP, cIgnoreAdd.COMMAND_IGNORE_ADD, cIgnoreRemove.COMMAND_IGNORE_REMOVE, cIgnoreShow.COMMAND_IGNORE_SHOW, cJoinChat.COMMAND_JOIN_CHAT, cLeaveChat.COMMAND_LEAVE_CHAT, cReport.COMMAND_REPORT, cShowModLog.COMMAND_SHOW_MOD_LOG, cUnban.COMMAND_UNBAN, cReportingShow.COMMAND_REPORTING_SHOW, cUnblock.COMMAND_UNBLOCK, cPresenceStatus.COMMAND_PRESENCE_STATUS]);
         }
 
         protected function registerSlashCommand(_arg_1:SlashCommand):void
@@ -72,6 +74,7 @@
             this.registerSlashCommand(new cUnban());
             this.registerSlashCommand(new cReportingShow());
             this.registerSlashCommand(new cUnblock());
+            this.registerSlashCommand(new cPresenceStatus());
         }
 
         override public function handleNotification(_arg_1:INotification):void
@@ -82,6 +85,9 @@
             var _local_4:int = this.panel.mucs.dataProvider.getItemIndex(this.panel.selectedChannel);
             switch (_arg_1.getName())
             {
+                case cPresenceStatus.COMMAND_PRESENCE_STATUS:
+                    sendNotification(XIFFRosterMediator.SET_PRESENCE, (_arg_1.getBody() as String).replace(/^\/status\s+/i, "").replace(/\s+$/, "").toLowerCase());
+                    return;
                 case cAll.COMMAND_ALL:
                 case cBan.COMMAND_BAN:
                 case cChatInfoCommand.COMMAND_CHAT_INFO:

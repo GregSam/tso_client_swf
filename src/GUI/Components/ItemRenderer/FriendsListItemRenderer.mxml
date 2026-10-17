@@ -112,6 +112,7 @@
                 };
             };
             this.onlineStatus.visible = data.onlineStatus;
+            this.updatePresenceIndicator();
             this.currentZoneMarker.visible = (data.id == global.ui.mCurrentViewedZoneID);
             if (data.id == global.ui.mCurrentPlayer.GetPlayerId())
             {
@@ -148,6 +149,29 @@
         private var rendererPresentationUpdating:Boolean = false;
         private var rendererUpdates:RendererPresentationUpdates;
 
+        private function updatePresenceIndicator():void
+        {
+            var show:String = data.presenceShow;
+            var assetName:String = "OnlineStatusGreen";
+            switch (show)
+            {
+                case "away":
+                    assetName = "OnlineStatusAway";
+                    break;
+                case "xa":
+                    assetName = "OnlineStatusXa";
+                    break;
+                case "dnd":
+                    assetName = "OnlineStatusDnd";
+                    break;
+                case "chat":
+                    assetName = "OnlineStatusChat";
+                    break;
+            }
+            this.onlineStatus.source = gAssetManager.GetBitmap(assetName);
+            this.onlineStatus.toolTip = data.presenceStatus ? data.presenceStatus : (show ? show : "online");
+        }
+
         override protected function childrenCreated():void
         {
             super.childrenCreated();
@@ -182,6 +206,12 @@
             try
             {
                 rendererUpdates.observe([[data, "propertyChange"]]);
+
+                if (data != null)
+                {
+                    this.onlineStatus.visible = data.onlineStatus;
+                    this.updatePresenceIndicator();
+                }
 
             }
             finally

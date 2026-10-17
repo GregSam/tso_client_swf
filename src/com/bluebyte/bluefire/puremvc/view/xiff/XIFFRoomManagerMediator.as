@@ -30,7 +30,7 @@
 
         override public function listNotificationInterests():Array
         {
-            return ([BlueFireFacade.CONNECTED, BlueFireFacade.ROOM_JOIN, BlueFireFacade.ROOM_JOIN_EXPLICIT, BlueFireFacade.ROOM_LEAVE, BlueFireFacade.ROOM_JOIN_ALL, BlueFireFacade.ROOM_JOINED]);
+            return ([BlueFireFacade.CONNECTED, BlueFireFacade.ROOM_JOIN, BlueFireFacade.ROOM_JOIN_EXPLICIT, BlueFireFacade.ROOM_LEAVE, BlueFireFacade.ROOM_JOIN_ALL, BlueFireFacade.ROOM_JOINED, XIFFRosterMediator.OWN_PRESENCE_CHANGED]);
         }
 
         private function roomHandler_AllRoomsJoinedHandler(_arg_1:Event):void
@@ -46,6 +46,12 @@
         {
             switch (_arg_1.getName())
             {
+                case XIFFRosterMediator.OWN_PRESENCE_CHANGED:
+                    if (this.roomManager != null)
+                    {
+                        this.roomManager.updatePresence(_arg_1.getBody() as String);
+                    }
+                    return;
                 case BlueFireFacade.CONNECTED:
                     viewComponent = new RoomManager((facade as BlueFireFacade), (_arg_1.getBody() as XMPPConnection));
                     this.roomManager.addEventListener(RoomEvent.ROOM_JOIN, this.roomManager_RoomJoinHandler);

@@ -30,6 +30,7 @@
         // XIFF-quiet Room has no isActive member (proxy would throw Unknown Property).
         // Track join state locally from ROOM_JOIN / ROOM_LEAVE instead.
         private var _currentRoomActive:Boolean = false;
+        private var _presenceShow:String;
         private var _facade:BlueFireFacade;
         private var _connection:XMPPConnection;
         private var _instances:ArrayCollection = new ArrayCollection();
@@ -58,6 +59,22 @@
                 this._currentRoom = null;
                 this._currentRoomActive = false;
             };
+        }
+
+        public function updatePresence(show:String):void
+        {
+            this._presenceShow = show;
+            if (!this._currentRoomActive || this._currentRoom == null)
+            {
+                return;
+            }
+            if (this._currentRoom.userJID == null)
+            {
+                return;
+            }
+            var presence:Presence = new Presence(this._currentRoom.userJID.escaped,
+                this._connection.jid.escaped, null, show, null, 1);
+            this._connection.send(presence);
         }
 
         private function autoJoinGroupChat():void
@@ -174,6 +191,7 @@
             {
                 this._currentRoom.addEventListener(RoomEvent.USER_JOIN, this.HandleGuildRoomUserJoin);
                 this._currentRoom.addEventListener(RoomEvent.USER_DEPARTURE, this.HandleGuildRoomUserLeave);
+                this._currentRoom.addEventListener(RoomEvent.USER_PRESENCE_CHANGE, this.HandleGuildRoomUserPresenceChange);
             };
             this._currentRoom.join();
         }
@@ -199,7 +217,7 @@
             {
                 for each (_local_4 in _local_2.source)
                 {
-                    this._facade.sendNotification(BlueFireFacade.ROOM_OCCUPANT_PRESENCE_UPDATED, new RoomPresenceUpdatedVO(_local_4.nickname, _local_2.roomName, true));
+                    this._facade.sendNotification(BlueFireFacade.ROOM_OCCUPANT_PRESENCE_UPDATED, new RoomPresenceUpdatedVO(_local_4.nickname, _local_2.roomName, true, _local_4.show));
                 };
             };
             var _local_3:RoomManagerEvent = new RoomManagerEvent(RoomEvent.ROOM_JOIN);
@@ -215,7 +233,19 @@
         private function HandleGuildRoomUserJoin(_arg_1:RoomEvent):void
         {
             var _local_2:Presence = _arg_1.data;
-            this._facade.sendNotification(BlueFireFacade.ROOM_OCCUPANT_PRESENCE_UPDATED, new RoomPresenceUpdatedVO(_local_2.from.resource, _local_2.from.localpart, true));
+            this._facade.sendNotification(BlueFireFacade.ROOM_OCCUPANT_PRESENCE_UPDATED, new RoomPresenceUpdatedVO(_local_2.from.resource, _local_2.from.localpart, true, _local_2.show, _local_2.status));
+        }
+
+        private function HandleGuildRoomUserPresenceChange(event:RoomEvent):void
+        {
+            var presence:Presence = event.data as Presence;
+            if (presence == null || presence.from == null)
+            {
+                return;
+            }
+            this._facade.sendNotification(BlueFireFacade.ROOM_OCCUPANT_PRESENCE_UPDATED,
+                new RoomPresenceUpdatedVO(presence.from.resource, presence.from.localpart,
+                    true, presence.show, presence.status));
         }
 
 

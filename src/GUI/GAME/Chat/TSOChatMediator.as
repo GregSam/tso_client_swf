@@ -40,6 +40,7 @@
     import ServerState.cClientMessagesII;
     import mx.rpc.events.FaultEvent;
     import com.bluebyte.bluefire.puremvc.view.xiff.XIFFConnectionMediator;
+    import com.bluebyte.bluefire.puremvc.view.xiff.XIFFRosterMediator;
     import Utils.StringUtils;
     import com.bluebyte.tso.adventure.logic.AdventureManager;
     import Sound.cSoundManager;
@@ -391,12 +392,15 @@
                     return;
                 case BlueFireFacade.ROOM_OCCUPANT_PRESENCE_UPDATED:
                     _local_2 = (_arg_1.getBody() as RoomPresenceUpdatedVO);
-                    globalFlash.gui.mFriendsList.SetOnlineStatus(_local_2.name.toLowerCase(), _local_2.online, true);
+                    globalFlash.gui.mFriendsList.SetPresenceStatus(_local_2.name.toLowerCase(), _local_2.online, _local_2.show, _local_2.status, true);
                     return;
                 case BlueFireFacade.FRIEND_PRESENCE_UPDATED:
                     _local_3 = (_arg_1.getBody() as PresenceUpdatedVO);
                     global.ui.channels.ZONE.send("CHAT_MESSAGE", _local_3);
-                    globalFlash.gui.mFriendsList.SetOnlineStatus(_local_3.name.toLowerCase(), _local_3.online, false);
+                    globalFlash.gui.mFriendsList.SetPresenceStatus(_local_3.name.toLowerCase(), _local_3.online, _local_3.show, _local_3.status);
+                    return;
+                case XIFFRosterMediator.OWN_PRESENCE_CHANGED:
+                    globalFlash.gui.mFriendsList.SetOwnPresenceStatus(_arg_1.getBody() as String);
                     return;
                 case XIFFConnectionMediator.XIFF_CONNECT:
                     this.panel.chatstatusbox.visible = true;
@@ -817,6 +821,7 @@
             _local_1.push(BlueFireFacade.MESSAGE_CREATED);
             _local_1.push(BlueFireFacade.MESSAGE_CREATED_ADDED);
             _local_1.push(BlueFireFacade.FRIEND_PRESENCE_UPDATED);
+            _local_1.push(XIFFRosterMediator.OWN_PRESENCE_CHANGED);
             _local_1.push(BlueFireFacade.ROOM_OCCUPANT_PRESENCE_UPDATED);
             _local_1.push(BlueFireFacade.ROOM_LEFT);
             _local_1.push(BlueFireFacade.CONNECTION_ERROR);
