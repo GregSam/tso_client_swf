@@ -254,6 +254,7 @@
             globalFlash.gui.mChatPanel = this;
             global.getApplication().blueFireComponent.visible = true;
             this.panel.messageHistory.addEventListener(TextEvent.LINK, this.HandleLink);
+            this.panel.addEventListener(ChatPanel.PRESENCE_STATUS_SELECTED, this.handlePresenceStatusSelected);
             this.panel.whispers.addEventListener(ChatTabPrivateListItemRenderer.PRIVATE_LIST_REMOVE, this.whispers_RemoveHandler);
             this.panel.addEventListener(Event.ENTER_FRAME, this.handleEnterFrame);
             var _local_1:Object = cLocaManager.GetInstance().GetGroup(LOCA_GROUP.CHAT_MESSAGES);
@@ -279,6 +280,11 @@
             this._tabSortingIndices[COOP_NAME_FRIENDS] = 10;
             this.panel.messageInput.addEventListener(KeyboardEvent.KEY_UP, this.KeyDown);
             this.panel.addEventListener(FocusEvent.FOCUS_OUT, this.handleFocusOut);
+        }
+
+        private function handlePresenceStatusSelected(event:TextEvent):void
+        {
+            sendNotification(XIFFRosterMediator.SET_PRESENCE, event.text);
         }
 
         public function IsConnectionEstablished():Boolean
@@ -400,6 +406,7 @@
                     globalFlash.gui.mFriendsList.SetPresenceStatus(_local_3.name.toLowerCase(), _local_3.online, _local_3.show, _local_3.status);
                     return;
                 case XIFFRosterMediator.OWN_PRESENCE_CHANGED:
+                    this.panel.setPresenceStatus(_arg_1.getBody() as String);
                     globalFlash.gui.mFriendsList.SetOwnPresenceStatus(_arg_1.getBody() as String);
                     return;
                 case XIFFConnectionMediator.XIFF_CONNECT:

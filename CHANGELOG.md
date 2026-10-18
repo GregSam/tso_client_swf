@@ -10,6 +10,7 @@
 ### 🎨 UI / UX
 
 - Added distinct status indicators for chat, away, extended away, and do not disturb while retaining the original online indicator.
+- Added a chat status button beside the existing chat controls. 
 
 ## 2026-10-13
 

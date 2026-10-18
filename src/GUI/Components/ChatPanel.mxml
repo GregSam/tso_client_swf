@@ -98,6 +98,7 @@
         private var _isCollapsed:Boolean = false;
         private var isCollapsedChanged:Boolean = true;
         private var mSelectedChannel:ChannelVO;
+        public static const PRESENCE_STATUS_SELECTED:String = "presenceStatusSelected";
 
         override protected function childrenCreated():void
         {
@@ -136,6 +137,18 @@
             buttonBar.addEventListener("itemClick", __buttonBar_itemClick);
             messageColorBox.addEventListener(Event.CHANGE, __messageColorBox_change);
             autoScrollBox.addEventListener(MouseEvent.CLICK, __autoScrollBox_click);
+            presenceButton.addEventListener(MouseEvent.CLICK, togglePresenceMenu);
+            presenceOnline.addEventListener(MouseEvent.CLICK, selectPresenceStatus);
+            presenceChat.addEventListener(MouseEvent.CLICK, selectPresenceStatus);
+            presenceAway.addEventListener(MouseEvent.CLICK, selectPresenceStatus);
+            presenceXa.addEventListener(MouseEvent.CLICK, selectPresenceStatus);
+            presenceDnd.addEventListener(MouseEvent.CLICK, selectPresenceStatus);
+            presenceOnline.setStyle("icon", gAssetManager.GetClass("OnlineStatusGreen"));
+            presenceChat.setStyle("icon", gAssetManager.GetClass("OnlineStatusChat"));
+            presenceAway.setStyle("icon", gAssetManager.GetClass("OnlineStatusAway"));
+            presenceXa.setStyle("icon", gAssetManager.GetClass("OnlineStatusXa"));
+            presenceDnd.setStyle("icon", gAssetManager.GetClass("OnlineStatusDnd"));
+            setPresenceStatus(null);
             messageHistory.addEventListener("autoscrollChanged", syncAutoScrollBox);
             syncAutoScrollBox();
             addEventListener("creationComplete", onCreationComplete);
@@ -158,6 +171,91 @@
         {
             rotate.originX = chatstatusboxicon.x + chatstatusboxicon.width / 2;
             rotate.originY = chatstatusboxicon.x + chatstatusboxicon.height / 2;
+        }
+
+        public function setPresenceStatus(show:String):void
+        {
+            var assetName:String = "OnlineStatusGreen";
+            var statusName:String = "Online";
+            switch (show)
+            {
+                case "chat":
+                    assetName = "OnlineStatusChat";
+                    statusName = "Chat";
+                    break;
+                case "away":
+                    assetName = "OnlineStatusAway";
+                    statusName = "Away";
+                    break;
+                case "xa":
+                    assetName = "OnlineStatusXa";
+                    statusName = "Extended away";
+                    break;
+                case "dnd":
+                    assetName = "OnlineStatusDnd";
+                    statusName = "Do not disturb";
+                    break;
+            }
+            presenceButton.source = gAssetManager.GetBitmap(assetName);
+            presenceButton.toolTip = "Chat status: " + statusName;
+        }
+
+        private function togglePresenceMenu(event:MouseEvent):void
+        {
+            presenceMenu.visible = !presenceMenu.visible;
+            if (presenceMenu.visible)
+            {
+                Application.application.addEventListener(MouseEvent.MOUSE_DOWN,
+                    closePresenceMenuOnOutsideClick, true, 0, true);
+            }
+            else
+            {
+                hidePresenceMenu();
+            }
+        }
+
+        private function closePresenceMenuOnOutsideClick(event:MouseEvent):void
+        {
+            var target:DisplayObject = event.target as DisplayObject;
+            if (target != null && (target == presenceButton || presenceMenu.contains(target)))
+            {
+                return;
+            }
+            hidePresenceMenu();
+        }
+
+        private function hidePresenceMenu():void
+        {
+            presenceMenu.visible = false;
+            Application.application.removeEventListener(MouseEvent.MOUSE_DOWN,
+                closePresenceMenuOnOutsideClick, true);
+        }
+
+        private function selectPresenceStatus(event:MouseEvent):void
+        {
+            var show:String;
+            switch (event.currentTarget)
+            {
+                case presenceOnline:
+                    show = "online";
+                    break;
+                case presenceChat:
+                    show = "chat";
+                    break;
+                case presenceAway:
+                    show = "away";
+                    break;
+                case presenceXa:
+                    show = "xa";
+                    break;
+                case presenceDnd:
+                    show = "dnd";
+                    break;
+                default:
+                    return;
+            }
+            hidePresenceMenu();
+            dispatchEvent(new TextEvent(PRESENCE_STATUS_SELECTED, false, false, show));
         }
 
         private function updateWhisperLayout(event:Event = null):void
@@ -467,7 +565,7 @@
             <gui:CustomText id="channelInfoDisplay" maxWidth="300" text=""
                 visible="false" includeInLayout="false" color="0xE5E500" horizontalCenter="0" verticalCenter="0" />
             <gui:ChatHistory id="messageHistory" percentWidth="100" percentHeight="100"
-                verticalScrollBarShrink="44" autoscroll="true" maxEntries="500" paddingRight="3" paddingBottom="2"
+                verticalScrollBarShrink="59" autoscroll="true" maxEntries="500" paddingRight="3" paddingBottom="2"
                 />
             <gui:CustomTileList id="privateList" percentWidth="100" columnCount="4" rowCount="2"
                 visible="false" verticalScrollPolicy="on" height="0"
@@ -479,6 +577,17 @@
         </mx:HBox>
         <gui:ColorCheckBox id="messageColorBox" selected="false" bottom="18" right="0" />
         <gui:StandardCheckBox id="autoScrollBox" right="0" />
+        <mx:Image id="presenceButton" width="16" height="16" bottom="38" right="1"
+            buttonMode="true" useHandCursor="true" />
+        <mx:VBox id="presenceMenu" width="132" height="122" right="21" bottom="0"
+            visible="false" includeInLayout="false" verticalGap="0" paddingLeft="3" paddingRight="3"
+            paddingTop="3" paddingBottom="3" backgroundColor="0x302719" backgroundAlpha="0.96">
+            <gui:StandardButton id="presenceOnline" label="Online" width="126" height="23" />
+            <gui:StandardButton id="presenceChat" label="Chat" width="126" height="23" />
+            <gui:StandardButton id="presenceAway" label="Away" width="126" height="23" />
+            <gui:StandardButton id="presenceXa" label="Extended away" width="126" height="23" />
+            <gui:StandardButton id="presenceDnd" label="Do not disturb" width="126" height="23" />
+        </mx:VBox>
     </mx:Canvas>
     <gui:ChannelBar id="buttonBar" focusEnabled="false" rowCount="1" columnWidth="35"
         height="31" labelField="label" color="0xFFFFFF" backgroundAlpha="0" borderThickness="0" useRollOver="false" />
