@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-21
+
+### 🐛 FIX
+
+- Fixed Cultural Building details layout.
+- Fixed DismissMailsAlert layout.
+
 ## 2026-10-18
 
 ### ✨ FEATURE
