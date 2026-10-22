@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-22
+
+### 🐛 FIX
+
+- Fixed own presence icon
+
 ## 2026-10-21
 
 ### 🐛 FIX
