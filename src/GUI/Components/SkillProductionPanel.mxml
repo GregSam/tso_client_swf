@@ -197,29 +197,37 @@
                     <mx:Canvas styleName="detailsSubHeader" width="400" height="18">
                         <mx:Label id="_SkillProductionPanel_Label2" top="1" horizontalCenter="0" color="0xFFFFFF" fontWeight="bold"/>
                     </mx:Canvas>
-                    <mx:HBox styleName="detailsContentBox" width="400" paddingTop="5" paddingBottom="5" paddingLeft="5" verticalAlign="middle">
-                        <mx:Label id="durationHead" fontThickness="4"/>
-                        <mx:Label id="duration" text="123"/>
-                        <renderer:ResourceVerticalRender id="cost0"/>
-                        <renderer:ResourceVerticalRender id="cost1"/>
-                        <renderer:ResourceVerticalRender id="cost2"/>
-                        <mx:Image id="_SkillProductionPanel_Image7"/>
-                        <renderer:ResourceVerticalRender id="orderBook"/>
-                    </mx:HBox>
+                    <mx:Canvas styleName="detailsContentBox" width="400" height="55" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                        <mx:VBox width="175" left="5" verticalCenter="0" verticalGap="1" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                            <mx:Label id="durationHead" fontThickness="4"/>
+                            <mx:Text id="duration" width="175" selectable="false"/>
+                        </mx:VBox>
+                        <mx:HBox right="5" verticalCenter="0" horizontalGap="2" verticalAlign="middle" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                            <renderer:ResourceVerticalRender id="cost0"/>
+                            <renderer:ResourceVerticalRender id="cost1"/>
+                            <renderer:ResourceVerticalRender id="cost2"/>
+                            <mx:Image id="_SkillProductionPanel_Image7"/>
+                            <renderer:ResourceVerticalRender id="orderBook"/>
+                        </mx:HBox>
+                    </mx:Canvas>
                 </mx:VBox>
                 <mx:VBox verticalGap="0">
                     <mx:Canvas styleName="detailsSubHeader" width="400" height="18">
                         <mx:Label id="_SkillProductionPanel_Label5" top="1" horizontalCenter="0" color="0xFFFFFF" fontWeight="bold"/>
                     </mx:Canvas>
-                    <mx:HBox id="_SkillProductionPanel_HBox3" styleName="detailsContentBox" width="400" paddingTop="5" paddingBottom="5" paddingLeft="5" verticalAlign="middle">
-                        <mx:Label id="nextDurationHead" fontThickness="4" verticalCenter="0"/>
-                        <mx:Label id="nextDuration" text="123"/>
-                        <renderer:ResourceVerticalRender id="nextCost0"/>
-                        <renderer:ResourceVerticalRender id="nextCost1"/>
-                        <renderer:ResourceVerticalRender id="nextCost2"/>
-                        <mx:Image id="_SkillProductionPanel_Image8"/>
-                        <renderer:ResourceVerticalRender id="nextOrderBook"/>
-                    </mx:HBox>
+                    <mx:Canvas id="_SkillProductionPanel_HBox3" styleName="detailsContentBox" width="400" height="55" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                        <mx:VBox width="175" left="5" verticalCenter="0" verticalGap="1" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                            <mx:Label id="nextDurationHead" fontThickness="4"/>
+                            <mx:Text id="nextDuration" width="175" selectable="false"/>
+                        </mx:VBox>
+                        <mx:HBox right="5" verticalCenter="0" horizontalGap="2" verticalAlign="middle" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                            <renderer:ResourceVerticalRender id="nextCost0"/>
+                            <renderer:ResourceVerticalRender id="nextCost1"/>
+                            <renderer:ResourceVerticalRender id="nextCost2"/>
+                            <mx:Image id="_SkillProductionPanel_Image8"/>
+                            <renderer:ResourceVerticalRender id="nextOrderBook"/>
+                        </mx:HBox>
+                    </mx:Canvas>
                     <mx:HBox id="_SkillProductionPanel_HBox4" styleName="detailsContentBox" width="400" height="55" verticalAlign="middle" horizontalAlign="center">
                         <mx:Label id="_SkillProductionPanel_Label8" verticalCenter="0"/>
                     </mx:HBox>

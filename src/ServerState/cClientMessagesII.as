@@ -75,6 +75,9 @@ package ServerState
     import Communication.VO.dGameTickCommandVO;
     import Colony.cColony;
     import Communication.VO.UpdateVO.dRemovedFriendVO;
+    import Communication.VO.UpdateVO.dRemovedForestDepositVO;
+    import Communication.VO.UpdateVO.dForestPlantingStartedVO;
+    import Communication.VO.UpdateVO.dPlantedForestDepositVO;
     import GUI.ApplicationFacade;
     import GUI.GAME.avatarSelection.AvatarSelectionPanel;
     import Communication.VO.Mail.dMailVO;
@@ -505,6 +508,21 @@ package ServerState
             var userAchievementManagerUpdated:Boolean;
             for each (updateVO in _updateVOs)
             {
+                if (updateVO is dForestPlantingStartedVO)
+                {
+                    this.mGameInterface.mCurrentPlayerZone.StartForestPlanting(updateVO as dForestPlantingStartedVO);
+                    continue;
+                }
+                if (updateVO is dPlantedForestDepositVO)
+                {
+                    this.mGameInterface.mCurrentPlayerZone.PlantForestDeposit(updateVO as dPlantedForestDepositVO);
+                    continue;
+                }
+                if (updateVO is dRemovedForestDepositVO)
+                {
+                    this.mGameInterface.mCurrentPlayerZone.RemoveForestDeposit(updateVO as dRemovedForestDepositVO);
+                    continue;
+                }
                 if ((updateVO is DConsoleTextVO))
                 {
                     dConsoleTextVO = (updateVO as DConsoleTextVO);
