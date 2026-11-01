@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-01
+
+### 🐛 FIX
+
+- Fixed Hidden Veins quest (new DepositDepletedTrigger)
+
 ## 2026-10-22
 
 ### 🐛 FIX
